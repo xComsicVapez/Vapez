@@ -1,0 +1,41 @@
+# Runtime / build
+target/
+run/
+*.jar
+!plugin/lib/.gitkeep
+.idea/
+.vscode/
+*.iml
+.DS_Store
+*.log
+hs_err_pid*
+
+# Minecraft server runtime
+pack/runtime/
+world/
+world_nether/
+world_the_end/
+logs/
+cache/
+libraries/
+versions/
+crash-reports/
+banned-*.json
+ops.json
+usercache.json
+whitelist.json
+session.lock
+spigot.yml.bak
+
+# Downloaded third-party binaries
+pack/plugins/*.jar
+!pack/plugins/VapezCore-*.jar
+pack/purpur-*.jar
+pack/server.jar
+dist/
+*.mcpack
+*.zip
+!pack/resourcepack/**
+!pack/bedrock-pack/**
+!pack/plugins/Geyser-Spigot/packs/**
+!pack/schematics/**

@@ -1,0 +1,224 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                       Notes                          | #
+# +------------------------------------------------------+ #
+############################################################
+# EssentialsX economy provider for Vault. Keep /bal and /pay
+# aligned with VapezCore (VapezCore will use Vault → this).
+ops-name-color: '4'
+nickname-prefix: '~'
+max-nick-length: 20
+nick-length-includes-prefix: false
+hide-overridden-commands: true
+change-displayname: true
+teleport-safety: true
+force-disable-teleport-safety: false
+teleport-invulnerability: 4
+teleport-cooldown: 3
+teleport-delay: 3
+teleport-request-timeout: 60
+overwrite-tpa-requests: true
+update-bed-at-daytime: true
+sethome-cooldown: 10
+max-money: 1000000000000
+min-money: 0
+economy-log-enabled: false
+currency-symbol: '$'
+currency-symbol-suffix: false
+starting-balance: 0
+# VapezCore grants the starter-kit money on first join.
+max-nick-length: 20
+allow-silent-join-quit: true
+custom-join-message: 'none'
+custom-quit-message: 'none'
+world-change-announce: false
+spawn-on-join: true
+spawn-on-join-exempt:
+  - builders
+command-cooldowns:
+  ah: 2
+  shop: 1
+  rtp: 120
+disabled-commands:
+  - essentials:nick
+newbies:
+  announce-format: '&dWelcome {DISPLAYNAME} &dto Vapez SMP.'
+  spawnpoint: newbies
+  kit: ''
+kits: {}
+already-owned-pluggables: []
+auto-afk: 300
+auto-afk-kick: -1
+freeze-afk-players: false
+disable-item-pickup-while-afk: false
+cancel-afk-on-interact: true
+cancel-afk-on-move: true
+sleep-ignores-afk-players: true
+chat:
+  radius: 0
+  format: '<gradient:#7BFFE9:#C084FC>{DISPLAYNAME}</gradient> <dark_gray>»</dark_gray> {MESSAGE}'
+protect:
+  prevent:
+    lava-flow: false
+    water-flow: false
+    water-bucket-flow: false
+    fire-spread: true
+    lava-fire-spread: true
+    lightning-fire-spread: true
+    portal-creation: false
+    tnt-explosion: false
+    tnt-playerdamage: false
+    fireball-explosion: false
+    fireball-fire: false
+    fireball-playerdamage: false
+    witherskull-explosion: false
+    witherskull-playerdamage: false
+    wither-spawnexplosion: false
+    wither-blockreplace: false
+    creeper-explosion: false
+    creeper-playerdamage: false
+    creeper-blockdamage: false
+    enderdragon-blockdamage: true
+    enderman-pickup: true
+    villager-death: false
+    enderpearl: false
+    ravager-thief: false
+    ravager-break: false
+  prevent-spawn:
+    - wither
+  creeper:
+    disable-explosion: false
+  disable:
+    fall: false
+    pvp: false
+    drown: false
+    suffocate: false
+    lavadmg: false
+    projectiles: false
+    contactdmg: false
+    firedmg: false
+    lightning: false
+    wither: false
+    weather: false
+  build: true
+  use: true
+  warn-on-build-disallow: true
+  disable-break-bedrock: true
+  alert:
+    on-placement: []
+    on-use: []
+    on-break: []
+  blacklist:
+    placement: []
+    usage: []
+    break: []
+    piston: []
+    crafting: []
+world-teleport-permissions: false
+world-time-permissions: []
+default-stack-size: -1
+oversized-stacksize: 64
+repair-enchanted: true
+unsafe-enchantments: false
+register-back-in-listener: true
+login-attack-delay: 5
+max-fly-speed: 0.8
+max-walk-speed: 0.8
+mails-per-minute: 4
+max-item-lore-lines: 16
+max-item-displayname-length: 50
+allow-direct-hat: true
+world-time-permissions: []
+player-commands:
+  - afk
+  - balance
+  - bal
+  - pay
+  - msg
+  - r
+  - tpa
+  - tpaccept
+  - tpdeny
+  - spawn
+  - kit
+  - homes
+  - home
+  - sethome
+  - delhome
+  - warp
+  - warps
+  - back
+  - help
+item-spawn-blacklist: []
+spawners-can-change-type: false
+spawners-max-player-distance: 16
+debug: false
+notify-no-new-mail: true
+remove-god-on-disconnect: true
+change-tab-complete-name: false
+send-info-after-motd: true
+allow-old-id-signs: false
+sign-use-per-second: 4
+backup:
+  interval: 30
+  cooldown: 300
+  enabled: false
+  commands: []
+per-warp-permission: false
+list:
+  hidden-tags:
+    - hidden
+    - vanished
+update-bed-at-daytime: true
+world-time-permissions: []
+locale: en
+economy:
+  log-enabled: false
+  currency-symbol: '$'
+  starting-balance: 0
+  min-money: 0
+  max-money: 1000000000000
+  command-balance-min: 0
+  minimum-pay-amount: 0.01
+home-cooldown: 3
+max-home-count: 2
+sethome-multiple:
+  default: 2
+  vip: 5
+  staff: 20
+compass-towards-home-perm: false
+respawn-at-home: false
+respawn-at-anchor: true
+build-override: false
+use-override: false
+new-player-fly: false
+teleport-to-center: true
+enabledSigns: []
+non-ess-in-command-help: true
+last-message-reply-recipient: true
+last-message-reply-recipient-timeout: 180
+world-change-fly-reset: false
+world-change-speed-reset: false
+tpa-accept-cancellation: 120
+allow-direct-hat: true
+create-home-on-join: false
+token-commands: []
+socialspy-commands:
+  - msg
+  - w
+  - r
+  - mail
+  - m
+  - t
+  - whisper
+  - tell
+time-format: MM/dd/yyyy HH:mm
+date-format: MM/dd/yyyy
+unleash-on-logout: true
+world-time-permissions: []
+command-costs: {}
+use-nbt-serialization-in-createkit: true
+delay-motd: 0
+allow-pvp-command: false
+check-for-updates: true
+update-branch: release

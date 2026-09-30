@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": "minecraft:amethyst_shard",
+  "result": { "id": "minecraft:netherite_ingot" },
+  "experience": 4.0,
+  "cookingtime": 100
+}

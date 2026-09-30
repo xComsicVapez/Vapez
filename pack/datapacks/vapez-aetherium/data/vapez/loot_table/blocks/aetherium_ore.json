@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "vapez:blocks/aetherium_ore",
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:amethyst_shard",
+          "functions": [
+            { "function": "minecraft:set_name", "name": { "text": "Aetherium Crystal", "italic": false, "color": "light_purple" } },
+            { "function": "minecraft:set_custom_data", "tag": "{vapez_item:\"aetherium_crystal\"}" }
+          ]
+        }
+      ]
+    }
+  ]
+}

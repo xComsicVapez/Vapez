@@ -1,0 +1,7 @@
+{
+  "pack": {
+    "pack_format": 48,
+    "supported_formats": { "min_inclusive": 48, "max_inclusive": 88 },
+    "description": "Vapez Aetherium worldgen (Y=-64 to -50, rarer than diamonds)"
+  }
+}

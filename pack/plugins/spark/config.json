@@ -1,0 +1,3 @@
+backgroundProfilerEnabled: true
+disableJvmHeapDump: false
+ignoreAsyncErrors: false

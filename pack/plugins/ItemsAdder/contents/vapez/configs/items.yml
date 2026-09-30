@@ -1,0 +1,36 @@
+info:
+  namespace: vapez
+items:
+  aetherium_crystal:
+    display_name: '&dAetherium Crystal'
+    resource:
+      material: AMETHYST_SHARD
+      generate: true
+      textures:
+        - item/aetherium_crystal
+  aetherium_ingot:
+    display_name: '&bAetherium Ingot'
+    resource:
+      material: NETHERITE_INGOT
+      generate: true
+      textures:
+        - item/aetherium_ingot
+  aetherium_ore:
+    display_name: '&5Aetherium Ore'
+    resource:
+      material: PAPER
+      generate: true
+      textures:
+        - block/aetherium_ore
+    specific_properties:
+      block:
+        placed_model:
+          type: REAL_NOTE
+        hardness: 40
+        break_tools: [netherite_pickaxe]
+        drop_when_silk_touch: aetherium_ore
+        cancel_drop: true
+        events:
+          break:
+            - play_sound: block.ancient_debris.break
+            - give_item: vapez:aetherium_crystal

@@ -1,0 +1,12 @@
+# ZNPCsPlus — optional. VapezCore already spawns invulnerable villager NPCs
+# at the Citadel (shop, auction, warps, forge, crates). If you install ZNPCsPlus,
+# you can replace those with player-skin NPCs using the coordinates below.
+view-distance: 32
+nametag-hologram: true
+npcs: []
+# Suggested positions (citadel Y=65):
+#  shop     0.5  65  32.5
+#  auction 32.5  65   0.5
+#  warp     0.5  65 -32.5
+#  forge  -32.5  65   0.5
+#  crates   0.5  65  44.5

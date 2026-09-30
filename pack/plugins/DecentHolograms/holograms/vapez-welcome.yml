@@ -1,0 +1,17 @@
+location: world:0.5:69.5:8.5
+enabled: true
+display-range: 64
+update-range: 64
+update-interval: 100
+facing: 180.0
+down-origin: false
+pages:
+  - lines:
+      - content: '&b&lVAPEZ SMP'
+        height: 0.4
+      - content: '&dAetherium &7• &fCross-Play Survival'
+        height: 0.32
+      - content: '&7Border &f%vapez_border% &8| &7/shop /ah /level /pwarp'
+        height: 0.3
+      - content: '&8WorldGuard protected citadel'
+        height: 0.28

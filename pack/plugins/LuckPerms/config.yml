@@ -1,0 +1,47 @@
+server: Vapez SMP
+use-server-uuid-cache: true
+storage-method: h2
+data:
+  sync-minutes: -1
+watch-files: false
+split-storage:
+  user: false
+  group: false
+  track: false
+  uuid: false
+  log: false
+server-uuid: generated-on-boot
+messaging-service: none
+auto-op: false
+enable-ops: true
+commands-allow-op: true
+auto-install-translations: true
+bundled-message-file: luckperms-en.properties
+debug-logins: false
+log-players-without-group: false
+temporary-add-behaviour: deny
+primary-group-calculation: parents-by-weight
+argument-based-command-permissions: false
+require-sender-group-membership-to-modify: false
+log-notify: false
+editor-seconds: 300
+group-weight:
+  default: 0
+  vip: 10
+  staff: 50
+  admin: 100
+meta-formatting:
+  prefix:
+    format: '{prefix}'
+    duplicates: first-only
+  suffix:
+    format: '{suffix}'
+    duplicates: first-only
+  prefix-option: lowest-weight
+  suffix-option: highest-weight
+apply-wildcards-in-progress: false
+apply-regex-in-progress: false
+apply-brackets-in-progress: false
+apply-shorthand-in-progress: false
+inheritance-transitive-limit: 50
+# Groups are created by scripts/luckperms-bootstrap.txt after first start.

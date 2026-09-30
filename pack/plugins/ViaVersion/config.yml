@@ -1,0 +1,41 @@
+# ViaVersion 5.x on Purpur 1.21.8 — lets newer Java clients join.
+# Pair with ViaBackwards if you also want older Java clients (1.21.1–1.21.7).
+max-pps: 800
+tracking-period: 6
+tracking-warning-pps: 120
+tracking-max-warnings: 4
+block-disconnect-msg: You are sending too many packets!
+exploit:
+  prevent-sculk-sensor-crash: true
+  max-book-pages: 100
+  max-book-page-length: 5000
+check-for-updates: true
+block-world-edit-animations: false
+packet-limiter:
+  enabled: true
+  interval: 7.0
+  max-packet-rate: 500.0
+suppress-conversion-warnings: false
+fix-1_21-placement-rotation: true
+handle-invalid-item-count: true
+bossbar-patch: true
+bossbar-anti-flicker: false
+use-new-death-messages: true
+item-cache: true
+nms-player-ticking: true
+quick-move-action-fix: false
+team-colour-fix: true
+minimize-cooldown: true
+disable-1_13-auto-complete: false
+serverside-blockconnections: true
+reduce-blockstorage-memory: false
+flowerstem-when-block-above: false
+vine-climb-fix: false
+snow-collision-fix: true
+infested-block-fix: true
+vehicle-hacks: false
+change-1_9-hitbox: false
+change-1_14-hitbox: false
+fix-1_21-placement: true
+chat-nbt-fix: true
+1_19-secure-chat-preview: false

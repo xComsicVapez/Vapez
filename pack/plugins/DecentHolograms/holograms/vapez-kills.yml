@@ -1,0 +1,23 @@
+location: world:0.5:70.0:-44.5
+enabled: true
+display-range: 48
+update-range: 48
+update-interval: 40
+facing: 0.0
+down-origin: false
+pages:
+  - lines:
+      - content: '&b&l⚔ TOP KILLS'
+        height: 0.35
+      - content: '&8──────────────'
+        height: 0.28
+      - content: '&e#1 &f%vapez_kills_top_1%'
+        height: 0.28
+      - content: '&6#2 &f%vapez_kills_top_2%'
+        height: 0.28
+      - content: '&7#3 &f%vapez_kills_top_3%'
+        height: 0.28
+      - content: '&7#4 &f%vapez_kills_top_4%'
+        height: 0.28
+      - content: '&7#5 &f%vapez_kills_top_5%'
+        height: 0.28

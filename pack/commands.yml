@@ -1,0 +1,11 @@
+#command-block-overrides: []
+#unrestricted-advancements: []
+aliases:
+  icanhasbukkit:
+    - version $1-
+  shop:
+    - vapez:shop $1-
+  ah:
+    - vapez:ah $1-
+  spawn:
+    - vapez:spawn $1-
