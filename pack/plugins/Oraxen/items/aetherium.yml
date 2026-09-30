@@ -1,0 +1,42 @@
+# Oraxen — optional custom block for Aetherium Ore (replaces HEAVY_CORE visual).
+# Install Oraxen, drop this file into plugins/Oraxen/items/, then set
+# VapezCore config ore.block to the Oraxen placed block material if you switch.
+# By default VapezCore uses vanilla HEAVY_CORE so the server runs without Oraxen.
+
+aetherium_crystal:
+  displayname: "<gradient:#A78BFA:#7BFFE9><bold>Aetherium Crystal</bold></gradient>"
+  material: AMETHYST_SHARD
+  Pack:
+    generate_model: true
+    parent_model: item/generated
+    textures:
+      - vapez:item/aetherium_crystal
+  itemname: Aetherium Crystal
+
+aetherium_ingot:
+  displayname: "<gradient:#7BFFE9:#C084FC><bold>Aetherium Ingot</bold></gradient>"
+  material: NETHERITE_INGOT
+  Pack:
+    generate_model: true
+    parent_model: item/generated
+    textures:
+      - vapez:item/aetherium_ingot
+
+aetherium_ore:
+  displayname: "<light_purple>Aetherium Ore"
+  material: STONE
+  specific:
+    hardness: 40
+    drop_type: SELF
+  Pack:
+    generate_model: true
+    custom_model_data: 22101
+    textures:
+      - vapez:block/aetherium_ore
+  Mechanics:
+    block:
+      custom_variation: 12
+      model: aetherium_ore
+      hardness: 40
+      drop: aetherium_crystal
+      minimal_type: NETHERITE

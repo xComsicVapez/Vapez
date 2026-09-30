@@ -1,0 +1,5 @@
+# ViaBackwards — optional older Java clients talking to 1.21.8
+suppress-1_21-recipe-errors: true
+handle-sounds: true
+fix-1_21-chat: true
+map-custom-model-data: true

@@ -1,0 +1,49 @@
+# Geyser-Spigot — Java/Bedrock cross-play on the same Purpur process.
+# Auth: Floodgate. Custom items: custom_mappings/vapez.json + packs/vapez-aetherium.mcpack
+bedrock:
+  address: 0.0.0.0
+  port: 19132
+  clone-remote-port: false
+  motd1: Vapez SMP
+  motd2: Aetherium Cross-Play
+  server-name: Vapez SMP
+  compression-level: 6
+  enable-proxy-protocol: false
+remote:
+  address: 127.0.0.1
+  port: 25565
+  auth-type: floodgate
+  use-proxy-protocol: false
+  forward-hostname: true
+floodgate-key-file: key.pem
+saved-user-logins: []
+pending-authentication-timeout: 120
+command-suggestions: true
+passthrough-motd: true
+passthrough-player-counts: true
+legacy-ping-passthrough: false
+ping-passthrough-interval: 3
+forward-player-ping: true
+max-players: 200
+debug-mode: false
+allow-custom-skulls: true
+max-visible-custom-skulls: 128
+custom-skull-render-distance: 32
+show-cooldown: title
+show-coordinates: true
+disable-bedrock-scaffolding: false
+emote-offhand-workaround: disabled
+cache-images: 0
+allow-third-party-capes: false
+allow-third-party-notes: false
+xbox-achievements-enabled: false
+unusable-space-block: minecraft:barrier
+metrics:
+  enabled: false
+  uuid: generated
+scoreboard-packet-threshold: 20
+enable-proxy-connections: false
+mtu: 1400
+use-direct-connection: true
+disable-compression: true
+config-version: 4

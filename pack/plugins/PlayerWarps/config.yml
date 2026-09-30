@@ -1,0 +1,7 @@
+# Optional third-party PlayerWarps plugin.
+# VapezCore already provides /pwarp. Disable warps.enabled in VapezCore
+# if you install a premium replacement.
+enabled: false
+max-warps-per-player: 3
+set-cost: 2500
+warmup-seconds: 3

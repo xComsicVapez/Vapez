@@ -1,0 +1,10 @@
+# Chunky — pre-generate the 10,000 × 10,000 survival map (radius 5000).
+# Commands are issued by scripts/pregen.sh once the server is up.
+continue-on-restart: true
+force-load-existing-chunks: false
+silent: false
+force-update-saved-stats: false
+disable-async-chunk-save: false
+enable-timings: false
+keep-spawn-loaded: true
+keep-spawn-loaded-range: 10

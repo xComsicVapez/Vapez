@@ -1,0 +1,22 @@
+# Floodgate — Bedrock accounts on an online-mode Java server
+key-file-name: key.pem
+disconnect:
+  invalid-key: Failed to connect to the Java server. Please try again.
+  invalid-arguments-length: Please connect through Geyser.
+player-link:
+  enabled: true
+  require-link: false
+  enable-own-linking: true
+  allowed-quick-link-commands: true
+  get-player-information-from: floodgate
+  allowed-link-accounts: -1
+  link-code-timeout: 300
+  type: sqlite
+  enable-global-linking: true
+  allow-automatic-linking: false
+  player-linking-whitelist: []
+  player-linking-blacklist: []
+username-prefix: "."
+replace-spaces: true
+disconnect-before-incoming-transfer: true
+config-version: 3

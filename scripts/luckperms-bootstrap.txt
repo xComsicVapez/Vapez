@@ -1,0 +1,53 @@
+# LuckPerms command script — run in console after first boot:
+#   lp import file luckperms-bootstrap.txt
+# or paste line-by-line.
+
+lp creategroup default
+lp creategroup vip
+lp creategroup staff
+lp creategroup admin
+
+lp group default setweight 0
+lp group vip setweight 10
+lp group staff setweight 50
+lp group admin setweight 100
+
+lp group default meta setprefix 10 "&7"
+lp group vip meta setprefix 20 "&d[VIP] "
+lp group staff meta setprefix 50 "&b[Staff] "
+lp group admin meta setprefix 100 "&c[Admin] "
+
+lp group default permission set vapez.shop true
+lp group default permission set vapez.auction true
+lp group default permission set vapez.warp true
+lp group default permission set vapez.warp.set true
+lp group default permission set vapez.level true
+lp group default permission set vapez.spawn true
+lp group default permission set vapez.lifesteal true
+lp group default permission set vapez.forge true
+lp group default permission set vapez.rtp true
+lp group default permission set essentials.tpa true
+lp group default permission set essentials.tpaccept true
+lp group default permission set essentials.tpdeny true
+lp group default permission set essentials.msg true
+lp group default permission set essentials.home true
+lp group default permission set essentials.sethome true
+lp group default permission set essentials.spawn true
+lp group default permission set essentials.balance true
+lp group default permission set essentials.pay true
+lp group default permission set essentials.warps true
+lp group default permission set essentials.warp true
+lp group default permission set essentials.back true
+lp group default permission set geyser.command.help true
+lp group default permission set floodgate.command.linkaccount true
+
+lp group vip permission set vapez.crates.give false
+lp group vip permission set essentials.sethome.multiple.vip true
+lp group vip parent add default
+
+lp group staff permission set vapez.admin true
+lp group staff permission set worldguard.region.bypass.world false
+lp group staff parent add vip
+
+lp group admin permission set * true
+lp group admin parent add staff

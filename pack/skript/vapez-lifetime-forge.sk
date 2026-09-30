@@ -1,0 +1,26 @@
+# Optional Skript mirror of the lifetime-lock. VapezCore is authoritative —
+# leave this file DISABLED (do not put it in plugins/Skript/scripts) unless you
+# uninstall the Java forge. Double-handling would consume ingredients twice.
+#
+# Enable only on a Skript-only test box.
+
+options:
+    prefix: &bVapez &8»&r
+
+on join:
+    if {vapez.kit.%uuid of player%} is not set:
+        set {vapez.kit.%uuid of player%} to true
+        # Java plugin issues the unique shulker. Skript does not duplicate it.
+
+command /skforgeinfo:
+    trigger:
+        if {vapez.sovereign.%uuid of player%} is set:
+            send "{@prefix} &cYou already forged your Sovereign Edge."
+        else:
+            send "{@prefix} &7Use &f/aetherforge &7in VapezCore. This Skript file is documentation."
+
+# If you disable VapezCore's forge and keep this file, you still cannot
+# reconstruct the GUI ritual in pure Skript without additional addons.
+# The Java plugin stores:
+#   player PersistentDataContainer key vapez:sovereign_crafted = 1
+# plus plugins/VapezCore/lifetime-crafts.yml as a backup.

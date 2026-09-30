@@ -1,0 +1,166 @@
+# =============================================================================
+# VapezCore — original SMP gameplay (not affiliated with any commercial SMP)
+# =============================================================================
+server-name: "Vapez SMP"
+prefix: "<gradient:#7BFFE9:#C084FC><bold>Vapez</bold></gradient> <dark_gray>»</dark_gray> "
+
+world:
+  overworld: world
+  nether: world_nether
+  end: world_the_end
+  spawn-world: world
+  spawn:
+    x: 0.5
+    y: 67.0
+    z: 0.5
+    yaw: 180.0
+    pitch: 0.0
+
+border:
+  # Vanilla worldborder size is a DIAMETER. 10000 = 10,000 x 10,000 playable area.
+  initial-diameter: 10000
+  center-x: 0.0
+  center-z: 0.0
+  damage-buffer: 5.0
+  damage-amount: 0.2
+  warning-distance: 8
+  max-diameter: 29999984
+  farlands-threshold: 12550821
+  farlands-enabled: false
+  farlands-overlay: true
+  # Allow ops to expand live without restart. Players never bypass the live border.
+  allow-live-expand: true
+
+ore:
+  enabled: true
+  # Rarer than diamonds: 1 vein attempt per N chunks (diamonds are ~1/chunk at peak Y).
+  chunk-divisor: 72
+  min-y: -64
+  max-y: -50
+  vein-size-min: 1
+  vein-size-max: 3
+  # Unique vanilla block that does not generate in overworld caves.
+  block: HEAVY_CORE
+  replaceable:
+    - DEEPSLATE
+    - STONE
+    - TUFF
+    - GRANITE
+    - DIORITE
+    - ANDESITE
+    - SMOOTH_BASALT
+    - DEEPSLATE_DIAMOND_ORE
+    - DEEPSLATE_GOLD_ORE
+    - DEEPSLATE_IRON_ORE
+    - DEEPSLATE_REDSTONE_ORE
+    - DEEPSLATE_LAPIS_ORE
+    - DEEPSLATE_COAL_ORE
+    - DEEPSLATE_COPPER_ORE
+    - BLACKSTONE
+    - BASALT
+  required-tool: NETHERITE_PICKAXE
+  drop-xp: 25
+
+items:
+  namespace: vapez
+  particle-interval-ticks: 10
+
+forge:
+  # PersistentDataContainer flag on the player: vapez:sovereign_crafted
+  one-craft-per-lifetime: true
+  backup-file: true
+  required:
+    aetherium-ingots: 8
+    nether-star: 1
+    netherite-ingot: 1
+    heavy-core: 1
+    dragon-head: 1
+    beacon: 1
+    enchanted-golden-apple: 1
+    elytra: 1
+    totem: 1
+    echo-shards: 4
+    heart-of-the-sea: 1
+
+starter-kit:
+  enabled: true
+  money: 500.0
+  unique-shulker: true
+  contents:
+    - IRON_SWORD
+    - IRON_PICKAXE
+    - IRON_AXE
+    - IRON_SHOVEL
+    - IRON_HELMET
+    - IRON_CHESTPLATE
+    - IRON_LEGGINGS
+    - IRON_BOOTS
+    - SHIELD
+    - BREAD:32
+    - COOKED_BEEF:16
+    - OAK_LOG:32
+    - TORCH:32
+    - GOLDEN_APPLE:2
+
+lifesteal:
+  enabled: true
+  hearts-per-kill: 1
+  min-hearts: 1
+  max-hearts: 20
+  health-per-heart: 2.0
+  drop-heart-item: true
+  ban-at-zero: false
+  withdraw-enabled: true
+
+levels:
+  enabled: true
+  playtime-xp-per-minute: 8
+  kill-xp: 40
+  death-xp-penalty: 10
+  ore-xp: 3
+  aetherium-xp: 50
+  base-xp: 100
+  xp-growth: 1.18
+  max-level: 100
+
+shop:
+  enabled: true
+  # Prices are Vault currency. Keep them SMP-survival, not creative.
+  sell-tax: 0.05
+
+auction:
+  enabled: true
+  duration-hours: 48
+  listing-fee: 25.0
+  max-listings-per-player: 12
+  tax-on-sale: 0.03
+
+warps:
+  enabled: true
+  max-per-player: 3
+  set-cost: 2500.0
+  teleport-warmup-seconds: 3
+  warmup-cancel-on-move: true
+
+crates:
+  enabled: true
+  key-material: TRIPWIRE_HOOK
+
+rtp:
+  min-distance: 250
+  max-attempts: 16
+  cooldown-seconds: 120
+
+spawn:
+  build-on-first-boot: true
+  schematic: vapez-citadel.schem
+  protection-radius: 128
+  fallback-guard: true
+
+holograms:
+  update-interval-ticks: 100
+  top-size: 10
+
+bounties:
+  enabled: true
+  min: 100.0

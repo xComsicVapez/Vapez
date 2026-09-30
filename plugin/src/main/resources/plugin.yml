@@ -1,0 +1,105 @@
+name: VapezCore
+version: ${project.version}
+main: com.vapez.smp.VapezPlugin
+api-version: "1.21"
+load: STARTUP
+authors: [Vapez]
+website: https://github.com/xComsicVapez/Vapez
+description: Original high-performance SMP core — economy, lifesteal, aetherium, spawn citadel, cross-play items, world border, Far Lands engine.
+folia-supported: false
+softdepend:
+  - Vault
+  - PlaceholderAPI
+  - WorldGuard
+  - FastAsyncWorldEdit
+  - WorldEdit
+  - DecentHolograms
+  - Essentials
+  - LuckPerms
+  - Geyser-Spigot
+  - floodgate
+  - Chunky
+libraries: []
+
+commands:
+  shop:
+    description: Open the Vapez SMP shop
+    usage: /shop [buy|sell]
+    aliases: [vshop, store]
+  ah:
+    description: Open the auction house
+    usage: /ah [sell <price>|cancel|expired]
+    aliases: [auctionhouse, auction, ahouse]
+  pwarp:
+    description: Player warps
+    usage: /pwarp [set|delete|list|<name>]
+    aliases: [playerwarp, pwarps, pw]
+  level:
+    description: View your SMP level progression
+    usage: /level [other]
+    aliases: [lvl, vlevel]
+  worldborder:
+    description: Toggleable world-border framework
+    usage: /worldborder [status|set|expand|farlands|pregen|toggle]
+    aliases: [vborder, vwb]
+  spawn:
+    description: Return to the Citadel spawn
+    usage: /spawn
+  lifesteal:
+    description: Lifesteal hearts management
+    usage: /lifesteal [withdraw|pay|top]
+    aliases: [ls, hearts]
+  crates:
+    description: Crate keys and locations
+    usage: /crates [give]
+    aliases: [crate, keys]
+  aetherforge:
+    description: Open the one-lifetime Sovereign forge
+    usage: /aetherforge
+    aliases: [forge, sovereign]
+  vapez:
+    description: Admin / diagnostics
+    usage: /vapez
+    aliases: [vsmp]
+  balance:
+    description: Show balance (Vault passthrough)
+    usage: /balance [player]
+    aliases: [bal, money]
+  pay:
+    description: Pay another player
+    usage: /pay <player> <amount>
+  bounty:
+    description: Place or view bounties
+    usage: /bounty [add|list]
+  rtp:
+    description: Random teleport within the current world border
+    usage: /rtp
+    aliases: [wild, randomtp]
+
+permissions:
+  vapez.shop:
+    default: true
+  vapez.auction:
+    default: true
+  vapez.warp:
+    default: true
+  vapez.warp.set:
+    default: true
+  vapez.level:
+    default: true
+  vapez.spawn:
+    default: true
+  vapez.lifesteal:
+    default: true
+  vapez.forge:
+    default: true
+  vapez.rtp:
+    default: true
+  vapez.border:
+    default: op
+  vapez.admin:
+    default: op
+  vapez.crates.give:
+    default: op
+  vapez.kit.bypass:
+    default: false

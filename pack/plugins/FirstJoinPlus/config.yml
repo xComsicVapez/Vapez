@@ -1,0 +1,7 @@
+# FirstJoinPlus / FirstJoinCommands — NOT required.
+# VapezCore already:
+#   • detects first join via PersistentDataContainer (vapez:unique_kit)
+#   • issues a UUID-colored shulker box with the starter kit
+#   • deposits starter money through Vault
+# If you still want FirstJoinCommands, do NOT also give a kit here or players get doubles.
+on-first-join: []

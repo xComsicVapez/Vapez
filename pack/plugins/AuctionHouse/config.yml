@@ -1,0 +1,8 @@
+# Optional third-party AuctionHouse plugin.
+# VapezCore already provides /ah. Only install a premium AH if you disable
+# VapezCore auction in plugins/VapezCore/config.yml (auction.enabled: false).
+enabled: false
+listing-duration-hours: 48
+listing-fee: 25
+tax: 0.03
+max-listings: 12

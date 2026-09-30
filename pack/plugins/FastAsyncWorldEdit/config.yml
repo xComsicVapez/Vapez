@@ -1,0 +1,17 @@
+# FastAsyncWorldEdit — drop the FAWE jar beside WorldEdit.
+# Use for /schem load vapez-citadel after copying pack/schematics/ into plugins/FastAsyncWorldEdit/schematics/
+enabled-components:
+  commands: true
+  tick-limiter: true
+enabled: true
+max-memory-percent: 80
+clipboard:
+  use-disk: true
+  delete-after-days: 1
+navigation-wand:
+  item: minecraft:compass
+  max-distance: 120
+restrict-to-loaded-chunks: false
+region-restrictions: true
+# Schematics directory relative to the FAWE plugin folder:
+schematics: schematics

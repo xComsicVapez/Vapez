@@ -1,0 +1,42 @@
+{
+  "resource_pack_name": "vapez",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "vapez.aetherium_crystal": {
+      "textures": "textures/items/aetherium_crystal"
+    },
+    "vapez.aetherium_ingot": {
+      "textures": "textures/items/aetherium_ingot"
+    },
+    "vapez.sovereign_edge": {
+      "textures": "textures/items/sovereign_edge"
+    },
+    "vapez.aetherium_sword": {
+      "textures": "textures/items/aetherium_sword"
+    },
+    "vapez.aetherium_pickaxe": {
+      "textures": "textures/items/aetherium_pickaxe"
+    },
+    "vapez.aetherium_axe": {
+      "textures": "textures/items/aetherium_axe"
+    },
+    "vapez.aetherium_helmet": {
+      "textures": "textures/items/aetherium_helmet"
+    },
+    "vapez.aetherium_chestplate": {
+      "textures": "textures/items/aetherium_chestplate"
+    },
+    "vapez.aetherium_leggings": {
+      "textures": "textures/items/aetherium_leggings"
+    },
+    "vapez.aetherium_boots": {
+      "textures": "textures/items/aetherium_boots"
+    },
+    "vapez.heart": {
+      "textures": "textures/items/heart"
+    },
+    "vapez.crate_key": {
+      "textures": "textures/items/crate_key"
+    }
+  }
+}

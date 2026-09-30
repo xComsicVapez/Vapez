@@ -1,0 +1,186 @@
+{
+  "format_version": 2,
+  "items": {
+    "minecraft:amethyst_shard": [
+      {
+        "type": "definition",
+        "model": "vapez:aetherium_crystal",
+        "bedrock_identifier": "vapez:aetherium_crystal",
+        "display_name": "Aetherium Crystal",
+        "bedrock_options": {
+          "icon": "vapez.aetherium_crystal",
+          "creative_category": "items",
+          "tags": ["vapez:aetherium"]
+        }
+      }
+    ],
+    "minecraft:netherite_ingot": [
+      {
+        "type": "definition",
+        "model": "vapez:aetherium_ingot",
+        "bedrock_identifier": "vapez:aetherium_ingot",
+        "display_name": "Aetherium Ingot",
+        "bedrock_options": {
+          "icon": "vapez.aetherium_ingot",
+          "creative_category": "items",
+          "tags": ["vapez:aetherium"]
+        }
+      }
+    ],
+    "minecraft:netherite_sword": [
+      {
+        "type": "definition",
+        "model": "vapez:sovereign_edge",
+        "bedrock_identifier": "vapez:sovereign_edge",
+        "display_name": "Sovereign Edge",
+        "bedrock_options": {
+          "icon": "vapez.sovereign_edge",
+          "display_handheld": true,
+          "creative_category": "equipment",
+          "creative_group": "itemGroup.name.sword",
+          "tags": ["vapez:aetherium", "vapez:legendary"]
+        }
+      },
+      {
+        "type": "definition",
+        "model": "vapez:aetherium_sword",
+        "bedrock_identifier": "vapez:aetherium_sword",
+        "display_name": "Aetherium Saber",
+        "bedrock_options": {
+          "icon": "vapez.aetherium_sword",
+          "display_handheld": true,
+          "creative_category": "equipment",
+          "creative_group": "itemGroup.name.sword"
+        }
+      }
+    ],
+    "minecraft:netherite_pickaxe": [
+      {
+        "type": "definition",
+        "model": "vapez:aetherium_pickaxe",
+        "bedrock_identifier": "vapez:aetherium_pickaxe",
+        "display_name": "Aetherium Drill",
+        "bedrock_options": {
+          "icon": "vapez.aetherium_pickaxe",
+          "display_handheld": true,
+          "creative_category": "equipment",
+          "creative_group": "itemGroup.name.pickaxe"
+        }
+      }
+    ],
+    "minecraft:netherite_axe": [
+      {
+        "type": "definition",
+        "model": "vapez:aetherium_axe",
+        "bedrock_identifier": "vapez:aetherium_axe",
+        "display_name": "Aetherium Cleaver",
+        "bedrock_options": {
+          "icon": "vapez.aetherium_axe",
+          "display_handheld": true,
+          "creative_category": "equipment",
+          "creative_group": "itemGroup.name.axe"
+        }
+      }
+    ],
+    "minecraft:netherite_helmet": [
+      {
+        "type": "definition",
+        "model": "vapez:aetherium_helmet",
+        "bedrock_identifier": "vapez:aetherium_helmet",
+        "display_name": "Aetherium Helm",
+        "bedrock_options": {
+          "icon": "vapez.aetherium_helmet",
+          "protection_value": 4,
+          "creative_category": "equipment",
+          "creative_group": "itemGroup.name.helmet"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "head"
+          }
+        }
+      }
+    ],
+    "minecraft:netherite_chestplate": [
+      {
+        "type": "definition",
+        "model": "vapez:aetherium_chestplate",
+        "bedrock_identifier": "vapez:aetherium_chestplate",
+        "display_name": "Aetherium Aegis",
+        "bedrock_options": {
+          "icon": "vapez.aetherium_chestplate",
+          "protection_value": 10,
+          "creative_category": "equipment",
+          "creative_group": "itemGroup.name.chestplate"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "chest"
+          }
+        }
+      }
+    ],
+    "minecraft:netherite_leggings": [
+      {
+        "type": "definition",
+        "model": "vapez:aetherium_leggings",
+        "bedrock_identifier": "vapez:aetherium_leggings",
+        "display_name": "Aetherium Greaves",
+        "bedrock_options": {
+          "icon": "vapez.aetherium_leggings",
+          "protection_value": 8,
+          "creative_category": "equipment",
+          "creative_group": "itemGroup.name.leggings"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "legs"
+          }
+        }
+      }
+    ],
+    "minecraft:netherite_boots": [
+      {
+        "type": "definition",
+        "model": "vapez:aetherium_boots",
+        "bedrock_identifier": "vapez:aetherium_boots",
+        "display_name": "Aetherium Treads",
+        "bedrock_options": {
+          "icon": "vapez.aetherium_boots",
+          "protection_value": 4,
+          "creative_category": "equipment",
+          "creative_group": "itemGroup.name.boots"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "feet"
+          }
+        }
+      }
+    ],
+    "minecraft:nether_star": [
+      {
+        "type": "definition",
+        "model": "vapez:heart",
+        "bedrock_identifier": "vapez:stolen_heart",
+        "display_name": "Stolen Heart",
+        "bedrock_options": {
+          "icon": "vapez.heart",
+          "creative_category": "items"
+        }
+      }
+    ],
+    "minecraft:tripwire_hook": [
+      {
+        "type": "definition",
+        "model": "vapez:crate_key",
+        "bedrock_identifier": "vapez:crate_key",
+        "display_name": "Citadel Crate Key",
+        "bedrock_options": {
+          "icon": "vapez.crate_key",
+          "creative_category": "items"
+        }
+      }
+    ]
+  }
+}

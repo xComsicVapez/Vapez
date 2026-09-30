@@ -1,0 +1,129 @@
+# Purpur 1.21.8 — gameplay-friendly SMP defaults. Unknown keys are ignored/filled on boot.
+verbose: false
+settings:
+  server-mod-name: Vapez
+  lagging-threshold: 19.0
+  tps-catchup: true
+  ticks-per:
+    player-login: 1
+    player-tab-timeout: 60
+  fix-unsafe-teleport-exploitation: true
+  disable-give-dropping: false
+  player-profiles:
+    cache-size: 2000
+  generate-zero-tick-plants: false
+  register-minecraft-debug-commands: false
+  startup-commands:
+    - spark profiler --timeout 30
+  messages:
+    afk-broadcast-away: <gray>%s is now AFK.
+    afk-broadcast-back: <gray>%s is no longer AFK.
+    afk-broadcast-use-display-name: false
+    cannot-ride-mob: <red>You cannot ride this mob.
+    credit-riden-mobs-to-player-kills: true
+world-settings:
+  default:
+    mob-spawning:
+      village-spawn-excess-range: 0
+    blocks:
+      anvil:
+        cumulative-cost: true
+      beacon:
+        effect-range:
+          level-1: 20
+          level-2: 30
+          level-3: 40
+          level-4: 50
+      chest:
+        six-rows: false
+        use-nearby-for-trapped-chests: false
+      ender-chest:
+        six-rows: false
+      furnace:
+        infinite-fuel: false
+        infinite-lava: false
+      magma-block:
+        reverse-bubble-column-flow: false
+      piston:
+        block-push-limit: 12
+      cactus:
+        break-on-solid-neighbors: true
+      farmland:
+        trample: true
+        only-players-trample: false
+        gets-moist-from-below: false
+      lava:
+        infinite-always: false
+      water:
+        infinite-always: false
+    tools:
+      axe:
+        strip-shortcuts: true
+      hoe:
+        till-shortcuts: true
+      shovel:
+        flatten-shortcuts: true
+    gameplay-mechanics:
+      use-better-mending: true
+      disable-drowned-trident-drop: false
+      entity:
+        zombie:
+          jockey-spawn-chance: 0.05
+        phantom:
+          ignore-players-with-insomnia-effect: false
+      player:
+        teleport-if-outside-border: true
+        shift-right-click-repairs-mending: true
+        idle-timeout:
+          kick-if-idle: false
+          tick-nearby-entities: true
+          timeout-seconds: 0
+        totem-of-undying-works-in-inventory: false
+      boat:
+        eject-players-on-land: false
+      entity-hurt-non-projectiles-while-blocking: false
+      infinity-bow-works-without-arrows: false
+      milk-cures-bad-omen: true
+      persistent-droppable-entity-display-names: true
+      persistent-tile-entity-display-names-and-lore: true
+      raid-cooldown-seconds: 0
+      silk-touch-enabled-for-spawners: false
+      animal-count-for-breeding-cap: 32
+    mob-effects:
+      health-regen-amount: 1
+    hunger:
+      starvation-damage: 1
+    mobs:
+      villager:
+        can-be-leashed: false
+        follow-emerald-blocks: false
+        lobotomize:
+          enabled: true
+          wait-until-trade-locked: false
+          search-radius: 8
+      pig:
+        give-saddle-back: true
+      cow:
+        feed-wheat-to-grow: true
+      chicken:
+        retarget-eggs: true
+      creeper:
+        naturally-charged-creeper-spawn-rate: 0.0
+        explode-when-killed: false
+      enderman:
+        short-height: false
+        allow-picking-up-blocks: true
+      ghast:
+        shooting-ignores-line-of-sight: false
+      blaze:
+        one-shot-blaze-rod-drop: false
+      guardian:
+        skip-laser-animation: false
+      zombie:
+        aggressive-towards-villager-when-lagging: false
+    projectiles:
+      disable-relative-projectile-velocity: false
+    fireworks:
+      load-chunk-on-detonate: false
+    lightning-rods:
+  range: 128
