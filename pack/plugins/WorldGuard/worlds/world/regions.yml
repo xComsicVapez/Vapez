@@ -1,0 +1,39 @@
+#
+# WorldGuard 7 region file for the overworld.
+# Copy to plugins/WorldGuard/worlds/<world>/regions.yml if WG overwrote it.
+#
+regions:
+    __global__:
+        members: {}
+        flags: {}
+        owners: {}
+        type: global
+        priority: 0
+    spawn:
+        min: {x: -128, y: -64, z: -128}
+        max: {x: 128, y: 319, z: 128}
+        members: {}
+        flags:
+            pvp: deny
+            build: deny
+            block-break: deny
+            block-place: deny
+            interact: allow
+            use: allow
+            chest-access: allow
+            mob-spawning: deny
+            creeper-explosion: deny
+            tnt: deny
+            other-explosion: deny
+            fire-spread: deny
+            lava-fire: deny
+            ghast-fireball: deny
+            enderman-grief: deny
+            invincible: allow
+            fall-damage: deny
+            lightning: deny
+            greeting: §bVapez spawn — safe zone (no break, no death, no mobs)
+            farewell: §7You left spawn protection
+        owners: {}
+        type: cuboid
+        priority: 10

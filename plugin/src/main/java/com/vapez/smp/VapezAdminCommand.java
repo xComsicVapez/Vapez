@@ -32,7 +32,7 @@ public final class VapezAdminCommand implements CommandExecutor, TabCompleter {
         if (args.length == 0) {
             sender.sendMessage(plugin.settings().prefix().append(
                     Component.text("VapezCore " + plugin.getPluginMeta().getVersion(), NamedTextColor.AQUA)));
-            sender.sendMessage(Component.text("/vapez reload | give | buildspawn | ore | stats", NamedTextColor.GRAY));
+            sender.sendMessage(Component.text("/vapez reload | give | buildspawn | spawnstatus | stats", NamedTextColor.GRAY));
             return true;
         }
         switch (args[0].toLowerCase(Locale.ROOT)) {
@@ -63,6 +63,16 @@ public final class VapezAdminCommand implements CommandExecutor, TabCompleter {
                 player.getInventory().addItem(stack);
                 sender.sendMessage(plugin.settings().prefix().append(Component.text("Gave " + args[1], NamedTextColor.GREEN)));
             }
+            case "spawnstatus", "inspect" -> {
+                if (plugin.inspector() != null) {
+                    plugin.inspector().scan();
+                    for (String line : plugin.inspector().report().consoleLines()) {
+                        sender.sendMessage(Component.text(line, NamedTextColor.AQUA));
+                    }
+                } else {
+                    sender.sendMessage(Component.text("Inspector not ready yet.", NamedTextColor.RED));
+                }
+            }
             case "stats" -> sender.sendMessage(Component.text(
                     "Players tracked: " + plugin.stats().size()
                             + " | Listings: " + plugin.auctions().size()
@@ -84,7 +94,7 @@ public final class VapezAdminCommand implements CommandExecutor, TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
                                                 @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1) {
-            return Stream.of("reload", "give", "buildspawn", "stats")
+            return Stream.of("reload", "give", "buildspawn", "spawnstatus", "stats")
                     .filter(s -> s.startsWith(args[0].toLowerCase(Locale.ROOT)))
                     .toList();
         }

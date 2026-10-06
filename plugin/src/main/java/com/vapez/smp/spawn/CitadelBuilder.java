@@ -37,6 +37,15 @@ public final class CitadelBuilder {
             world.setSpawnLocation(plugin.settings().spawnLocation(world));
             return;
         }
+        if (plugin.settings().skipCitadelIfInhabited()) {
+            long inhabited = world.getChunkAt(world.getSpawnLocation()).getInhabitedTime();
+            if (inhabited >= plugin.settings().inhabitedThreshold()) {
+                plugin.getLogger().warning("Spawn chunk already inhabited (" + inhabited
+                        + " ticks). Skipping Aether Citadel flatten so a transferred world is not wiped. "
+                        + "Run /vapez buildspawn only if you want the original citadel.");
+                return;
+            }
+        }
         forceRebuild(world);
     }
 

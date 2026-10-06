@@ -9,11 +9,15 @@ public final class Positions {
     private Positions() {
     }
 
+    public static boolean inside(int x, int z, int cx, int cz, int radius) {
+        return Math.abs(x - cx) <= radius && Math.abs(z - cz) <= radius;
+    }
+
     public static boolean inside(Location loc, int cx, int cz, int radius) {
         if (loc == null || loc.getWorld() == null) {
             return false;
         }
-        return Math.abs(loc.getBlockX() - cx) <= radius && Math.abs(loc.getBlockZ() - cz) <= radius;
+        return inside(loc.getBlockX(), loc.getBlockZ(), cx, cz, radius);
     }
 
     public static boolean inside(Block block, int cx, int cz, int radius) {

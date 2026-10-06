@@ -27,12 +27,18 @@ A smaller FAWE schematic (`pack/schematics/vapez-citadel.schem`) of the inner pl
 
 ## Protection
 
-Two layers:
+Centered on **world spawn** (so a transferred world is covered, not only 0,0).
 
-1. **WorldGuard** region `spawn` (and sub-regions) in `plugins/WorldGuard/worlds/world/regions.yml`
-2. **VapezCore fallback guard** — cancels break/place/PVP/explosions/mob spawns inside `spawn.protection-radius` (default 128) unless `vapez.admin`
+1. **WorldGuard** region `spawn` in `pack/plugins/WorldGuard/worlds/world/regions.yml` (invincible, no break, no mobs, no PvP)
+2. **VapezCore fallback guard** — cancels break/place, **all player damage/death**, hunger, explosions, fire, and hostile mobs inside `spawn.protection-radius` (default 128) unless `vapez.admin`. Existing hostiles are purged.
 
 Vanilla `spawn-protection` is **0** so FAWE/WorldEdit ops are not fighting vanilla.
+
+Remote look (phone, no Minecraft client): [REMOTE.md](REMOTE.md). Console: `/vapez spawnstatus`.
+
+## Transferred worlds
+
+If the spawn chunk already has inhabited time, the Citadel **will not flatten** your imported map. Signature on the dashboard will be `CUSTOM`. Force the original citadel only with `/vapez buildspawn`.
 
 ## Interactive zones
 

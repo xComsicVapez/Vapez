@@ -62,6 +62,7 @@ modrinth luckperms "${RUNTIME}/plugins/LuckPerms.jar" paper "${MC_VERSION}"
 modrinth spark "${RUNTIME}/plugins/spark.jar"
 modrinth coreprotect "${RUNTIME}/plugins/CoreProtect.jar"
 modrinth worldedit "${RUNTIME}/plugins/WorldEdit.jar" paper "${MC_VERSION}"
+modrinth bluemap "${RUNTIME}/plugins/BlueMap.jar" paper "${MC_VERSION}" || true
 
 # EngineHub / Hangar / GitHub known URLs
 download "https://github.com/MilkBowl/Vault/releases/latest/download/Vault.jar" \

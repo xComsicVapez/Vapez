@@ -32,6 +32,7 @@ Java 23+ treats generational ZGC as default; the `ZGenerational` flag may warn. 
 spark tps
 spark health
 spark profiler --timeout 30
+vapez spawnstatus
 chunky continue     # if a pregen was paused
 ```
 
@@ -53,7 +54,8 @@ Player PDC lives inside `world/playerdata/` — a world backup includes kit/forg
 - `enable-command-block=false`
 - `rcon` disabled by default
 - Anti-xray on
-- WorldGuard spawn deny-break
+- WorldGuard spawn deny-break + VapezCore no-death / no-mob spawn zone
+- Spawn dashboard is read-only; set `inspect.dashboard-token` if the port is public
 - Packet limiter in Paper + ViaVersion
 
 ## When you outgrow 10k
