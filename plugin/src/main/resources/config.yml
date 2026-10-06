@@ -156,6 +156,28 @@ spawn:
   schematic: vapez-citadel.schem
   protection-radius: 128
   fallback-guard: true
+  # Safe zone: players cannot grief, die, or meet hostiles at spawn.
+  deny-break: true
+  deny-place: true
+  deny-damage: true
+  deny-hunger: true
+  deny-mobs: true
+  purge-mobs: true
+  # Do not flatten a transferred world that already has spawn chunks.
+  skip-citadel-if-inhabited: true
+  inhabited-threshold-ticks: 20
+
+inspect:
+  # Phone page: http://YOUR.PUBLIC.IP:25580/  (forward 25580 TCP)
+  dashboard: true
+  dashboard-port: 25580
+  dashboard-bind: 0.0.0.0
+  dashboard-token: ""
+  motd-status: true
+  interval-ticks: 200
+  map-radius: 64
+  map-scale: 4
+  discord-webhook: ""
 
 holograms:
   update-interval-ticks: 100

@@ -12,6 +12,8 @@ import com.vapez.smp.forge.AetherforgeCommand;
 import com.vapez.smp.forge.ForgeListener;
 import com.vapez.smp.forge.LifetimeCrafts;
 import com.vapez.smp.guard.SpawnGuardListener;
+import com.vapez.smp.inspect.SpawnInspector;
+import com.vapez.smp.inspect.SpawnMotdListener;
 import com.vapez.smp.items.AbilityTask;
 import com.vapez.smp.items.CustomItems;
 import com.vapez.smp.items.ItemListener;
@@ -65,6 +67,7 @@ public final class VapezPlugin extends JavaPlugin implements Listener {
     private CitadelBuilder citadel;
     private SpawnNpcManager npcs;
     private FarLandsEngine farLands;
+    private SpawnInspector inspector;
 
     public static VapezPlugin get() {
         return instance;
@@ -93,6 +96,7 @@ public final class VapezPlugin extends JavaPlugin implements Listener {
         this.citadel = new CitadelBuilder(this);
         this.npcs = new SpawnNpcManager(this);
         this.farLands = new FarLandsEngine(this);
+        this.inspector = new SpawnInspector(this);
 
         CustomRecipes.register(this);
         registerCommands();
@@ -108,6 +112,7 @@ public final class VapezPlugin extends JavaPlugin implements Listener {
         auctions.startTasks();
         new AbilityTask(this).start();
         crates.startTasks();
+        inspector.start();
 
         getLogger().info("VapezCore enabled — original SMP framework ready.");
     }
@@ -128,6 +133,9 @@ public final class VapezPlugin extends JavaPlugin implements Listener {
         }
         if (npcs != null) {
             npcs.despawn();
+        }
+        if (inspector != null) {
+            inspector.shutdown();
         }
         getLogger().info("VapezCore disabled.");
     }
@@ -189,6 +197,7 @@ public final class VapezPlugin extends JavaPlugin implements Listener {
         pm.registerEvents(new StatsListener(this), this);
         pm.registerEvents(lifesteal, this);
         pm.registerEvents(new SpawnGuardListener(this), this);
+        pm.registerEvents(new SpawnMotdListener(this), this);
         pm.registerEvents(npcs, this);
         pm.registerEvents(crates, this);
         pm.registerEvents(warps, this);
@@ -241,6 +250,10 @@ public final class VapezPlugin extends JavaPlugin implements Listener {
 
     public CitadelBuilder citadel() {
         return citadel;
+    }
+
+    public SpawnInspector inspector() {
+        return inspector;
     }
 
     public void reloadAll() {

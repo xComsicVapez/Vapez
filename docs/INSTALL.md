@@ -145,6 +145,7 @@ Keep `world/datapacks/vapez-aetherium` — it is original. The plugin populator 
 ```bash
 ufw allow 25565/tcp
 ufw allow 19132/udp
+ufw allow 25580/tcp   # phone spawn dashboard
 ```
 
 ## 10. Verify
@@ -154,5 +155,7 @@ Join from Java 1.21.8 and from a Bedrock client pointing at `host:19132`.
 - First join: uniquely colored shulker kit
 - `/shop`, `/ah`, `/level` work
 - `/worldborder status` shows 10000
-- Spawn is the Citadel, not a dirt hut
+- Spawn is the Citadel, not a dirt hut (or `CUSTOM` if you transferred a world)
+- Phone: `http://YOUR.PUBLIC.IP:25580/` — see [REMOTE.md](REMOTE.md)
+- `vapez spawnstatus` from console
 - `spark tps` after pregen

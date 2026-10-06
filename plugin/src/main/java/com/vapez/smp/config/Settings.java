@@ -236,6 +236,74 @@ public final class Settings {
         return cfg.getBoolean("spawn.fallback-guard", true);
     }
 
+    public boolean denyBreak() {
+        return cfg.getBoolean("spawn.deny-break", true);
+    }
+
+    public boolean denyPlace() {
+        return cfg.getBoolean("spawn.deny-place", true);
+    }
+
+    public boolean denyDamage() {
+        return cfg.getBoolean("spawn.deny-damage", true);
+    }
+
+    public boolean denyHunger() {
+        return cfg.getBoolean("spawn.deny-hunger", true);
+    }
+
+    public boolean denyMobs() {
+        return cfg.getBoolean("spawn.deny-mobs", true);
+    }
+
+    public boolean purgeMobs() {
+        return cfg.getBoolean("spawn.purge-mobs", true);
+    }
+
+    public boolean skipCitadelIfInhabited() {
+        return cfg.getBoolean("spawn.skip-citadel-if-inhabited", true);
+    }
+
+    public long inhabitedThreshold() {
+        return cfg.getLong("spawn.inhabited-threshold-ticks", 20);
+    }
+
+    public boolean dashboardEnabled() {
+        return cfg.getBoolean("inspect.dashboard", true);
+    }
+
+    public int dashboardPort() {
+        return cfg.getInt("inspect.dashboard-port", 25580);
+    }
+
+    public String dashboardBind() {
+        return cfg.getString("inspect.dashboard-bind", "0.0.0.0");
+    }
+
+    public String dashboardToken() {
+        return cfg.getString("inspect.dashboard-token", "");
+    }
+
+    public boolean motdStatus() {
+        return cfg.getBoolean("inspect.motd-status", true);
+    }
+
+    public int inspectIntervalTicks() {
+        return Math.max(40, cfg.getInt("inspect.interval-ticks", 200));
+    }
+
+    public int mapRadius() {
+        return Math.max(16, Math.min(128, cfg.getInt("inspect.map-radius", 64)));
+    }
+
+    public int mapScale() {
+        return Math.max(2, Math.min(8, cfg.getInt("inspect.map-scale", 4)));
+    }
+
+    public String discordWebhook() {
+        return cfg.getString("inspect.discord-webhook", "");
+    }
+
     public int hologramTop() {
         return cfg.getInt("holograms.top-size", 10);
     }

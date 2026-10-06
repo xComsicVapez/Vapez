@@ -13,7 +13,7 @@ This is **not** a DonutSMP clone, leak, or redistribution. Gameplay is in the sa
 | Gameplay | `VapezCore` — `/shop`, `/ah`, `/pwarp`, `/level`, `/lifesteal`, `/aetherforge`, `/worldborder`, RTP, bounties, crates, unique first-join shulker kit |
 | Ore | **Aetherium**, rarer than diamonds, Y=-64 to -50, netherite-pick only, plugin populator (Terralith-safe) |
 | Relic | **Sovereign Edge** — one craft per player lifetime via `PersistentDataContainer` |
-| Spawn | Original **Aether Citadel** megastructure (procedural + FAWE schematic), WorldGuard, NPCs, crate pavilion, hologram terrace |
+| Spawn | Original **Aether Citadel**, WorldGuard + no-death/no-mob guard, phone dashboard on :25580, `/vapez spawnstatus` |
 | Worldgen | Install path for Terralith + Structory + Towns and Towers (downloaded, not vendored) |
 | Border | 10,000 × 10,000 initialized, Chunky pregen, live `/worldborder expand` out to vanilla max (~30M) with optional Far Lands overlay engine |
 
@@ -55,7 +55,7 @@ Full procedure: [docs/INSTALL.md](docs/INSTALL.md)
 - `/worldborder status\|set\|expand\|farlands\|pregen`
 - `/crates give <player>` — ops
 - `/spawn` `/rtp` `/bal` `/pay` `/bounty`
-- `/vapez reload|give|buildspawn|stats`
+- `/vapez reload|give|buildspawn|spawnstatus|stats`
 
 ## Hardware
 
@@ -68,6 +68,7 @@ Full procedure: [docs/INSTALL.md](docs/INSTALL.md)
 - [Gameplay](docs/GAMEPLAY.md)
 - [Cross-play & custom models](docs/CROSSPLAY.md)
 - [Spawn citadel](docs/SPAWN.md)
+- [Remote spawn check (phone)](docs/REMOTE.md)
 - [Worldgen datapacks](docs/WORLDGEN.md)
 - [World border & Far Lands](docs/FAR-LANDS.md)
 - [Legal / licensing](docs/LEGAL.md)

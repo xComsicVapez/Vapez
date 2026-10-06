@@ -59,7 +59,7 @@ commands:
     aliases: [forge, sovereign]
   vapez:
     description: Admin / diagnostics
-    usage: /vapez
+    usage: /vapez [reload|give|buildspawn|spawnstatus|stats]
     aliases: [vsmp]
   balance:
     description: Show balance (Vault passthrough)

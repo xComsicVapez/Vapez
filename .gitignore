@@ -9,12 +9,14 @@ run/
 .DS_Store
 *.log
 hs_err_pid*
+__pycache__/
+*.pyc
 
 # Minecraft server runtime
 pack/runtime/
-world/
-world_nether/
-world_the_end/
+/world/
+/world_nether/
+/world_the_end/
 logs/
 cache/
 libraries/
