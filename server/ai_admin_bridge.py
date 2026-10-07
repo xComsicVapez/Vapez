@@ -63,6 +63,8 @@ Rules:
 - Some actions need the owner's approval. When a tool says approval is pending, stop and briefly tell \
 the owner what you are about to do; the owner will answer /ai yes or /ai no.
 - Replies are shown in Minecraft chat: plain text, no markdown, at most 3 short sentences unless asked for detail.
+- Use real player names in commands, never placeholders like YourUsername or <player>.
+- To add a feature, search_mods first, then install_mod with the best server-side match.
 - If a request is unclear or risky, ask a short question instead of guessing."""
 
 TOOLS = [
@@ -430,7 +432,8 @@ def handle(session, request):
         if session.pending:
             session.pending = None
             session.messages.append({"role": "user", "content": "(The owner ignored the pending approval request.)"})
-        session.messages.append({"role": "user", "content": text})
+        session.messages.append({"role": "user", "content": f"[The owner's in-game name is {session.name}; "
+                                 f"\"me\"/\"I\" means {session.name}.] {text}"})
     session.trim()
     agent_loop(session)
 
