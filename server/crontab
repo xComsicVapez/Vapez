@@ -1,0 +1,14 @@
+# Install with: crontab ~/server-tools/crontab     (times are UTC)
+PATH=/home/cosmic/bin:/usr/local/bin:/usr/bin:/bin
+TOOLS=/home/cosmic/server-tools
+
+# Start the servers when the machine boots.
+@reboot sleep 30 && $TOOLS/mc lifesteal1 start && $TOOLS/mc lifesteal2 start
+
+# Daily backups at 05:00; "daily" backups older than 14 days are deleted automatically.
+0 5 * * * $TOOLS/backup.sh lifesteal1 daily >> /home/cosmic/backups/backup.log 2>&1
+20 5 * * * $TOOLS/backup.sh lifesteal2 daily >> /home/cosmic/backups/backup.log 2>&1
+
+# Reset the Nether and End of the live server every 3 months (1 Jan, 1 Apr, 1 Jul, 1 Oct).
+# Players get a 30 minute countdown starting at 05:30; the reset happens at 06:00.
+30 5 1 1,4,7,10 * $TOOLS/reset-dimensions.sh lifesteal1 1800 >> /home/cosmic/backups/reset.log 2>&1

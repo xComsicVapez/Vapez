@@ -1,0 +1,172 @@
+#!/bin/bash
+# Manage Fabric servers that live in ~/<name> and run in a tmux session named <name>.
+#
+#   mc <name> start              start the server, its mod watcher, and ~/<name>-geyser if present
+#   mc <name> stop               stop the server and keep it stopped
+#   mc <name> restart [secs]     warn players, then restart (default 30s warning)
+#   mc <name> warn <secs> <msg>  only count down in chat, e.g. before maintenance
+#   mc <name> restart-geyser     restart Geyser, e.g. after editing ~/<name>-geyser/config.yml
+#   mc <name> console            open the console (leave with Ctrl+B then D)
+#   mc <name> cmd <command...>   run a console command, e.g. mc lifesteal2 cmd say hi
+#   mc <name> status             show whether the server, mod watcher and Geyser are running
+#   mc <name> watch-mods         (internal) restart automatically when mods/ changes
+
+set -u
+TOOLS_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+NAME="${1:-}"
+ACTION="${2:-status}"
+[ -z "$NAME" ] && { sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'; exit 1; }
+DIR="$HOME/$NAME"
+WATCH_SESSION="$NAME-modwatch"
+GEYSER_DIR="$HOME/$NAME-geyser"
+GEYSER_SESSION="$NAME-geyser"
+[ -d "$DIR" ] || { echo "No server folder at $DIR"; exit 1; }
+shift 2 2>/dev/null || shift $#
+
+log() { echo "[$(date '+%F %T')] $*" | tee -a "$DIR/logs/manager.log"; }
+running() { tmux has-session -t "=$NAME" 2>/dev/null; }
+send() { running && tmux send-keys -t "=$NAME:0.0" "$*" C-m; }
+
+say_countdown() {
+  local total=$1 reason=$2 t
+  for t in 1800 900 600 300 120 60 30 10 5 4 3 2 1; do
+    [ "$t" -gt "$total" ] && continue
+    sleep $((total - t))
+    total=$t
+    if [ "$t" -ge 60 ]; then send "say $reason in $((t / 60)) minute(s)."; else send "say $reason in $t second(s)."; fi
+  done
+  sleep "$total"
+}
+
+wait_for_exit() {
+  for _ in $(seq 1 120); do running || return 0; sleep 1; done
+  return 1
+}
+
+start_watcher() {
+  tmux has-session -t "=$WATCH_SESSION" 2>/dev/null && return
+  tmux new-session -d -s "$WATCH_SESSION" "$TOOLS_DIR/mc $NAME watch-mods"
+}
+
+geyser_running() { tmux has-session -t "=$GEYSER_SESSION" 2>/dev/null; }
+
+start_geyser() {
+  [ -f "$GEYSER_DIR/Geyser-Standalone.jar" ] || return 0
+  geyser_running && return
+  cp "$TOOLS_DIR/geyser.sh" "$GEYSER_DIR/geyser.sh"
+  tmux new-session -d -s "$GEYSER_SESSION" -c "$GEYSER_DIR" "./geyser.sh"
+  log "started Geyser for $NAME"
+}
+
+# Geyser's console garbles input typed through tmux, so it is controlled with signals.
+geyser_java_pid() {
+  local pane_pid
+  pane_pid=$(tmux list-panes -t "=$GEYSER_SESSION" -F '#{pane_pid}' 2>/dev/null | head -1)
+  [ -n "$pane_pid" ] && pgrep -P "$pane_pid" java
+}
+
+stop_geyser() {
+  geyser_running || return 0
+  [ "${1:-stop}" = stop ] && touch "$GEYSER_DIR/.stop-requested"
+  local pid
+  pid=$(geyser_java_pid)
+  [ -n "$pid" ] && kill -TERM "$pid"
+  if [ "${1:-stop}" = stop ]; then
+    for _ in $(seq 1 30); do geyser_running || break; sleep 1; done
+    geyser_running && tmux kill-session -t "=$GEYSER_SESSION"
+    log "stopped Geyser for $NAME"
+  else
+    log "restarting Geyser for $NAME"
+  fi
+}
+
+mods_fingerprint() {
+  find "$DIR/mods" -maxdepth 1 -name '*.jar' -printf '%f %s %T@\n' 2>/dev/null | sort
+}
+
+case "$ACTION" in
+  start)
+    if running; then echo "$NAME is already running."; else
+      mkdir -p "$DIR/logs"
+      tmux new-session -d -s "$NAME" -c "$DIR" "./start.sh"
+      log "started $NAME"
+    fi
+    start_watcher
+    start_geyser
+    ;;
+  stop)
+    tmux kill-session -t "=$WATCH_SESSION" 2>/dev/null
+    stop_geyser stop
+    if running; then
+      touch "$DIR/.stop-requested"
+      send "stop"
+      wait_for_exit && log "stopped $NAME" || { log "$NAME did not stop within 2 minutes"; exit 1; }
+    else
+      echo "$NAME is not running."
+    fi
+    ;;
+  restart-geyser)
+    if geyser_running; then stop_geyser restart; else start_geyser; fi
+    ;;
+  warn)
+    running && say_countdown "${1:-30}" "${2:-Server restarting}"
+    ;;
+  restart)
+    running || { "$0" "$NAME" start; exit; }
+    say_countdown "${1:-30}" "${RESTART_REASON:-Server restarting}"
+    log "restarting $NAME${RESTART_REASON:+ ($RESTART_REASON)}"
+    send "stop"
+    ;;
+  console)
+    running || { echo "$NAME is not running."; exit 1; }
+    tmux attach -t "=$NAME"
+    ;;
+  cmd)
+    running || { echo "$NAME is not running."; exit 1; }
+    send "$*"
+    ;;
+  status)
+    running && echo "$NAME: running" || echo "$NAME: stopped"
+    tmux has-session -t "=$WATCH_SESSION" 2>/dev/null && echo "mod watcher: running" || echo "mod watcher: stopped"
+    if [ -f "$GEYSER_DIR/Geyser-Standalone.jar" ]; then
+      geyser_running && echo "geyser: running" || echo "geyser: stopped"
+    fi
+    ;;
+  watch-mods)
+    previous="$(mods_fingerprint)"
+    log "watching $DIR/mods for changes"
+    while true; do
+      sleep 10
+      current="$(mods_fingerprint)"
+      [ "$current" = "$previous" ] && continue
+
+      # Wait for uploads to finish: the folder must stay unchanged for 30 seconds.
+      while sleep 30; do
+        settled="$(mods_fingerprint)"
+        [ "$settled" = "$current" ] && break
+        current="$settled"
+      done
+
+      added=$(comm -13 <(echo "$previous" | cut -d' ' -f1) <(echo "$current" | cut -d' ' -f1) | tr '\n' ' ')
+      removed=$(comm -23 <(echo "$previous" | cut -d' ' -f1) <(echo "$current" | cut -d' ' -f1) | tr '\n' ' ')
+      replaced=$(comm -13 <(echo "$previous") <(echo "$current") | cut -d' ' -f1 | grep -vxF -f <(echo "$added" | tr ' ' '\n' | sed '/^$/d') | tr '\n' ' ')
+      broken=""
+      for jar in "$DIR"/mods/*.jar; do
+        python3 -m zipfile -t "$jar" >/dev/null 2>&1 || broken+="$(basename "$jar") "
+      done
+      previous="$current"
+
+      if [ -n "$broken" ]; then
+        log "not restarting: these jars are incomplete or corrupt: $broken"
+        continue
+      fi
+      log "mods changed. added: ${added:-none}; replaced: ${replaced:-none}; removed: ${removed:-none}"
+      if running; then
+        RESTART_REASON="New mods detected, server restarting" "$0" "$NAME" restart 30
+      fi
+    done
+    ;;
+  *)
+    echo "Unknown action: $ACTION"; exit 1
+    ;;
+esac
