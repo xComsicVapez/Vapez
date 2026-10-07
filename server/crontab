@@ -5,8 +5,8 @@ TOOLS=/home/cosmic/server-tools
 # Start the live server when the machine boots. lifesteal1 is retired and stays off.
 @reboot sleep 30 && $TOOLS/mc lifesteal2 start
 
-# Local AI model used by the in-game /ai admin (ai_admin_bridge.py).
-@reboot tmux new-session -d -s ollama "OLLAMA_HOST=127.0.0.1:11434 OLLAMA_MODELS=/home/cosmic/ollama/models /home/cosmic/ollama/bin/ollama serve 2>&1 | tee -a /home/cosmic/ollama/serve.log"
+# Local AI model used by the in-game /ai admin (ai_admin_bridge.py). Low CPU priority so it never slows the game.
+@reboot tmux new-session -d -s ollama "nice -n 15 env OLLAMA_HOST=127.0.0.1:11434 OLLAMA_MODELS=/home/cosmic/ollama/models /home/cosmic/ollama/bin/ollama serve 2>&1 | tee -a /home/cosmic/ollama/serve.log"
 
 # Daily backup at 05:00; "daily" backups older than 14 days are deleted automatically.
 0 5 * * * $TOOLS/backup.sh lifesteal2 daily >> /home/cosmic/backups/backup.log 2>&1

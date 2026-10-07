@@ -364,7 +364,8 @@ class Session:
 def ask_model(messages):
     body = json.dumps({"model": SETTINGS.get("model", "qwen3:8b"), "stream": False, "think": False,
                        "messages": [{"role": "system", "content": SYSTEM_PROMPT}] + messages,
-                       "tools": tool_schema(), "options": {"temperature": 0.2}}).encode()
+                       "tools": tool_schema(),
+                       "options": {"temperature": 0.2, **SETTINGS.get("ollama_options", {})}}).encode()
     return http_json(SETTINGS.get("ollama_url", "http://127.0.0.1:11434") + "/api/chat", body)["message"]
 
 
