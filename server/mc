@@ -80,6 +80,16 @@ stop_geyser() {
   fi
 }
 
+AI_SESSION="$NAME-ai"
+
+start_ai_bridge() {
+  [ -f "$DIR/config/ai-admin-bridge.json" ] || return 0
+  tmux has-session -t "=$AI_SESSION" 2>/dev/null && return
+  tmux new-session -d -s "$AI_SESSION" -c "$DIR" \
+    "while true; do python3 '$TOOLS_DIR/ai_admin_bridge.py' '$DIR' 2>&1 | tee -a '$DIR/logs/ai-admin.log'; sleep 5; done"
+  log "started AI admin bridge for $NAME"
+}
+
 mods_fingerprint() {
   find "$DIR/mods" -maxdepth 1 -name '*.jar' -printf '%f %s %T@\n' 2>/dev/null | sort
 }
@@ -93,9 +103,11 @@ case "$ACTION" in
     fi
     start_watcher
     start_geyser
+    start_ai_bridge
     ;;
   stop)
     tmux kill-session -t "=$WATCH_SESSION" 2>/dev/null
+    tmux kill-session -t "=$AI_SESSION" 2>/dev/null
     stop_geyser stop
     if running; then
       touch "$DIR/.stop-requested"
@@ -130,6 +142,9 @@ case "$ACTION" in
     tmux has-session -t "=$WATCH_SESSION" 2>/dev/null && echo "mod watcher: running" || echo "mod watcher: stopped"
     if [ -f "$GEYSER_DIR/Geyser-Standalone.jar" ]; then
       geyser_running && echo "geyser: running" || echo "geyser: stopped"
+    fi
+    if [ -f "$DIR/config/ai-admin-bridge.json" ]; then
+      tmux has-session -t "=$AI_SESSION" 2>/dev/null && echo "ai admin: running" || echo "ai admin: stopped"
     fi
     ;;
   watch-mods)
