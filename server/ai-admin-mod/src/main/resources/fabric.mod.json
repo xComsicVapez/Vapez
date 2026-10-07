@@ -1,0 +1,18 @@
+{
+	"schemaVersion": 1,
+	"id": "ai-admin",
+	"version": "${version}",
+	"name": "AI Admin",
+	"description": "Adds /ai, usable only by the owners listed in config/ai-admin.json. Requests are queued for the AI admin bridge.",
+	"license": "MIT",
+	"environment": "server",
+	"entrypoints": {
+		"main": ["dev.cosmicpixel.aiadmin.AiAdmin"]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.1",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
