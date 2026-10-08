@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
 public class SpawnGuard implements ModInitializer {
@@ -12,14 +13,22 @@ public class SpawnGuard implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) ->
-			!(entity instanceof ServerPlayer player
-				&& source.is(DamageTypeTags.IS_FALL)
-				&& player.level().dimension() == Level.OVERWORLD
-				&& inSpawn(player.getX(), player.getZ())));
+		ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
+			if (!(entity instanceof ServerPlayer victim)) {
+				return true;
+			}
+			if (source.is(DamageTypeTags.IS_FALL) && inSpawn(victim)) {
+				return false;
+			}
+			// getEntity() is the owner for projectiles, so arrows and tridents count as PvP too.
+			return !(source.getEntity() instanceof ServerPlayer attacker && attacker != victim
+				&& (inSpawn(victim) || inSpawn(attacker)));
+		});
 	}
 
-	private static boolean inSpawn(double x, double z) {
-		return x >= MIN_X && x < MAX_X + 1 && z >= MIN_Z && z < MAX_Z + 1;
+	private static boolean inSpawn(Entity entity) {
+		double x = entity.getX(), z = entity.getZ();
+		return entity.level().dimension() == Level.OVERWORLD
+			&& x >= MIN_X && x < MAX_X + 1 && z >= MIN_Z && z < MAX_Z + 1;
 	}
 }
