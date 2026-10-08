@@ -38,6 +38,19 @@ say_countdown() {
   sleep "$total"
 }
 
+# simpleskills throws while players are kicked during "stop", which aborts the
+# shutdown before the world is saved, so always flush a save first.
+save_world() {
+  local before
+  before=$(grep -c "Saved the game" "$DIR/logs/latest.log" 2>/dev/null)
+  send "save-all flush"
+  for _ in $(seq 1 120); do
+    [ "$(grep -c "Saved the game" "$DIR/logs/latest.log" 2>/dev/null)" -gt "${before:-0}" ] && return 0
+    sleep 1
+  done
+  log "save-all flush did not finish within 2 minutes"
+}
+
 wait_for_exit() {
   for _ in $(seq 1 120); do running || return 0; sleep 1; done
   return 1
@@ -111,6 +124,7 @@ case "$ACTION" in
     stop_geyser stop
     if running; then
       touch "$DIR/.stop-requested"
+      save_world
       send "stop"
       wait_for_exit && log "stopped $NAME" || { log "$NAME did not stop within 2 minutes"; exit 1; }
     else
@@ -127,6 +141,7 @@ case "$ACTION" in
     running || { "$0" "$NAME" start; exit; }
     say_countdown "${1:-30}" "${RESTART_REASON:-Server restarting}"
     log "restarting $NAME${RESTART_REASON:+ ($RESTART_REASON)}"
+    save_world
     send "stop"
     ;;
   console)
