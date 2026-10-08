@@ -12,6 +12,8 @@ Scripts for the Fabric servers on `crazycraft-vm`. Each server lives in `~/<name
 | `mc <name> cmd <command>` | Run a console command, e.g. `mc lifesteal1 cmd say hi`. |
 | `mc <name> restart-geyser` | Restart Geyser Standalone after editing its `config.yml`. |
 | `backup.sh <name> [label]` | Back up the server while it runs, into `~/backups`. |
+| `copy_chunks.py <src-dim> <dst-dim> x1 z1 x2 z2 [--replace a=b]` | Copy a build (blocks, entities, POI) between worlds while the server is stopped. |
+| `region_scan.py <region-dir> <block>` | Find which region files contain a block, e.g. stray `note_block`s. |
 | `reset-dimensions.sh <name> [secs]` | Warn players, back up, move players out of the Nether/End, and regenerate both. |
 
 - **Adding mods:** copy the `.jar` into `~/<name>/mods`. When the folder has been unchanged for 30 seconds, the watcher checks that every jar is complete, warns players, and restarts the server. Fabric cannot load mods into a running server, so a restart is always needed.
