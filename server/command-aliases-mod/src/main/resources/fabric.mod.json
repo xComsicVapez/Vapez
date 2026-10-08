@@ -1,0 +1,19 @@
+{
+	"schemaVersion": 1,
+	"id": "command-aliases",
+	"version": "${version}",
+	"name": "Command Aliases",
+	"description": "Adds /sethome, /delhome, /homes and /home <name> as shortcuts for Essential Commands homes. Server-side only.",
+	"license": "MIT",
+	"environment": "server",
+	"entrypoints": {
+		"main": ["dev.cosmicpixel.aliases.CommandAliases"]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.1",
+		"java": ">=25",
+		"fabric-api": "*",
+		"essential_commands": "*"
+	}
+}
