@@ -1,0 +1,18 @@
+{
+	"schemaVersion": 1,
+	"id": "spawn-guard",
+	"version": "${version}",
+	"name": "Spawn Guard",
+	"description": "Players take no fall damage inside the overworld spawn area. Server-side only.",
+	"license": "MIT",
+	"environment": "server",
+	"entrypoints": {
+		"main": ["dev.cosmicpixel.spawnguard.SpawnGuard"]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.1",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
