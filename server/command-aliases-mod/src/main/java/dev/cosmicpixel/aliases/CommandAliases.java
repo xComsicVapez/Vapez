@@ -24,16 +24,16 @@ public class CommandAliases implements ModInitializer {
 	private static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		named(dispatcher, "sethome", "home set ");
 		named(dispatcher, "delhome", "home delete ");
-		dispatcher.register(Commands.literal("homes").requires(CommandSourceStack::isPlayer)
+		dispatcher.register(Commands.literal("homes")
 			.executes(ctx -> run(ctx, "home list")));
 		// Merges into Essential Commands' /home node; its set/tp/delete/list literals still take priority.
 		dispatcher.register(Commands.literal("home")
-			.then(Commands.argument("name", StringArgumentType.word()).requires(CommandSourceStack::isPlayer)
+			.then(Commands.argument("name", StringArgumentType.word())
 				.executes(ctx -> run(ctx, "home tp " + StringArgumentType.getString(ctx, "name")))));
 	}
 
 	private static void named(CommandDispatcher<CommandSourceStack> dispatcher, String alias, String target) {
-		dispatcher.register(Commands.literal(alias).requires(CommandSourceStack::isPlayer)
+		dispatcher.register(Commands.literal(alias)
 			.executes(ctx -> run(ctx, target + DEFAULT_HOME))
 			.then(Commands.argument("name", StringArgumentType.word())
 				.executes(ctx -> run(ctx, target + StringArgumentType.getString(ctx, "name")))));
