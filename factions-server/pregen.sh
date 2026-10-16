@@ -5,7 +5,7 @@
 set -euo pipefail
 SESSION="${SESSION:-factions}"
 RADIUS="${1:-10000}"
-send() { tmux send-keys -t "=$SESSION:" "$1" Enter; }
+send() { tmux send-keys -t "=$SESSION:server" "$1" Enter; }
 send "chunky world minecraft:overworld"
 send "chunky center 0 0"
 send "chunky radius $RADIUS"

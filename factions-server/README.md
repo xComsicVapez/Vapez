@@ -1,6 +1,6 @@
 # Vapez Factions server
 
-A Fabric 1.21.1 factions server with 118 mods: tech, storage, furniture, food, mobs,
+A Fabric 1.21.1 factions server with 119 mods: tech, storage, furniture, food, mobs,
 combat, and over a dozen structure and biome mods. The overworld is as big as
 Minecraft allows:
 
@@ -13,8 +13,46 @@ Minecraft allows:
 | Mountains | up to ~250 | **50% taller**, thicker ranges |
 
 Factions comes from the [Factions](https://modrinth.com/mod/factions) mod: `/f create <name>`,
-`/f claim`, `/f invite`, `/f declare ally|enemy`, power that drops when you die, faction
-homes and safes. Its settings are in `runtime/config/factions.json`.
+`/f claim add`, `/f invite`, `/f declare ally|enemy`, power that drops when you die, faction
+homes and safes. Its settings are in `runtime/config/factions.json`. Every mod it integrates
+with is installed:
+
+| Mod | What Factions uses it for |
+|---|---|
+| Fabric API | required |
+| LuckPerms | per-rank permissions for every `/f` command |
+| PlaceholderAPI, Styled Chat | faction name and rank in chat and the tab list |
+| BlueMap | live web map with every faction's claims at `http://<server>:8100` |
+
+The server-list icon is `server-config/server-icon.png` (64×64).
+
+## Which edition?
+
+| | Full pack (default) | Any-version edition |
+|---|---|---|
+| Players join with | the 1.21.1 client pack below | **any normal Minecraft, 1.8 up to the newest release**, no mods |
+| Mods | all 119 | the 51 (42 plus their libraries) that work without client mods: Factions, admin tools, Tectonic + Terralith terrain, YUNG's and the other structure mods, performance mods, BlueMap |
+| Install | `./setup.sh` | `EDITION=any-version ./setup.sh` (installs into `runtime-any-version/`) |
+
+The two can't be combined. Mods that add blocks, items, mobs or new screens (Tech Reborn,
+furniture, Better Combat, backpacks, ...) need the same mod on the player's computer, and
+those client mods only exist for 1.21.1. A vanilla client of any version, even 1.21.1, is
+disconnected from the full pack with an error like "Network configuration task not
+supported: bettercombat:config".
+
+How the any-version edition works: a [Velocity](https://papermc.io/software/velocity) proxy with ViaVersion,
+ViaBackwards and ViaRewind takes port 25565 and translates every client version to
+1.21.1. The Fabric server only listens on `127.0.0.1:25566`, and FabricProxy-Lite checks a
+shared secret, so nobody can skip the proxy's Mojang login. `start.sh` starts both
+(`./console.sh`, then **Ctrl+B, N** to switch between server and proxy). The proxy
+needs Java 25: `sudo apt install openjdk-25-jre-headless`. The server itself stays on 21.
+Run only one edition at a time; both use port 25565.
+
+`compat/config-ping-timeout/` is a small server mod the any-version edition needs. Fabric
+API waits for a reply that ViaBackwards and Velocity never deliver for 1.17–1.20.1
+clients, so those players would hang on "Joining world" forever. The mod waits 3 seconds
+and then lets them in. Universal Graves is left out of this edition because its Polymer
+library hangs logins from clients older than 1.20.2 the same way.
 
 ## Install on your Proxmox VM (Ubuntu/Debian)
 
@@ -39,7 +77,8 @@ python3 tools/import-old-server.py /path/to/old/server
 **What gets copied:**
 - Settings that describe the server and your community: port, player limit,
   online mode, whitelist settings, op level, idle timeout, RCON/query, and the resource pack.
-- `ops.json`, `whitelist.json`, `banned-players.json`, `banned-ips.json` and `server-icon.png`.
+- `ops.json`, `whitelist.json`, `banned-players.json` and `banned-ips.json`. The old
+  server icon isn't copied; this pack ships its own.
 
 **What deliberately stays as this pack sets it:**
 - World and gameplay settings: level name, type and seed, hardcore, difficulty, PvP and
@@ -106,6 +145,7 @@ server back, but players get kicked. Admins in-game can use `/f admin ...`.
 |---|---|---|
 | 25565 | TCP | Minecraft |
 | 24454 | UDP | Simple Voice Chat (optional) |
+| 8100 | TCP | BlueMap web map with faction claims (optional; it's reachable on your LAN without forwarding) |
 
 ## Players: install the client pack
 

@@ -1,0 +1,54 @@
+# Velocity proxy for the any-version edition. Players connect here (port 25565);
+# ViaVersion/ViaBackwards/ViaRewind in plugins/ translate their client version to
+# 1.21.1 and the proxy forwards them to the Fabric server on 127.0.0.1:25566.
+config-version = "2.9"
+bind = "0.0.0.0:25565"
+motd = "<gold>Vapez Factions"
+show-max-players = 1000
+online-mode = true
+# Key enforcement only matters for 1.19-1.19.2 chat signing and blocks some Via clients.
+force-key-authentication = false
+prevent-client-proxy-connections = false
+player-info-forwarding-mode = "modern"
+forwarding-secret-file = "forwarding.secret"
+announce-forge = false
+kick-existing-players = false
+sample-players-in-ping = false
+enable-player-address-logging = true
+
+# Show the server's own MOTD, player count and server icon in the server list.
+[ping-passthrough]
+version = false
+players = true
+description = true
+favicon = true
+modinfo = false
+
+[servers]
+factions = "127.0.0.1:25566"
+try = ["factions"]
+
+[forced-hosts]
+
+[advanced]
+compression-threshold = 256
+compression-level = -1
+login-ratelimit = 3000
+connection-timeout = 5000
+read-timeout = 30000
+haproxy-protocol = false
+tcp-fast-open = false
+bungee-plugin-message-channel = true
+show-ping-requests = false
+failover-on-unexpected-server-disconnect = true
+announce-proxy-commands = true
+log-command-executions = false
+log-player-connections = true
+accepts-transfers = false
+enable-reuse-port = false
+
+[query]
+enabled = false
+port = 25565
+map = "Vapez Factions"
+show-plugins = false

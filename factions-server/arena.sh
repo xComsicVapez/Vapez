@@ -9,7 +9,7 @@ cd "$(dirname "$0")"
 SESSION="${SESSION:-factions}"
 X="${1:-0}"; Y="${2:-180}"; Z="${3:-0}"
 LOG=logs/console.log
-send() { tmux send-keys -t "=$SESSION:" "$1" Enter; }
+send() { tmux send-keys -t "=$SESSION:server" "$1" Enter; }
 tmux has-session -t "=$SESSION" 2>/dev/null || { echo "Start the server first (./start.sh)"; exit 1; }
 [ -d world/datapacks/vapez-arena ] || { echo "Missing world/datapacks/vapez-arena; run ../setup.sh and restart"; exit 1; }
 

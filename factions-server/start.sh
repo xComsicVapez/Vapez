@@ -7,8 +7,12 @@ SESSION="${SESSION:-factions}"
 MEMORY="${MEMORY:-100G}"
 
 if [ "${FOREGROUND:-}" != "1" ] && tmux has-session -t "=$SESSION" 2>/dev/null; then
-  echo "Already running. Attach with ./console.sh"
-  exit 0
+  if tmux list-windows -t "=$SESSION" -F '#W' | grep -qx server; then
+    echo "Already running. Attach with ./console.sh"
+    exit 0
+  fi
+  # Only a leftover proxy is running (the server was stopped from its console).
+  tmux kill-session -t "=$SESSION"
 fi
 
 # AlwaysPreTouch claims the whole heap at boot, so the machine/VM needs the heap
@@ -23,7 +27,7 @@ if [ "$total_gb" -lt $(( heap_gb + 4 )) ]; then
 fi
 
 # The pack is tested on Java 21; spark's profiler segfaults on Java 25, so prefer 21 when installed.
-JAVA="${JAVA:-$(ls /usr/lib/jvm/java-21-openjdk*/bin/java 2>/dev/null | head -1)}"
+JAVA="${JAVA:-$(ls /usr/lib/jvm/java-21-openjdk*/bin/java 2>/dev/null | head -1 || true)}"
 JAVA="${JAVA:-java}"
 
 # No core dumps: with a 100 GB heap a single crash would write ~100 GB to disk.
@@ -40,5 +44,15 @@ fi
 
 mkdir -p logs
 rm -f .stop
-tmux new-session -d -s "$SESSION" -c "$PWD" "while true; do ${CMD[*]} 2>&1 | tee -a logs/console.log; [ -f .stop ] && rm -f .stop && break; echo 'Crashed/stopped; restarting in 10s (./stop.sh to prevent)'; sleep 10; done"
+tmux new-session -d -s "$SESSION" -n server -c "$PWD" "while true; do ${CMD[*]} 2>&1 | tee -a logs/console.log; [ -f .stop ] && rm -f .stop && break; echo 'Crashed/stopped; restarting in 10s (./stop.sh to prevent)'; sleep 10; done"
 echo "Started in tmux session '$SESSION' with $MEMORY RAM ($JAVA). ./console.sh to watch, ./stop.sh to stop."
+
+# Any-version edition: the Velocity proxy (with ViaVersion) takes the public port and
+# forwards to this server on localhost. Velocity 4 needs Java 25.
+if [ -f proxy/velocity.jar ]; then
+  PROXY_JAVA="${PROXY_JAVA:-$(ls /usr/lib/jvm/{java-25-openjdk*,jdk-25*}/bin/java 2>/dev/null | head -1 || true)}"
+  PROXY_JAVA="${PROXY_JAVA:-java}"
+  PROXY_CMD="$PROXY_JAVA -Xms1G -Xmx2G -XX:+UseG1GC -XX:-CreateCoredumpOnCrash -jar velocity.jar"
+  tmux new-window -d -t "=$SESSION:" -n proxy -c "$PWD/proxy" "while true; do $PROXY_CMD; [ -f ../.stop ] && break; echo 'Proxy stopped; restarting in 5s'; sleep 5; done"
+  echo "Started the version proxy (Velocity + ViaVersion) in window 'proxy' ($PROXY_JAVA)."
+fi

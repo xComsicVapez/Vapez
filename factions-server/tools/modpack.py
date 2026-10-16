@@ -3,7 +3,11 @@
 
   lock      resolve modlist.txt (+ required deps) into mods.lock.json
   server    download every server-compatible mod in the lock into a mods dir
+  proxy     download the lock's Velocity plugins into a plugins dir
   mrpack    build a client .mrpack (import into Prism / Modrinth App / ATLauncher)
+
+`--edition any-version` uses modlist-any-version.txt / mods-any-version.lock.json
+instead of modlist.txt / mods.lock.json.
 """
 import argparse
 import hashlib
@@ -44,10 +48,11 @@ def get(path, params=None):
 
 
 def read_modlist():
-    """Returns [(slug, pinned_version_or_None, client_only)].
+    """Returns [(slug, pinned_version_or_None, tags)].
 
     `slug==1.2.3` pins an exact Modrinth version number; a trailing `@client`
-    keeps the mod (but not its libraries) off the server.
+    keeps the mod (but not its libraries) off the server, and `@velocity` marks a
+    plugin for the Velocity proxy instead of a Fabric mod.
     """
     entries = []
     with open(MODLIST) as f:
@@ -55,13 +60,15 @@ def read_modlist():
             words = line.split("#", 1)[0].split()
             if words:
                 slug, _, pin = words[0].partition("==")
-                entries.append((slug, pin or None, "@client" in words[1:]))
+                entries.append((slug, pin or None, {w for w in words[1:] if w.startswith("@")}))
     return entries
 
 
 def pick_version(project_id, loader, mc, pin=None):
-    versions = get(f"/project/{project_id}/version",
-                   {"loaders": [loader], "game_versions": [mc]})
+    params = {"loaders": [loader]}
+    if mc:
+        params["game_versions"] = [mc]
+    versions = get(f"/project/{project_id}/version", params)
     if not versions:
         return None
     if pin:
@@ -78,14 +85,32 @@ def env_of(project):
     return {"client": norm(project["client_side"]), "server": norm(project["server_side"])}
 
 
+def file_entry(f):
+    return {"name": f["filename"], "url": f["url"], "size": f["size"],
+            "sha1": f["hashes"]["sha1"], "sha512": f["hashes"]["sha512"]}
+
+
 def cmd_lock(args):
     meta = json.load(open(os.path.join(ROOT, "pack.json")))
     loader, mc = meta["loader"], meta["minecraft"]
     entries = read_modlist()
     pins = {slug: pin for slug, pin, _ in entries if pin}
-    client_only = {slug for slug, _, flag in entries if flag}
-    queue = [(slug, None) for slug, _, _ in entries]
+    client_only = {slug for slug, _, tags in entries if "@client" in tags}
+    queue = [(slug, None) for slug, _, tags in entries if "@velocity" not in tags]
     resolved, deps, missing = {}, {}, []
+    plugins = []
+    for slug, pin, tags in entries:
+        if "@velocity" not in tags:
+            continue
+        project = get(f"/project/{slug}")
+        version = project and pick_version(project["id"], "velocity", None, pin)
+        if not version:
+            missing.append(f"{slug} (no velocity build)")
+            continue
+        primary = next((f for f in version["files"] if f["primary"]), version["files"][0])
+        plugins.append({"slug": project["slug"], "title": project["title"], "version": version["version_number"],
+                        "version_id": version["id"], "file": file_entry(primary)})
+        print(f"  {project['slug']:<45} {version['version_number']}   (velocity plugin)")
     while queue:
         ref, parent = queue.pop(0)
         project = get(f"/project/{ref}")
@@ -111,13 +136,7 @@ def cmd_lock(args):
             "version_id": version["id"],
             "dependency_of": parent,
             "env": env,
-            "file": {
-                "name": primary["filename"],
-                "url": primary["url"],
-                "size": primary["size"],
-                "sha1": primary["hashes"]["sha1"],
-                "sha512": primary["hashes"]["sha512"],
-            },
+            "file": file_entry(primary),
         }
         deps[project["id"]] = [d["project_id"] for d in version["dependencies"]
                                if d["dependency_type"] == "required" and d.get("project_id")]
@@ -140,8 +159,11 @@ def cmd_lock(args):
                     changed = True
 
     mods = sorted(resolved.values(), key=lambda m: m["slug"])
+    lock = {"minecraft": mc, "loader": loader, "mods": mods}
+    if plugins:
+        lock["velocity_plugins"] = plugins
     with open(LOCK, "w") as f:
-        json.dump({"minecraft": mc, "loader": loader, "mods": mods}, f, indent=2)
+        json.dump(lock, f, indent=2)
         f.write("\n")
     print(f"\nLocked {len(mods)} mods ({sum(m['dependency_of'] is not None for m in mods)} pulled in as dependencies) -> {LOCK}")
     if missing:
@@ -174,26 +196,38 @@ def sha512(path):
     return h.hexdigest()
 
 
-def cmd_server(args):
-    lock = json.load(open(LOCK))
-    os.makedirs(args.mods_dir, exist_ok=True)
-    wanted = [m for m in lock["mods"] if m["env"]["server"] != "unsupported"]
+def install(wanted, dest_dir):
+    """Download `wanted` into dest_dir and remove jars a previous run put there."""
+    os.makedirs(dest_dir, exist_ok=True)
     wanted_names = {m["file"]["name"] for m in wanted}
-    managed = os.path.join(args.mods_dir, ".managed.json")
+    managed = os.path.join(dest_dir, ".managed.json")
     previous = set(json.load(open(managed))) if os.path.exists(managed) else set()
     for stale in previous - wanted_names:
-        path = os.path.join(args.mods_dir, stale)
+        path = os.path.join(dest_dir, stale)
         if os.path.exists(path):
             os.remove(path)
             print(f"  removed {stale}")
     fetched = 0
     for m in wanted:
-        if download(m, args.mods_dir):
+        if download(m, dest_dir):
             fetched += 1
             print(f"  got {m['file']['name']}")
     json.dump(sorted(wanted_names), open(managed, "w"), indent=1)
+    return fetched
+
+
+def cmd_server(args):
+    lock = json.load(open(LOCK))
+    wanted = [m for m in lock["mods"] if m["env"]["server"] != "unsupported"]
+    fetched = install(wanted, args.mods_dir)
     print(f"{len(wanted)} server mods in {args.mods_dir} ({fetched} downloaded, "
           f"{len(lock['mods']) - len(wanted)} client-only mods skipped)")
+
+
+def cmd_proxy(args):
+    plugins = json.load(open(LOCK)).get("velocity_plugins", [])
+    fetched = install(plugins, args.plugins_dir)
+    print(f"{len(plugins)} Velocity plugins in {args.plugins_dir} ({fetched} downloaded)")
 
 
 def cmd_mrpack(args):
@@ -232,16 +266,25 @@ def cmd_mrpack(args):
 
 
 def main():
+    global MODLIST, LOCK
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("--edition", default="full")
     sub = p.add_subparsers(dest="cmd", required=True)
     lk = sub.add_parser("lock")
     lk.add_argument("--strict", action="store_true", help="fail if any listed mod can't be resolved")
     sv = sub.add_parser("server")
     sv.add_argument("--mods-dir", default=os.path.join(ROOT, "runtime", "mods"))
+    px = sub.add_parser("proxy")
+    px.add_argument("--plugins-dir", required=True)
     mp = sub.add_parser("mrpack")
     mp.add_argument("--output")
     args = p.parse_args()
-    {"lock": cmd_lock, "server": cmd_server, "mrpack": cmd_mrpack}[args.cmd](args)
+    if args.edition != "full":
+        MODLIST = os.path.join(ROOT, f"modlist-{args.edition}.txt")
+        LOCK = os.path.join(ROOT, f"mods-{args.edition}.lock.json")
+        if not os.path.exists(MODLIST):
+            sys.exit(f"No {MODLIST}")
+    {"lock": cmd_lock, "server": cmd_server, "proxy": cmd_proxy, "mrpack": cmd_mrpack}[args.cmd](args)
 
 
 if __name__ == "__main__":
