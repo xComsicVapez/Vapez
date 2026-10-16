@@ -10,6 +10,7 @@ need python3 python3
 need curl curl
 need tmux tmux
 need java openjdk-21-jre-headless
+python3 -c 'import numpy' 2>/dev/null || { echo "Missing numpy for the arena generator: sudo apt install python3-numpy" >&2; exit 1; }
 java_major=$(java -version 2>&1 | awk -F'"' '/version/{split($2,v,"."); print v[1]}')
 if [ "${java_major:-0}" -lt 21 ]; then
   echo "Java 21+ is required (found $java_major). sudo apt install openjdk-21-jre-headless" >&2
@@ -38,7 +39,9 @@ echo "==> Config"
     echo "  + ${f#./}"
   fi
 done
-cp start.sh stop.sh console.sh pregen.sh "$RUNTIME/"
+echo "==> Kit PvP arena datapack"
+python3 tools/build_arena.py --out "$RUNTIME/world/datapacks/vapez-arena"
+cp start.sh stop.sh console.sh pregen.sh arena.sh "$RUNTIME/"
 chmod +x "$RUNTIME"/*.sh
 
 if ! grep -qs '^eula=true' "$RUNTIME/eula.txt"; then
