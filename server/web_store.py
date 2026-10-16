@@ -301,9 +301,11 @@ def deliver_loop():
                 if delivery["uuid"] not in online:
                     continue
                 uuid = delivery["uuid"]
+                # give/tellraw only accept players by name; the current name comes from the online list.
+                name = online[uuid]
                 while delivery["done"] < len(delivery["items"]):
                     item, count = delivery["items"][delivery["done"]]
-                    reply = RCON.run(f"give {uuid} minecraft:{item} {int(count)}")
+                    reply = RCON.run(f"give {name} minecraft:{item} {int(count)}")
                     if not reply.startswith("Gave"):
                         log("DELIVERY give failed", uuid, item, reply)
                         break
@@ -315,7 +317,7 @@ def deliver_loop():
                                 entry["done"] = delivery["done"]
                         write_json(DATA / "deliveries.json", current)
                 if delivery["done"] >= len(delivery["items"]):
-                    RCON.run(f'tellraw {uuid} {{"text":"[Store] Your {delivery["product"]} has been delivered. '
+                    RCON.run(f'tellraw {name} {{"text":"[Store] Your {delivery["product"]} has been delivered. '
                              f'Thanks for your purchase!","color":"green"}}')
                     log("DELIVERED", delivery["name"], delivery["product"])
                     with LOCK:
