@@ -22,12 +22,17 @@ if [ "$total_gb" -lt $(( heap_gb + 4 )) ]; then
   exit 1
 fi
 
+# The pack is tested on Java 21; spark's profiler segfaults on Java 25, so prefer 21 when installed.
+JAVA="${JAVA:-$(ls /usr/lib/jvm/java-21-openjdk*/bin/java 2>/dev/null | head -1)}"
+JAVA="${JAVA:-java}"
+
+# No core dumps: with a 100 GB heap a single crash would write ~100 GB to disk.
 JAVA_FLAGS=(
   "-Xms$MEMORY" "-Xmx$MEMORY"
   -XX:+UseZGC -XX:+ZGenerational -XX:+AlwaysPreTouch -XX:+DisableExplicitGC
-  -XX:+PerfDisableSharedMem -Dfile.encoding=UTF-8
+  -XX:+PerfDisableSharedMem -XX:-CreateCoredumpOnCrash -Dfile.encoding=UTF-8
 )
-CMD=(java "${JAVA_FLAGS[@]}" -jar fabric-server-launch.jar nogui)
+CMD=("$JAVA" "${JAVA_FLAGS[@]}" -jar fabric-server-launch.jar nogui)
 
 if [ "${FOREGROUND:-}" = "1" ]; then
   exec "${CMD[@]}"
@@ -36,4 +41,4 @@ fi
 mkdir -p logs
 rm -f .stop
 tmux new-session -d -s "$SESSION" -c "$PWD" "while true; do ${CMD[*]} 2>&1 | tee -a logs/console.log; [ -f .stop ] && rm -f .stop && break; echo 'Crashed/stopped; restarting in 10s (./stop.sh to prevent)'; sleep 10; done"
-echo "Started in tmux session '$SESSION' with $MEMORY RAM. ./console.sh to watch, ./stop.sh to stop."
+echo "Started in tmux session '$SESSION' with $MEMORY RAM ($JAVA). ./console.sh to watch, ./stop.sh to stop."
