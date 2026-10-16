@@ -10,8 +10,9 @@ import net.minecraft.commands.Commands;
 
 /**
  * Bukkit-style shortcuts for Essential Commands' homes, which only understands
- * /home set|tp|delete|list. Each alias re-runs the real command as the player,
- * so Essential Commands still applies its own permissions and home limit.
+ * /home set|tp|delete|list, plus /sell for ClassicGUIShop's sell menu. Each alias
+ * re-runs the real command as the player, so the target mod still applies its own
+ * permissions and limits.
  */
 public class CommandAliases implements ModInitializer {
 	private static final String DEFAULT_HOME = "home";
@@ -26,6 +27,8 @@ public class CommandAliases implements ModInitializer {
 		named(dispatcher, "delhome", "home delete ");
 		dispatcher.register(Commands.literal("homes")
 			.executes(ctx -> run(ctx, "home list")));
+		dispatcher.register(Commands.literal("sell")
+			.executes(ctx -> run(ctx, "shop sell")));
 		// Merges into Essential Commands' /home node; its set/tp/delete/list literals still take priority.
 		dispatcher.register(Commands.literal("home")
 			.then(Commands.argument("name", StringArgumentType.word())
