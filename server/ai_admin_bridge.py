@@ -22,6 +22,7 @@ import subprocess
 import sys
 import threading
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -461,8 +462,17 @@ def chat_model(system, messages, tools, think=False):
                        "messages": [{"role": "system", "content": system}] + messages,
                        "tools": tools,
                        "options": {"temperature": 0.2, **SETTINGS.get("ollama_options", {})}}).encode()
+    url = SETTINGS.get("ollama_url", "http://127.0.0.1:11434") + "/api/chat"
     with MODEL_LOCK:
-        return http_json(SETTINGS.get("ollama_url", "http://127.0.0.1:11434") + "/api/chat", body)["message"]
+        for attempt in range(3):
+            try:
+                return http_json(url, body)["message"]
+            except urllib.error.HTTPError as error:
+                # Ollama answers 500 when it can't parse the model's tool call; a fresh sample usually parses.
+                detail = error.read().decode(errors="replace")[:300]
+                print(f"model error {error.code} (attempt {attempt + 1}): {detail}", flush=True)
+                if error.code != 500 or attempt == 2:
+                    raise
 
 
 def player_chat_model(*args, **kwargs):

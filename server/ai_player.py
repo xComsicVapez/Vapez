@@ -58,7 +58,7 @@ when it is done. Check your inventory in the observation before claiming you hav
 
 TOOLS = [
     ("chat", "Say something in public chat.", {"message": "What to say (short)"}),
-    ("find_block", "Find the nearest blocks of a type within about 24 blocks of you.",
+    ("find_block", "Find the nearest blocks of a type within about 16 blocks of you.",
      {"block": "Block id like 'oak_log', 'iron_ore', 'chest', or a tag like '#logs', '#iron_ores'"}),
     ("walk_to", "Walk (and jump over small obstacles) to a position. Waits until you arrive, get stuck, or "
      "time runs out, then reports where you are.", {"x": "x", "y": "y", "z": "z"}),
@@ -78,7 +78,7 @@ TOOLS = [
     ("jump", "Jump, or keep jumping (swims up in water).", {"mode": "once, continuous, or stop"}),
     ("sprint", "Start or stop sprinting.", {"on": "true or false"}),
     ("sneak", "Start or stop sneaking.", {"on": "true or false"}),
-    ("attack", "Attack / mine what you are looking at.", {"mode": "once, continuous, or stop"}),
+    ("attack", "Hit the mob you are looking at. To break blocks use mine_block, not this.", {"mode": "once, continuous, or stop"}),
     ("use", "Use the held item (eat, place, open, shoot).", {"mode": "once, continuous, or stop"}),
     ("hotbar", "Select a hotbar slot.", {"slot": "1-9"}),
     ("drop", "Drop the held stack (e.g. to give it to a player in front of you).", {}),
@@ -280,11 +280,11 @@ class AIPlayer:
         test += " && reduce(neighbours(_), _a || air(_) || liquid(_), false)"
         result = self.scarpet(
             f"p=map(pos(player('{self.name}')), floor(_)); l=[]; "
-            f"scan(p, [24,10,24], if({test}, l+=[reduce(pos(_)-p, _a+_*_, 0), pos(_)])); "
+            f"scan(p, [16,8,16], if({test}, l+=[reduce(pos(_)-p, _a+_*_, 0), pos(_)])); "
             f"if(length(l)==0, [], slice(sort_key(l, _:0), 0, min(5, length(l))))")
         found = re.findall(r"\[(-?\d+), (-?\d+), (-?\d+)\]", result)
         if not found:
-            return f"no reachable {block} within 24 blocks"
+            return f"no reachable {block} within 16 blocks"
         x, y, z = self.position()
         return f"nearest {block}: " + ", ".join(
             f"{a} {b} {c} ({((int(a) - x) ** 2 + (int(b) - y) ** 2 + (int(c) - z) ** 2) ** 0.5:.0f} away)"
