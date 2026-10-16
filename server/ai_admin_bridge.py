@@ -168,9 +168,9 @@ def audit(text):
 # ---------------------------------------------------------------- RCON
 
 def rcon_paused():
-    """True while `mc` is stopping the server (see pause_rcon there); a stale file older than 10 minutes is ignored."""
+    """True while `mc` is stopping the server (see pause_rcon there); it expires after 90 seconds, longer than any shutdown."""
     try:
-        return time.time() - (SERVER_DIR / ".rcon-pause").stat().st_mtime < 600
+        return time.time() - (SERVER_DIR / ".rcon-pause").stat().st_mtime < 90
     except OSError:
         return False
 

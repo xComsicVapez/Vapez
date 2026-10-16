@@ -107,6 +107,25 @@ start_ai_bridge() {
   log "started AI admin bridge for $NAME"
 }
 
+# Web store (web_store.py) on 127.0.0.1:8080. Without a fixed "public_url" in config/web-store.json it is
+# published through a cloudflared quick tunnel, whose random https://....trycloudflare.com address the store
+# picks up by itself (and shows in /store).
+STORE_SESSION="web-store"
+TUNNEL_SESSION="store-tunnel"
+start_web_store() {
+  [ -f "$DIR/config/web-store.json" ] || return 0
+  if ! tmux has-session -t "=$STORE_SESSION" 2>/dev/null; then
+    tmux new-session -d -s "$STORE_SESSION" -c "$DIR" \
+      "while true; do python3 '$TOOLS_DIR/web_store.py' '$DIR' 2>&1 | tee -a '$DIR/logs/web-store.log'; sleep 5; done"
+    log "started the web store for $NAME"
+  fi
+  if ! grep -q '"public_url": *"http' "$DIR/config/web-store.json" && ! tmux has-session -t "=$TUNNEL_SESSION" 2>/dev/null; then
+    tmux new-session -d -s "$TUNNEL_SESSION" \
+      "cloudflared tunnel --no-autoupdate --url http://127.0.0.1:8080 --metrics 127.0.0.1:20242 2>&1 | tee /tmp/store-tunnel.log"
+    log "started the quick tunnel for the web store"
+  fi
+}
+
 mods_fingerprint() {
   find "$DIR/mods" -maxdepth 1 -name '*.jar' -printf '%f %s %T@\n' 2>/dev/null | sort
 }
@@ -121,6 +140,7 @@ case "$ACTION" in
     start_watcher
     start_geyser
     start_ai_bridge
+    start_web_store
     ;;
   stop)
     tmux kill-session -t "=$WATCH_SESSION" 2>/dev/null
@@ -166,6 +186,11 @@ case "$ACTION" in
     fi
     if [ -f "$DIR/config/ai-admin-bridge.json" ]; then
       tmux has-session -t "=$AI_SESSION" 2>/dev/null && echo "ai admin: running" || echo "ai admin: stopped"
+    fi
+    if [ -f "$DIR/config/web-store.json" ]; then
+      tmux has-session -t "=$STORE_SESSION" 2>/dev/null && echo "web store: running" || echo "web store: stopped"
+      grep -q '"public_url": *"http' "$DIR/config/web-store.json" \
+        || { tmux has-session -t "=$TUNNEL_SESSION" 2>/dev/null && echo "store tunnel: running" || echo "store tunnel: stopped"; }
     fi
     ;;
   watch-mods)

@@ -118,7 +118,7 @@ def server_properties():
 def rcon_paused():
     """True while `mc` is stopping the server: a command arriving during shutdown deadlocks it."""
     try:
-        return time.time() - (SERVER / ".rcon-pause").stat().st_mtime < 600
+        return time.time() - (SERVER / ".rcon-pause").stat().st_mtime < 90
     except OSError:
         return False
 

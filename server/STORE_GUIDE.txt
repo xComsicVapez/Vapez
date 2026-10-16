@@ -1,0 +1,137 @@
+COSMICPIXEL WEB STORE - SETUP AND OWNER GUIDE
+=============================================
+
+The store is already installed and running. It works right now through a temporary link. Part 1 is how
+players use it, part 2 gives it a permanent address (store.cosmicpixel.org), and the rest covers prices,
+starting and stopping, and fixing problems.
+
+
+1. HOW PLAYERS USE IT
+---------------------
+1. Join play.cosmicpixel.org and type  /store  in chat.
+2. Chat shows a 6-letter code (works once, for 10 minutes) and a link. Click the link (or type it in a browser).
+3. Type the code into "Sign in" on the website.
+4. Buy kits or supplies, rent a spawn plot, or revive a friend. Everything costs in-game money: the same balance
+   as /bal. Items appear in your inventory right away if you are online, otherwise the next time you join.
+5. Each kit or supply has a small chance (1-4%) of a bonus heart that goes past the 20 heart limit (max 5 extra).
+
+Out of hearts:
+- You get banned and the ban screen shows the date of your free automatic revive (3 days later), the store link
+  and an 8-letter revive code.
+- Wait for the free revive, or sign in on the store with that 8-letter code and pay for a revive from your own
+  balance. A friend can also sign in with their own /store code and buy the revive for you on the "Revives" page.
+- Revived players come back at spawn with 10 hearts. Bonus hearts are lost when you are eliminated.
+
+Spawn plots (the 8 diamond domes):
+- Rent one on the "Spawn plots" page ($2,500 a week, 1 to 4 weeks at a time, one plot per player).
+- In game: /plot shows which plot and until when, /plot home teleports you there, /plot sethome changes that spot.
+- Inside your dome only you can build and break, no mining fatigue, nobody else opens your chests.
+- When the rental runs out you get 1 more day to renew (on the same page) before your blocks are removed.
+
+
+2. GIVE THE STORE A PERMANENT ADDRESS (do this once, about 5 minutes)
+---------------------------------------------------------------------
+Right now the store uses a free "quick tunnel" with a random address like
+https://gage-accordingly-feed-soil.trycloudflare.com. It works, but the address changes whenever the tunnel or
+the VM restarts. (The store updates the /store link and ban messages by itself, so players can always find
+it in game, but links posted on Discord stop working.) Your Cloudflare tunnel for crazy.cosmicpixel.org can
+serve the store too:
+
+a) Go to https://one.dash.cloudflare.com and log in with the account that owns cosmicpixel.org.
+b) In the left menu open  Networks  >  Tunnels   (newer dashboards: Networks > Connectors > Cloudflare Tunnels).
+c) Click the tunnel that is "Healthy" and already serves crazy.cosmicpixel.org, then click  Edit
+   (or the three dots > Configure).
+d) Open the  Public Hostname  tab (newer dashboards: "Published application routes") and click
+   Add a public hostname.
+e) Fill in:
+       Subdomain:  store
+       Domain:     cosmicpixel.org
+       Path:       (leave empty)
+       Service:    Type  HTTP     URL  localhost:8080
+   Click  Save hostname. Cloudflare creates the DNS record itself.
+f) Wait a minute, then open https://store.cosmicpixel.org . You should see the store.
+   (The cloudflared on the VM is the one that already runs as a service, so nothing changes on the VM for this.)
+g) Tell the store its new address. On the VM (ssh cosmic@crazycraft-vm):
+       nano ~/lifesteal2/config/web-store.json
+   change   "public_url": ""   to   "public_url": "https://store.cosmicpixel.org"
+   save (Ctrl+O, Enter, Ctrl+X), then restart the store and stop the temporary tunnel:
+       tmux kill-session -t web-store
+       tmux kill-session -t store-tunnel
+       ~/server-tools/mc lifesteal2 start
+   (start only starts what is not running; the game server keeps running.)
+h) In game type /store: the link should now be https://store.cosmicpixel.org .
+
+Security: the store only listens on 127.0.0.1 (it can't be reached except through Cloudflare), sign-ins are
+one-time codes made in game, there are no passwords to steal, and only cosmic-store's op-only RCON commands
+can touch money. Don't forward port 8080 on the router; Cloudflare does the work.
+
+
+3. CHANGE PRICES, KITS AND RULES
+--------------------------------
+Kits and supplies: ~/server-tools/web-store/catalog.json  (also in the repo: server/web-store/catalog.json)
+    "price"           dollars of in-game money
+    "cooldown_hours"  how often one player can buy it (0 = any time)
+    "heart_chance"    percent chance of a bonus heart
+    "items"           [item, count] pairs, max 64 per line; enchanted items look like
+                      "iron_sword[enchantments={sharpness:2}]"
+  Changes show up on the website immediately; no restart needed. Check your edit is valid JSON first:
+      python3 -m json.tool ~/server-tools/web-store/catalog.json > /dev/null && echo OK
+
+Everything else: ~/lifesteal2/config/web-store.json, then restart the store (tmux kill-session -t web-store;
+~/server-tools/mc lifesteal2 start):
+    "revive_price"         5000
+    "revive_wait_days"     3      days until the free automatic revive
+    "plot_price_per_week"  2500
+    "plot_max_weeks"       4
+    "public_url"           see part 2
+    "ignore_players"       accounts the store never handles eliminations for (the AI bots)
+  Max bonus hearts: "maxBonusHearts" in ~/lifesteal2/config/cosmic-store.json (needs a server restart).
+
+Current prices (Oct 16): Starter $250, Farmer $150, Builder $300, Miner $400, Warrior $900,
+Food Crate $60, Torch Bundle $25, Iron Crate $250, XP Bottles $150, Revive $5,000, Plot $2,500/week.
+
+
+4. START, STOP, CHECK
+---------------------
+    ~/server-tools/mc lifesteal2 status    shows "web store" and "store tunnel" (running/stopped)
+    ~/server-tools/mc lifesteal2 start     starts anything that is stopped (also runs at boot)
+    tmux attach -t web-store               watch the store live (detach: Ctrl+B then D)
+    tail -f ~/lifesteal2/logs/web-store.log    every login, purchase, delivery, revive and refund
+Data files (don't edit while the store runs): ~/lifesteal2/config/web-store/
+    purchases.jsonl     every purchase and refund (one line each)
+    deliveries.json     items waiting for a player to come online
+    eliminations.json   who is out of hearts, their revive code and free revive date
+    cooldowns.json      kit cooldowns
+
+
+5. ADMIN COMMANDS (in game as op, or the server console)
+--------------------------------------------------------
+/plot admin rent <plot 1-8> <uuid> <name> <days>   give someone a plot for free
+/plot admin evict <plot>      end a rental (their blocks are removed after the 1 day grace)
+/plot admin clear <plot>      free a plot right now and remove its blocks
+/revive <player>              revive someone for free
+/cosmicstore balance <uuid>   /cosmicstore refund <uuid> <amount>   (refund = give money back)
+/cosmicstore bonushearts get|add|reset <uuid> [n]
+Find a player's uuid: /list uuids  (online) or ~/lifesteal2/usercache.json.
+
+
+6. PROBLEMS
+-----------
+"That code is wrong, used or expired"   Type /store again for a fresh code (each code works once, 10 minutes).
+Website doesn't load                    mc lifesteal2 status; if the store or tunnel says stopped, run
+                                        mc lifesteal2 start. With the quick tunnel the address may have changed:
+                                        type /store in game for the current link.
+"the server did not answer"             The game server was restarting. Check /bal before buying again;
+                                        a charge is never sent twice.
+Bought something but got nothing        Items arrive when you are online; check the log for "DELIVERED".
+                                        If something failed after paying, the store refunds automatically
+                                        ("REFUND" in the log).
+Player says the revive didn't work      Look for "REVIVE" or "AUTO REVIVE failed" in the log; /revive <player> fixes it.
+
+
+7. A NOTE ON REAL MONEY
+-----------------------
+The store sells for in-game money on purpose. Mojang's rules for servers do not allow selling gameplay
+advantages (items, kits, revives, hearts) for real money; cosmetics and server ranks without gameplay
+advantages are allowed. If you ever want real payments (for example a cosmetic rank or donations), that
+needs a payment provider such as Stripe added to the store; ask and it can be built.
