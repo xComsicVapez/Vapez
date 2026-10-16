@@ -4,7 +4,7 @@
   python3 tools/import-old-server.py /path/to/old/server [--runtime runtime] [--dry-run]
 
 Copies network/identity/admin settings from the old server.properties plus the
-ops, whitelist, ban lists and server icon. Gameplay and world settings stay as
+ops, whitelist and ban lists. Gameplay and world settings stay as
 this pack sets them: the old world type, height, seed and difficulty don't fit a
 new factions world, and the performance values are tuned for these mods.
 """
@@ -30,7 +30,7 @@ TRANSFER = [
     "require-resource-pack",
 ]
 
-FILES = ["ops.json", "whitelist.json", "banned-players.json", "banned-ips.json", "server-icon.png"]
+FILES = ["ops.json", "whitelist.json", "banned-players.json", "banned-ips.json"]
 
 
 def read_props(path):
@@ -75,6 +75,12 @@ def main():
 
     old, new = read_props(old_props_path), read_props(new_props_path)
     updates = {k: old[k] for k in TRANSFER if k in old and old[k] != new.get(k)}
+    if os.path.isdir(os.path.join(args.runtime, "proxy")):
+        # Any-version edition: the proxy owns the public port and the Mojang login;
+        # the Fabric server behind it must stay on localhost in offline mode.
+        for k in ("server-port", "online-mode", "enforce-secure-profile", "prevent-proxy-connections"):
+            if updates.pop(k, None) is not None:
+                print(f"note: {k} not copied; the proxy (proxy/velocity.toml) handles it in this edition")
     if old.get("rcon.password") == "" and updates.get("enable-rcon") == "true":
         print("! old server had RCON on with no password; leaving RCON off")
         updates.pop("enable-rcon")
