@@ -298,6 +298,9 @@ class AIPlayer:
             return f"that is {distance:.0f} blocks away; walk_to at most 120 blocks at a time"
         deadline = time.time() + min(60.0, distance * 0.6 + 6)
         last, last_check, stuck, swimming = start, time.time(), 0, False
+        # You cannot stand inside a solid block, so next to it counts as arrived.
+        solid_target = self.scarpet(f"solid({int(x // 1)},{int(y // 1)},{int(z // 1)})") == "true"
+        tolerance = 1.8 if solid_target else 1.0
         self.carpet("move forward")
         if distance > 6:
             self.carpet("sprint")
@@ -307,7 +310,7 @@ class AIPlayer:
                     return "stopped: you were turned off"
                 here = self.position()
                 remaining = ((x - here[0]) ** 2 + (z - here[2]) ** 2) ** 0.5
-                if remaining < 1.0:
+                if remaining < tolerance:
                     return f"arrived at {here[0]:.0f} {here[1]:.0f} {here[2]:.0f}" + self._height_note(y, here[1])
                 in_water = self.in_water()
                 if in_water != swimming:
