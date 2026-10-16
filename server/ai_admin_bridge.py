@@ -167,6 +167,14 @@ def audit(text):
 
 # ---------------------------------------------------------------- RCON
 
+def rcon_paused():
+    """True while `mc` is stopping the server (see pause_rcon there); a stale file older than 10 minutes is ignored."""
+    try:
+        return time.time() - (SERVER_DIR / ".rcon-pause").stat().st_mtime < 600
+    except OSError:
+        return False
+
+
 class Rcon:
     def __init__(self, host, port, password):
         self.address, self.password, self.sock = (host, port), password, None
@@ -203,6 +211,11 @@ class Rcon:
             return self._command(command)
 
     def _command(self, command):
+        if rcon_paused():
+            if self.sock is not None:
+                self.sock.close()
+                self.sock = None
+            raise ConnectionError("the server is restarting")
         for attempt in range(2):
             try:
                 if self.sock is None:

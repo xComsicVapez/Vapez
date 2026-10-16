@@ -24,6 +24,7 @@ rm -f .stop-requested
 quick_crashes=0
 while true; do
   started=$(date +%s)
+  rm -f .rcon-pause
   java "${JVM_FLAGS[@]}" -jar "$SERVER_JAR" nogui
   code=$?
 
