@@ -7,7 +7,7 @@ SESSION="${SESSION:-factions}"
 MEMORY="${MEMORY:-100G}"
 
 if [ "${FOREGROUND:-}" != "1" ] && tmux has-session -t "=$SESSION" 2>/dev/null; then
-  if tmux list-windows -t "=$SESSION" -F '#W' | grep -qx server; then
+  if [ "$(tmux list-windows -t "=$SESSION" -F '#W')" != proxy ]; then
     echo "Already running. Attach with ./console.sh"
     exit 0
   fi

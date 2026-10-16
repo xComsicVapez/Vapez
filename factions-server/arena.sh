@@ -9,8 +9,10 @@ cd "$(dirname "$0")"
 SESSION="${SESSION:-factions}"
 X="${1:-0}"; Y="${2:-180}"; Z="${3:-0}"
 LOG=logs/console.log
-send() { tmux send-keys -t "=$SESSION:server" "$1" Enter; }
 tmux has-session -t "=$SESSION" 2>/dev/null || { echo "Start the server first (./start.sh)"; exit 1; }
+WIN=server
+tmux list-windows -t "=$SESSION" -F '#W' | grep -qx server || WIN=""   # session from an older start.sh
+send() { tmux send-keys -t "=$SESSION:$WIN" "$1" Enter; }
 [ -d world/datapacks/vapez-arena ] || { echo "Missing world/datapacks/vapez-arena; run ../setup.sh and restart"; exit 1; }
 
 wait_for() {
