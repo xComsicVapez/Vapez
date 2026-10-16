@@ -596,7 +596,7 @@ Spawner Breaker
     Goes on: Pickaxes
     Does:    Spawners drop themselves when mined.
     Price:   not sold
-    Note:    REMOVED: lets players stack mob farms of any type.
+    Note:    REMOVED: not needed, any Silk Touch pickaxe mines spawners now (mineable-spawner mod).
 
 Strength Gift
     Goes on: Swords

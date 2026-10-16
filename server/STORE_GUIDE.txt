@@ -11,8 +11,9 @@ starting and stopping, and fixing problems.
 1. Join play.cosmicpixel.org and type  /store  in chat.
 2. Chat shows a 6-letter code (works once, for 10 minutes) and a link. Click the link (or type it in a browser).
 3. Type the code into "Sign in" on the website.
-4. Buy kits or supplies, rent a spawn plot, or revive a friend. Everything costs in-game money: the same balance
-   as /bal. Items appear in your inventory right away if you are online, otherwise the next time you join.
+4. Buy kits or supplies, rent a spawn plot, or revive a friend with in-game money (the same balance as /bal),
+   or buy kits and supplies with a card once card payments are on (part 7). Items appear in your inventory
+   right away if you are online, otherwise the next time you join.
 5. Each kit or supply has a small chance (1-4%) of a bonus heart that goes past the 20 heart limit (max 5 extra).
 
 Out of hearts:
@@ -29,37 +30,29 @@ Spawn plots (the 8 diamond domes):
 - When the rental runs out you get 1 more day to renew (on the same page) before your blocks are removed.
 
 
-2. GIVE THE STORE A PERMANENT ADDRESS (do this once, about 5 minutes)
+2. GIVE THE STORE A PERMANENT ADDRESS (do this once, about 2 minutes)
 ---------------------------------------------------------------------
 Right now the store uses a free "quick tunnel" with a random address like
 https://gage-accordingly-feed-soil.trycloudflare.com. It works, but the address changes whenever the tunnel or
 the VM restarts. (The store updates the /store link and ban messages by itself, so players can always find
-it in game, but links posted on Discord stop working.) Your Cloudflare tunnel for crazy.cosmicpixel.org can
-serve the store too:
+it in game, but links posted on Discord stop working.) The fix is the store's own Cloudflare tunnel at
+https://store.cosmicpixel.org :
 
-a) Go to https://one.dash.cloudflare.com and log in with the account that owns cosmicpixel.org.
-b) In the left menu open  Networks  >  Tunnels   (newer dashboards: Networks > Connectors > Cloudflare Tunnels).
-c) Click the tunnel that is "Healthy" and already serves crazy.cosmicpixel.org, then click  Edit
-   (or the three dots > Configure).
-d) Open the  Public Hostname  tab (newer dashboards: "Published application routes") and click
-   Add a public hostname.
-e) Fill in:
-       Subdomain:  store
-       Domain:     cosmicpixel.org
-       Path:       (leave empty)
-       Service:    Type  HTTP     URL  localhost:8080
-   Click  Save hostname. Cloudflare creates the DNS record itself.
-f) Wait a minute, then open https://store.cosmicpixel.org . You should see the store.
-   (The cloudflared on the VM is the one that already runs as a service, so nothing changes on the VM for this.)
-g) Tell the store its new address. On the VM (ssh cosmic@crazycraft-vm):
-       nano ~/lifesteal2/config/web-store.json
-   change   "public_url": ""   to   "public_url": "https://store.cosmicpixel.org"
-   save (Ctrl+O, Enter, Ctrl+X), then restart the store and stop the temporary tunnel:
-       tmux kill-session -t web-store
-       tmux kill-session -t store-tunnel
-       ~/server-tools/mc lifesteal2 start
-   (start only starts what is not running; the game server keeps running.)
-h) In game type /store: the link should now be https://store.cosmicpixel.org .
+a) On the VM (ssh cosmic@crazycraft-vm) run:
+       cloudflared tunnel login
+   It prints a link. Open it on any computer, log in to Cloudflare with the account that owns
+   cosmicpixel.org, click  cosmicpixel.org  and then  Authorize. Leave the command running until it says
+   it saved the certificate (~/.cloudflared/cert.pem).
+b) Then run:
+       ~/server-tools/store-tunnel-setup.sh
+   It creates the "cosmic-store" tunnel and the store.cosmicpixel.org DNS record, sets "public_url" in
+   ~/lifesteal2/config/web-store.json, swaps the quick tunnel for the new one and restarts the store.
+   "mc lifesteal2 start" keeps starting the new tunnel after every reboot.
+c) Open https://store.cosmicpixel.org, and type /store in game: the link should be the new address.
+
+If store.cosmicpixel.org already exists in Cloudflare DNS the script stops and tells you; delete that record
+in the Cloudflare dashboard (cosmicpixel.org > DNS) and run it again. Nothing about the existing tunnel for
+crazy.cosmicpixel.org changes.
 
 Security: the store only listens on 127.0.0.1 (it can't be reached except through Cloudflare), sign-ins are
 one-time codes made in game, there are no passwords to steal, and only cosmic-store's op-only RCON commands
@@ -70,6 +63,7 @@ can touch money. Don't forward port 8080 on the router; Cloudflare does the work
 --------------------------------
 Kits and supplies: ~/server-tools/web-store/catalog.json  (also in the repo: server/web-store/catalog.json)
     "price"           dollars of in-game money
+    "usd"             card price in real dollars (part 7); leave it out for in-game money only
     "cooldown_hours"  how often one player can buy it (0 = any time)
     "heart_chance"    percent chance of a bonus heart
     "items"           [item, count] pairs, max 64 per line; enchanted items look like
@@ -129,9 +123,35 @@ Bought something but got nothing        Items arrive when you are online; check 
 Player says the revive didn't work      Look for "REVIVE" or "AUTO REVIVE failed" in the log; /revive <player> fixes it.
 
 
-7. A NOTE ON REAL MONEY
------------------------
-The store sells for in-game money on purpose. Mojang's rules for servers do not allow selling gameplay
-advantages (items, kits, revives, hearts) for real money; cosmetics and server ranks without gameplay
-advantages are allowed. If you ever want real payments (for example a cosmetic rank or donations), that
-needs a payment provider such as Stripe added to the store; ask and it can be built.
+7. CARD PAYMENTS (REAL MONEY) WITH STRIPE
+-----------------------------------------
+Kits and supplies can also be bought with a card. Stripe hosts the payment page (cards, Apple Pay, Google
+Pay), so card numbers never touch your server. Card purchases have no cooldown and still roll the bonus heart.
+Until a Stripe key is set the card buttons are hidden and nothing changes.
+
+a) Make an account at https://dashboard.stripe.com/register and finish "Activate payments" (business details
+   and the bank account payouts go to). Stripe pays out to you minus about 2.9% + 30c per payment.
+b) Test first: in the Stripe dashboard turn on "Test mode", open Developers > API keys and copy the
+   "Secret key" (starts with sk_test_). Treat it like a password: it only goes in the file below.
+c) On the VM:
+       nano ~/lifesteal2/config/web-store.json
+   add a line   "stripe_secret_key": "sk_test_...",   (keep the commas valid), save, then restart the store:
+       kill $(pgrep -f "^python3 /home/cosmic/server-tools/web_store.py")
+   (it starts again by itself within 5 seconds). Cards need the permanent address from part 2 first.
+d) Sign in on the store, press "Buy with card" and pay with the test card 4242 4242 4242 4242, any future
+   date, any CVC. You get sent back to the store, the kit is delivered, and "CARD ORDER" shows in the log.
+e) When that works, repeat c) with the live key (sk_live_) from the dashboard with Test mode off.
+
+Card prices are the "usd" field of each product in ~/server-tools/web-store/catalog.json (remove "usd" to sell
+a product for in-game money only). Current card prices: Starter $2.99, Farmer $1.99, Builder $2.99,
+Miner $3.99, Warrior $6.99, Food $0.99, Torches $0.99, Iron $1.99, XP $1.49.
+Every paid order is in ~/lifesteal2/config/web-store/card-orders.json and the Stripe dashboard (Payments).
+Refunds: Stripe dashboard > Payments > the payment > Refund (the store does not take the items back).
+No webhook is needed: the store asks Stripe about each payment when the buyer comes back, and checks for
+paid orders every minute in case someone closes the page early.
+
+Important - Mojang's rules: the Minecraft EULA and Mojang's server guidelines do not allow selling gameplay
+advantages (kits, gear, hearts, revives) for real money; only cosmetics, server access and donation ranks
+without advantages are allowed. Many servers sell kits anyway, but Mojang can block servers that break these
+rules so they can't be joined. Selling kits for real money is your decision and your risk. A safer option is
+to give "usd" prices only to cosmetic products (they can be added to the catalog like any other product).

@@ -44,6 +44,14 @@ same money (shown on the sidebar).
 /enchants  (/ce)            Custom enchant menu: spend XP levels on random enchant books
                             Common 5 lvls, Epic 15, Legendary 25, Exclusive 40
                             (The "Custom Enchants" villager at spawn also sells max-level books)
+/bounty                     The 10 biggest bounties
+/bounty <player>            See someone's bounty
+/bounty <player> <amount>   Add to someone's bounty from your /bal (at least $100). Whoever kills
+                            them collects all of it.
+/stats <player> <category> <stat>   Look up a stat, e.g. /stats Steve mined diamond_ore
+/stats top <category> <stat>        Leaderboard, e.g. /stats top killed zombie
+Spawners: mine them with a Silk Touch pickaxe to keep them (you also get the mob's spawn egg to set the
+spawner's type again). Any other pickaxe destroys them.
 
 EVERYONE - LIFESTEAL
 --------------------
@@ -58,8 +66,9 @@ web store with the 8-letter code from your ban screen (friends can buy it for yo
 
 EVERYONE - WEB STORE AND SPAWN PLOTS
 ------------------------------------
-/store                      Get a one-time code (10 minutes) and the link to the web store. Everything
-                            there costs in-game money (your /bal): kits, supplies, revives, spawn plots.
+/store                      Get a one-time code (10 minutes) and the link to the web store: kits, supplies,
+                            revives and spawn plots for in-game money (your /bal); kits and supplies can
+                            also be bought with a card once the owner turns card payments on.
                             Every kit or supply has a small chance of a bonus heart past the 20 heart cap
                             (up to 5 extra). Kits have a cooldown (24-72 hours).
 /plot                       Your spawn plot: which one, until when. The 8 domes at spawn can be rented
@@ -155,7 +164,9 @@ OWNER / OPS - WEB STORE AND PLOTS
 ---------------------------------
 Store files: config/web-store.json (prices, wait days, public_url), server-tools/web-store/catalog.json
 (kits). Logs: logs/web-store.log. Runs in tmux "web-store"; the public link comes from tmux "store-tunnel"
-until a fixed address (store.cosmicpixel.org) is set as "public_url".
+until a fixed address (store.cosmicpixel.org) is set as "public_url" (server-tools/store-tunnel-setup.sh
+does that after "cloudflared tunnel login"). Card payments: put your Stripe secret key in
+"stripe_secret_key"; card prices are the "usd" fields in catalog.json; card orders: config/web-store/card-orders.json.
 /plot admin rent <id> <uuid> <name> <days>   Give someone a plot        /plot admin evict <id>  End a rental (1 grace day)
 /plot admin clear <id>                       Free a plot now and remove its blocks
 /cosmicstore balance|charge|refund <uuid> [amount]     (used by the store over RCON)

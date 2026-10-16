@@ -117,7 +117,7 @@ CUSTOM = {
     "9_exclusive_enchants_item/netherite_generator": ("Netherite Generator", "Block of Netherite", 1, None, "Turns the block into a mob that drops netherite scrap every 5 minutes forever.", "REMOVED: infinite free netherite."),
     "9_exclusive_enchants_item/pet_regeneration": ("Pet Regeneration", PET_ARMOR, 1, 1000, "Gives your horse or wolf Regeneration IV.", ""),
     "9_exclusive_enchants_item/regeneration_boots": ("Regeneration", LEGS, 2, None, "Permanent Regeneration I-II (despite the name it goes on leggings).", "REMOVED: too strong in PvP."),
-    "9_exclusive_enchants_item/spawner_breaker": ("Spawner Breaker", "Pickaxes", 1, None, "Spawners drop themselves when mined.", "REMOVED: lets players stack mob farms of any type."),
+    "9_exclusive_enchants_item/spawner_breaker": ("Spawner Breaker", "Pickaxes", 1, None, "Spawners drop themselves when mined.", "REMOVED: not needed, any Silk Touch pickaxe mines spawners now (mineable-spawner mod)."),
     "9_exclusive_enchants_item/strength_gift": ("Strength Gift", SWORD, 1, None, "10% chance on hit to give you Strength.", "REMOVED: too strong in PvP."),
     "9_exclusive_enchants_item/super_knockback": ("Super Knockback", SWORD, 3, None, "+5 / +6 / +7 knockback.", "REMOVED: launches players off the map."),
     "9_exclusive_enchants_item/unbreakable": ("Unbreakable", "Tools, weapons, shears, fishing rods, flint and steel", 1, 12000, "The item never loses durability.", "Not with Unbreaking, Mending or Self Repair."),
