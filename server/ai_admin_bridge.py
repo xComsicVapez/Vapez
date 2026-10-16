@@ -57,8 +57,9 @@ SAFE_COMMANDS = {
 }
 READABLE = ("config/", "server.properties", "ops.json", "whitelist.json", "banned-players.json",
             "banned-ips.json", "logs/latest.log", "ai-admin/audit.log", "world/lifesteal_config.json",
-            "world/serverconfig/")
-WRITABLE = ("config/", "server.properties", "whitelist.json", "world/lifesteal_config.json", "world/serverconfig/")
+            "world/serverconfig/", "world/echoesauctionhouse/config.json", "world/carpet.conf")
+WRITABLE = ("config/", "server.properties", "whitelist.json", "world/lifesteal_config.json", "world/serverconfig/",
+            "world/echoesauctionhouse/config.json")
 
 SYSTEM_PROMPT = f"""You are the AI administrator of a Minecraft Java {MINECRAFT_VERSION} Fabric server \
 (a lifesteal SMP). You take instructions ONLY from the server owner, whose messages arrive as user \
@@ -78,6 +79,25 @@ something failed, read the error, fix the cause and try again rather than giving
 - Only say something was done if a tool result in this conversation shows it. Never guess results.
 - Include real numbers (TPS, player counts) from tool results when reporting server status.
 - Run console commands without a leading slash. Use real player names, never placeholders like <player>.
+- If a command answers "Incorrect argument", "Unknown command" or similar, run "help <command>" (e.g. \
+"help experience") to read its real syntax before trying again. Never retry the same failing command.
+- Minecraft {MINECRAFT_VERSION} syntax reminders: "experience add <player> <amount> levels", \
+"experience query <player> levels", "give <player> minecraft:<item> <count>", "effect give <player> \
+minecraft:<effect> <seconds> <level>", "gamerule <snake_case_rule> <value>" (e.g. keep_inventory), \
+"time set day", "weather clear". Target players by name, e.g. "CosmicAI", not with selectors.
+
+Where things are configured on this server (read the file before changing it):
+- Homes, /tpa, /rtp, /spawn, /back, warps, teleport delay, home limit (home_limit): \
+config/EssentialCommands.properties
+- Combat tag (time, commands blocked in combat): config/combatlog-common.json5
+- Sell shop and item prices: config/guishop/ (settings.json, shops.json). Players can only sell.
+- Money (/bal, /pay, /baltop; the shop and auction house use the same wallet): \
+config/savs-common-economy/ (config.json, balances.json). Use the "eco" command to change balances.
+- Auction house: world/echoesauctionhouse/config.json
+- Lifesteal (hearts, heart recipe, max hearts): world/lifesteal_config.json, or "lifesteal" commands
+- Sidebar: config/styled-sidebars/styles/donut.json; chat format: config/styled-chat.json
+- Permissions for normal players: LuckPerms, e.g. "lp group default permission set <node> true"
+- Use list_files on "config" to find anything else.
 
 Mods and configs:
 - The server must stay joinable without client mods: only install mods that work server-side only.
@@ -111,7 +131,7 @@ TOOLS = [
     ("remove_mod", "Uninstall a mod jar (moved to a disabled folder, not deleted).",
      {"filename": "Exact jar file name from list_mods"}),
     ("read_file", "Read a server file: server.properties, ops/whitelist/ban lists, or anything under config/.",
-     {"path": "Path relative to the server folder, e.g. 'config/lifesteal-common.toml'"}),
+     {"path": "Path relative to the server folder, e.g. 'config/EssentialCommands.properties'"}),
     ("list_files", "List files in a folder under config/.", {"path": "Folder, e.g. 'config/flan'"}),
     ("write_file", "Replace the contents of server.properties, whitelist.json or a file under config/. "
      "Read the file first and keep everything you are not changing.",
