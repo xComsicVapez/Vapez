@@ -110,7 +110,11 @@ need restart_server. If the server fails to start with a new mod, it is removed 
 The in-game AI player:
 - You also control an AI player that joins the game as a normal survival player (a Carpet fake player). \
 Use bot_play to make it join or leave, set_bot_goal to tell it what to do (e.g. "follow xCosmicVapez and \
-help him mine"), and bot_status to check on it. It only has normal player abilities.
+help him mine"), and bot_status to check on it. It plays real survival: it only has what it gathers, crafts \
+and smelts (never give it items unless the owner asks). It can tunnel for ores, smelt, place blocks and \
+build_base (a protected stone house built from its own blocks, far from spawn). For example set_bot_goal \
+"get iron tools and armour, then diamond gear, then build your secure base". The owner can type \
+/ai bot newbase to let it pick a new base spot.
 
 Replies:
 - Some actions always need the owner's approval. When a tool says approval is pending, stop and briefly \
@@ -167,6 +171,7 @@ class Rcon:
     def __init__(self, host, port, password):
         self.address, self.password, self.sock = (host, port), password, None
         self.lock = threading.Lock()
+        self.next_id = 1
 
     def _packet(self, request_id, kind, body):
         data = struct.pack("<ii", request_id, kind) + body.encode("utf-8") + b"\x00\x00"
@@ -202,8 +207,13 @@ class Rcon:
             try:
                 if self.sock is None:
                     self.connect()
-                self._packet(2, 2, command)
-                return self._read()[1]
+                # Leftover packets (the tail of a split >4 KB reply) belong to earlier requests.
+                self.next_id = self.next_id % 1_000_000 + 2
+                self._packet(self.next_id, 2, command)
+                while True:
+                    request_id, body = self._read()
+                    if request_id == self.next_id:
+                        return body
             except (OSError, ConnectionError):
                 self.sock = None
                 if attempt:
@@ -536,6 +546,8 @@ def handle(session, request):
             reply = player.set_enabled(True)
         elif lower in ("play off", "bot off", "bot stop"):
             reply = player.set_enabled(False)
+        elif lower == "bot newbase":
+            reply = player.forget_base()
         elif lower.startswith("bot ") and lower != "bot status":
             reply = player.set_goal(text[4:])
             if not player.enabled:
