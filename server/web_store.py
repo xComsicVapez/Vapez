@@ -113,6 +113,14 @@ def server_properties():
 
 # ---------------------------------------------------------------------------------------------------- RCON
 
+def rcon_paused():
+    """True while `mc` is stopping the server: a command arriving during shutdown deadlocks it."""
+    try:
+        return time.time() - (SERVER / ".rcon-pause").stat().st_mtime < 600
+    except OSError:
+        return False
+
+
 class Rcon:
     def __init__(self, port, password):
         self.address, self.password, self.sock = ("127.0.0.1", port), password, None
@@ -146,6 +154,11 @@ class Rcon:
     def run(self, command, retry=True):
         """Send a command. With retry=False (money), a lost connection is never re-sent, so nothing runs twice."""
         with self.lock:
+            if rcon_paused():
+                if self.sock is not None:
+                    self.sock.close()
+                    self.sock = None
+                raise ConnectionError("the server is restarting")
             for attempt in range(2 if retry else 1):
                 try:
                     if self.sock is None:
@@ -306,6 +319,8 @@ def deliver_loop():
                     with LOCK:
                         current = [d for d in read_json(DATA / "deliveries.json", []) if d["id"] != delivery["id"]]
                         write_json(DATA / "deliveries.json", current)
+        except ConnectionError:
+            pass
         except Exception:
             log("DELIVERY error", traceback.format_exc(limit=3))
 
@@ -329,16 +344,28 @@ def ban_reason(entry):
             f"Or buy a revive now at {url} with code {entry['code']} (friends can buy it for you too).")
 
 
+def update_elimination(uuid, **fields):
+    with LOCK:
+        elims = read_json(DATA / "eliminations.json", {})
+        if uuid in elims:
+            elims[uuid].update(fields)
+            write_json(DATA / "eliminations.json", elims)
+
+
 def reban(entry):
-    """Swap the lifesteal ban message for one with the revive date, website and code. The player stays banned."""
+    """Swap the lifesteal ban message for one with the revive date, website and code. The player stays banned:
+    "rebanning" is stored first, so if the connection drops after the pardon the next check bans them again."""
     name = entry["name"]
+    update_elimination(entry["uuid"], rebanning=True)
     RCON.run(f"pardon {name}")
     reply = RCON.run(f"ban {name} {ban_reason(entry)}")
     if not reply.startswith("Banned"):
-        fallback = RCON.run(f"ban {name} You ran out of hearts! Wait to be revived.")
-        log("ELIMINATION re-ban failed for", name, reply, "| fallback:", fallback)
-        return False
-    return True
+        reply = RCON.run(f"ban {name} You ran out of hearts! Wait to be revived.")
+        log("ELIMINATION re-ban with the store message failed for", name, "| plain ban:", reply)
+    if reply.startswith("Banned"):
+        update_elimination(entry["uuid"], rebanning=False)
+        return True
+    return False
 
 
 def elimination_loop():
@@ -353,6 +380,8 @@ def elimination_loop():
                 for entry in waiting:
                     reban(entry)
             last_url = url
+        except ConnectionError:
+            pass
         except Exception:
             log("ELIMINATION error", traceback.format_exc(limit=3))
         time.sleep(15)
@@ -361,9 +390,9 @@ def elimination_loop():
 def check_eliminations():
     bans = {b["uuid"]: b for b in read_json(BANS_FILE, []) if "uuid" in b}
     now = int(time.time())
+    new = []
     with LOCK:
         elims = read_json(DATA / "eliminations.json", {})
-        changed = False
         for uuid, ban in bans.items():
             entry = elims.get(uuid)
             if ban.get("source") != "LifestealMod" or (entry and entry["status"] == "waiting"):
@@ -373,14 +402,25 @@ def check_eliminations():
                      "revive_at": created + int(CONFIG["revive_wait_days"] * 86400),
                      "code": "".join(secrets.choice(CODE_ALPHABET) for _ in range(8)), "status": "waiting"}
             elims[uuid] = entry
-            changed = True
-            log("ELIMINATED", entry["name"], "auto revive", when(entry["revive_at"]))
-            RCON.run(f"cosmicstore bonushearts reset {uuid}")
-            reban(entry)
+            new.append(entry)
+        if new:
+            write_json(DATA / "eliminations.json", elims)
+    for entry in new:
+        log("ELIMINATED", entry["name"], "auto revive", when(entry["revive_at"]))
+        RCON.run(f"cosmicstore bonushearts reset {entry['uuid']}")
+        reban(entry)
+
+    unbanned = []
+    with LOCK:
+        elims = read_json(DATA / "eliminations.json", {})
+        changed = False
         for uuid, entry in elims.items():
             if entry["status"] != "waiting":
                 continue
             if uuid not in bans:
+                if entry.get("rebanning"):
+                    unbanned.append(entry)
+                    continue
                 entry["status"], entry["ended"] = "pardoned", now
                 changed = True
                 log("ELIMINATION ended outside the store for", entry["name"])
@@ -395,6 +435,9 @@ def check_eliminations():
                 changed = True
         if changed:
             write_json(DATA / "eliminations.json", elims)
+    for entry in unbanned:
+        log("ELIMINATION finishing an interrupted re-ban of", entry["name"])
+        reban(entry)
 
 
 def waiting_eliminations():
