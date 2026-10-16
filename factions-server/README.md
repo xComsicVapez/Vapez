@@ -1,0 +1,175 @@
+# Vapez Factions server
+
+A Fabric 1.21.1 factions server with 119 mods: tech, storage, furniture, food, mobs,
+combat, and over a dozen structure and biome mods. The overworld is as big as
+Minecraft allows:
+
+| | Vanilla | This server |
+|---|---|---|
+| World border | 59,999,968 blocks wide (already the maximum) | same, enforced by `world/datapacks/vapez-world` |
+| Build height | Y -64 to 320 | **Y -128 to 512** (Tectonic) |
+| Continents | normal | **~2x wider**, wider oceans between them |
+| Biomes | normal | **~2x larger**, plus Terralith, Biomes O' Plenty and Nature's Spirit biomes |
+| Mountains | up to ~250 | **50% taller**, thicker ranges |
+
+Factions comes from the [Factions](https://modrinth.com/mod/factions) mod: `/f create <name>`,
+`/f claim add`, `/f invite`, `/f declare ally|enemy`, power that drops when you die, faction
+homes and safes. Its settings are in `runtime/config/factions.json`. Every mod it integrates
+with is installed:
+
+| Mod | What Factions uses it for |
+|---|---|
+| Fabric API | required |
+| LuckPerms | per-rank permissions for every `/f` command |
+| PlaceholderAPI, Styled Chat | faction name and rank in chat and the tab list |
+| BlueMap | live web map with every faction's claims at `http://<server>:8100` |
+
+The server-list icon is `server-config/server-icon.png` (64×64).
+
+## Which edition?
+
+| | Full pack (default) | Any-version edition |
+|---|---|---|
+| Players join with | the 1.21.1 client pack below | **any normal Minecraft, 1.8 up to the newest release**, no mods |
+| Mods | all 119 | the 51 (42 plus their libraries) that work without client mods: Factions, admin tools, Tectonic + Terralith terrain, YUNG's and the other structure mods, performance mods, BlueMap |
+| Install | `./setup.sh` | `EDITION=any-version ./setup.sh` (installs into `runtime-any-version/`) |
+
+The two can't be combined. Mods that add blocks, items, mobs or new screens (Tech Reborn,
+furniture, Better Combat, backpacks, ...) need the same mod on the player's computer, and
+those client mods only exist for 1.21.1. A vanilla client of any version, even 1.21.1, is
+disconnected from the full pack with an error like "Network configuration task not
+supported: bettercombat:config".
+
+How the any-version edition works: a [Velocity](https://papermc.io/software/velocity) proxy with ViaVersion,
+ViaBackwards and ViaRewind takes port 25565 and translates every client version to
+1.21.1. The Fabric server only listens on `127.0.0.1:25566`, and FabricProxy-Lite checks a
+shared secret, so nobody can skip the proxy's Mojang login. `start.sh` starts both
+(`./console.sh`, then **Ctrl+B, N** to switch between server and proxy). The proxy
+needs Java 25: `sudo apt install openjdk-25-jre-headless`. The server itself stays on 21.
+Run only one edition at a time; both use port 25565.
+
+`compat/config-ping-timeout/` is a small server mod the any-version edition needs. Fabric
+API waits for a reply that ViaBackwards and Velocity never deliver for 1.17–1.20.1
+clients, so those players would hang on "Joining world" forever. The mod waits 3 seconds
+and then lets them in. Universal Graves is left out of this edition because its Polymer
+library hangs logins from clients older than 1.20.2 the same way.
+
+## Install on your Proxmox VM (Ubuntu/Debian)
+
+```bash
+sudo apt install -y openjdk-21-jre-headless python3 python3-numpy curl tmux git
+git clone https://github.com/xComsicVapez/Vapez && cd Vapez/factions-server
+./setup.sh
+echo eula=true > runtime/eula.txt     # after reading https://aka.ms/MinecraftEULA
+runtime/start.sh
+```
+
+`setup.sh` is safe to re-run after `git pull`. It updates the mods and never touches the
+world or any config you've edited.
+
+## Bring over settings from your old server
+
+```bash
+python3 tools/import-old-server.py /path/to/old/server --dry-run   # preview
+python3 tools/import-old-server.py /path/to/old/server
+```
+
+**What gets copied:**
+- Settings that describe the server and your community: port, player limit,
+  online mode, whitelist settings, op level, idle timeout, RCON/query, and the resource pack.
+- `ops.json`, `whitelist.json`, `banned-players.json` and `banned-ips.json`. The old
+  server icon isn't copied; this pack ships its own.
+
+**What deliberately stays as this pack sets it:**
+- World and gameplay settings: level name, type and seed, hardcore, difficulty, PvP and
+  spawn protection, because they don't fit a new factions world.
+- The view and simulation distances, which are tuned for these mods.
+- The MOTD.
+
+The dry run lists exactly which old values it kept out. The old server's 1000 player slots
+are already set. LuckPerms ranks move separately: run `lp export ranks` on the old server
+and `lp import ranks` here (the script prints the steps if it finds LuckPerms).
+
+## Kit PvP spawn map
+
+A replica of the Spaleforce "Kit PVP Map" (minecraft-schematics #31943). The original is
+a paid download, so this one is generated by `tools/build_arena.py`. It's a green mountain
+plateau just under the clouds, about 270 blocks across, with:
+
+- a walled castle with round red-capped towers, a gatehouse and a fountain courtyard
+- a palace with red roofs, side wings and a clock tower with a belfry
+- a village of about 45 timber houses around a market square and well
+- dense oak, birch, spruce and dark-oak forest
+- four leap-of-faith bridges with water pools on the ground below, the way down to the
+  survival world
+
+`setup.sh` installs it as a datapack. With the server running:
+
+```bash
+runtime/arena.sh              # centred on 0,0, plateau at Y=180
+runtime/arena.sh 3000 180 0   # or anywhere else
+```
+
+The script pre-generates the area, builds about 14 million blocks in under a minute (the
+server lags while it does), and makes the castle courtyard the world spawn. Running it
+again at the same spot repairs the map.
+
+## RAM
+
+`start.sh` gives the server **100 GB** by default. Because of `-XX:+AlwaysPreTouch`, the
+whole 100 GB is claimed at boot, so in Proxmox give the VM **at least 104 GB, ideally
+110 GB** (Hardware > Memory, with ballooning off). If the VM has less, `start.sh` refuses to start
+and tells you what will fit. To use a different amount: `MEMORY=64G runtime/start.sh`.
+
+## Day-to-day
+
+| Do this | Command |
+|---|---|
+| Start (in the background, auto-restarts after a crash) | `runtime/start.sh` |
+| Stop cleanly (warns players, saves) | `runtime/stop.sh` |
+| Watch or type in the console | `runtime/console.sh`, then detach with **Ctrl+B, D** |
+| Pre-generate land so exploring doesn't lag | `runtime/pregen.sh 10000` (radius in blocks) |
+| Build or repair the Kit PvP spawn map | `runtime/arena.sh` |
+
+Pre-generating everything is impossible: 60 million blocks across is petabytes. Pre-generate
+the area players will actually use. Rough disk use with these mods: radius 5k is about 5 GB,
+10k about 20 GB, and 25k about 120 GB.
+
+**Run `/f ...` commands in-game only.** Factions 2.8.0 crashes the server if a factions
+command is typed in the server console (its bug, not ours). The auto-restart brings the
+server back, but players get kicked. Admins in-game can use `/f admin ...`.
+
+## Ports to forward on the ASUS router
+
+| Port | Protocol | What |
+|---|---|---|
+| 25565 | TCP | Minecraft |
+| 24454 | UDP | Simple Voice Chat (optional) |
+| 8100 | TCP | BlueMap web map with faction claims (optional; it's reachable on your LAN without forwarding) |
+
+## Players: install the client pack
+
+Players need the same mods. Send them `dist/vapez-factions-1.0.0.mrpack`. In the
+[Modrinth App](https://modrinth.com/app) or Prism Launcher, choose **Add instance > Import
+> File**, pick the `.mrpack`, then join your server address. It's Minecraft 1.21.1 with
+Fabric, plus Sodium, Iris shaders and Distant Horizons so the huge terrain is visible far
+into the distance.
+
+## Changing the mod list
+
+1. Edit `modlist.txt` (Modrinth slugs). Use `slug==version` to pin a version, or add `@client`
+   to keep a mod off the server.
+2. Run `python3 tools/modpack.py lock`. This resolves every mod and its dependencies into
+   `mods.lock.json`.
+3. Run `./setup.sh` to update the server, and `python3 tools/modpack.py mrpack` to rebuild the
+   client pack.
+4. Test-boot on a **copy** of the world before going live.
+
+Known incompatibilities, found by test-booting:
+
+- **Oh The Biomes We've Gone:** world generation crashes ("Feature order cycle") together
+  with Terralith.
+- **C2ME 0.4.x:** needs Java 25, so it's pinned to 0.3.0.
+- **Java 25:** spark's profiler crashes the JVM on startup (SIGSEGV). Use Java 21; `start.sh`
+  picks `/usr/lib/jvm/java-21-openjdk*` when it's installed, even if `java` points at a newer one.
+  It also turns off JVM core dumps, which would otherwise try to write a 100 GB file on a crash.

@@ -1,0 +1,63 @@
+# "Any version" edition: only mods that work with an unmodded client, behind a
+# Velocity proxy running ViaVersion/ViaBackwards/ViaRewind so Minecraft 1.8 up to
+# the newest release can join. Install with:  EDITION=any-version ./setup.sh
+# Every mod that adds blocks, items, mobs or client screens is left out, because
+# a vanilla client can't join a server that has them.
+
+# --- Version bridging (plugins for the Velocity proxy in front of the server) ---
+viaversion       @velocity   # newer clients
+viabackwards     @velocity   # older clients (down to 1.9)
+viarewind        @velocity   # 1.7/1.8 clients
+fabricproxy-lite             # lets the proxy forward real player UUIDs/skins to the server
+
+# --- Factions & server admin ---
+factions
+luckperms
+placeholder-api
+ledger
+# universal-graves: needs Polymer, whose login handshake hangs pre-1.20.2 clients behind ViaVersion
+styled-chat
+spark
+chunky
+bluemap                  # web map with faction claims, http://<server>:8100
+simple-voice-chat        # optional for players; vanilla clients just don't hear voice
+
+# --- Performance ---
+lithium
+ferrite-core
+krypton
+c2me-fabric==0.3.0+alpha.0.364+1.21.1   # 0.4.x needs Java 25
+modernfix
+alternate-current
+packet-fixer
+scalablelux
+
+# --- Massive overworld terrain & biomes (data-driven, no new blocks) ---
+tectonic
+terralith
+lithostitched
+
+# --- Structures built from vanilla blocks ---
+yungs-better-dungeons
+yungs-better-mineshafts
+yungs-better-strongholds
+yungs-better-nether-fortresses
+yungs-better-ocean-monuments
+yungs-better-desert-temples
+yungs-better-jungle-temples
+yungs-better-witch-huts
+yungs-better-end-island
+yungs-bridges
+yungs-extras
+towns-and-towers
+dungeons-and-taverns
+when-dungeons-arise
+repurposed-structures-fabric
+mes-moogs-end-structures
+ct-overhaul-village
+structory
+
+# --- Quality of life ---
+veinminer
+fallingtree
+rightclickharvest

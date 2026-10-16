@@ -1,0 +1,965 @@
+{
+  "minecraft": "1.21.1",
+  "loader": "fabric",
+  "mods": [
+    {
+      "slug": "alternate-current",
+      "title": "Alternate Current",
+      "version": "mc1.21-1.9.0",
+      "version_id": "78P98rac",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "alternate-current-mc1.21-1.9.0.jar",
+        "url": "https://cdn.modrinth.com/data/r0v8vy1s/versions/78P98rac/alternate-current-mc1.21-1.9.0.jar",
+        "size": 51836,
+        "sha1": "b3dbc4fc4acfd98f3f6b62bbb4e641ed4df915e8",
+        "sha512": "8b2899de60af229e911bf45d10f71e624910e8df555aad94cb4e590f052ca5dae102f366a883a0c17a3821fbb086c587b5b9286b70502c09d51f4d60dd02ab77"
+      }
+    },
+    {
+      "slug": "architectury-api",
+      "title": "Architectury API",
+      "version": "13.0.11+fabric",
+      "version_id": "Pzc2FP5K",
+      "dependency_of": "rightclickharvest",
+      "env": {
+        "client": "required",
+        "server": "required"
+      },
+      "file": {
+        "name": "architectury-13.0.11-fabric.jar",
+        "url": "https://cdn.modrinth.com/data/lhGA9TYQ/versions/Pzc2FP5K/architectury-13.0.11-fabric.jar",
+        "size": 600921,
+        "sha1": "18200609d4c3571c4237b50884966f6fd82431ea",
+        "sha512": "53314eb34890b11ad3c06c6f3ba2d01ae1ca756235ce4f0574e4b0544952a2ab3c628c81b521653d6487d62c5dc3055e06fed6367a3a499bafad909512f0c716"
+      }
+    },
+    {
+      "slug": "bluemap",
+      "title": "BlueMap",
+      "version": "5.7-fabric",
+      "version_id": "Dr2hvJBc",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "bluemap-5.7-fabric.jar",
+        "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/Dr2hvJBc/bluemap-5.7-fabric.jar",
+        "size": 5517229,
+        "sha1": "42777d6140234a75243c04156b63cfbe562a1cdb",
+        "sha512": "b7483d6ff90f09258f994a6f487846c1dfe814f1d0af931bd50426fd0afc98ccad033c5f440705edc08a8ced03cf216171ba1571db2221aca4ec620d676443a4"
+      }
+    },
+    {
+      "slug": "c2me-fabric",
+      "title": "Concurrent Chunk Management Engine (Fabric)",
+      "version": "0.3.0+alpha.0.364+1.21.1",
+      "version_id": "1vHN61jT",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "required"
+      },
+      "file": {
+        "name": "c2me-fabric-mc1.21.1-0.3.0+alpha.0.364.jar",
+        "url": "https://cdn.modrinth.com/data/VSNURh3q/versions/1vHN61jT/c2me-fabric-mc1.21.1-0.3.0%2Balpha.0.364.jar",
+        "size": 4687748,
+        "sha1": "c7c21c60480dea01f9b173bdaf750bb5eec0c9cb",
+        "sha512": "4a3509986c1c5dc28be8b4137c463c6ff1d9fe2312052673a3a2d0c75c527d6dd40c3b2400af9fb7b416c5b430f3d1dc9f1db2b061dac8ae56ae4a5955edaa68"
+      }
+    },
+    {
+      "slug": "chunky",
+      "title": "Chunky",
+      "version": "1.4.23",
+      "version_id": "RVFHfo1D",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "optional"
+      },
+      "file": {
+        "name": "Chunky-Fabric-1.4.23.jar",
+        "url": "https://cdn.modrinth.com/data/fALzjamp/versions/RVFHfo1D/Chunky-Fabric-1.4.23.jar",
+        "size": 342979,
+        "sha1": "6c8098fc0f124c7b6492de60db0108747f7f9821",
+        "sha512": "02ca6af1ed31e9ebc51af20948a2afb670fe653c80aaeb990947caf6b655d6ab8eda3f1b64ef478633b67ef5d2fd0d1fe67e2107a4a522ef45fd1f183c9a6c9c"
+      }
+    },
+    {
+      "slug": "cloth-config",
+      "title": "Cloth Config API",
+      "version": "15.0.140+fabric",
+      "version_id": "HpMb5wGb",
+      "dependency_of": "yungs-better-dungeons",
+      "env": {
+        "client": "optional",
+        "server": "optional"
+      },
+      "file": {
+        "name": "cloth-config-15.0.140-fabric.jar",
+        "url": "https://cdn.modrinth.com/data/9s6osm5g/versions/HpMb5wGb/cloth-config-15.0.140-fabric.jar",
+        "size": 1157166,
+        "sha1": "5d82342a2df53fd6df712bfdd583a811572918a4",
+        "sha512": "1b3f5db4fc1d481704053db9837d530919374bf7518d7cede607360f0348c04fc6347a3a72ccfef355559e1f4aef0b650cd58e5ee79c73b12ff0fc2746797a00"
+      }
+    },
+    {
+      "slug": "cristel-lib",
+      "title": "Cristel Lib",
+      "version": "fabric-1.21.1-3.1.7",
+      "version_id": "K1dyr5gj",
+      "dependency_of": "towns-and-towers",
+      "env": {
+        "client": "optional",
+        "server": "required"
+      },
+      "file": {
+        "name": "cristellib-fabric-1.21.1-3.1.7.jar",
+        "url": "https://cdn.modrinth.com/data/cl223EMc/versions/K1dyr5gj/cristellib-fabric-1.21.1-3.1.7.jar",
+        "size": 584853,
+        "sha1": "4f966c3efd6ecfe679aac64ba7c6f4d4a648ad5b",
+        "sha512": "7a71a8f409d14268461bebb8d7c45a1e15e82f379d92c6f6938eb20cc480cc6bbb763affc1ac582c3733eac2c403788f1cf43edcb4abe345054b0acc5c4c045d"
+      }
+    },
+    {
+      "slug": "ct-overhaul-village",
+      "title": "ChoiceTheorem's Overhauled Village",
+      "version": "3.6.3",
+      "version_id": "dqaObRbU",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "[Fabric]ctov-3.6.3.jar",
+        "url": "https://cdn.modrinth.com/data/fgmhI8kH/versions/dqaObRbU/%5BFabric%5Dctov-3.6.3.jar",
+        "size": 8118869,
+        "sha1": "80352bdb2729a4794508e696cffbb45b8dc32c39",
+        "sha512": "743a8ae53db490536232a781d1e102927ccd439b3c0e864eeea4d6a2a97deeb9bc877c47a33b98f2bcdbbf25bc4971da132afef459bc9a1ce4406f0cd6dd67a4"
+      }
+    },
+    {
+      "slug": "dungeons-and-taverns",
+      "title": "Dungeons and Taverns",
+      "version": "v4.4.4+mod",
+      "version_id": "EUlNXs9V",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "required"
+      },
+      "file": {
+        "name": "dungeons-and-taverns-v4.4.4.jar",
+        "url": "https://cdn.modrinth.com/data/tpehi7ww/versions/EUlNXs9V/dungeons-and-taverns-v4.4.4.jar",
+        "size": 24859360,
+        "sha1": "68c6f0dea960ce94f55f1f05d8893623da207be8",
+        "sha512": "ceeaaa41bafeb23d54abb498a4291b1905a53b6b3d17d14d892e9fa0d81cd56275c5edfdc999910520547939a17c1884d4553543d5aaafcf2295fb818cadba01"
+      }
+    },
+    {
+      "slug": "fabric-api",
+      "title": "Fabric API",
+      "version": "0.116.17+1.21.1",
+      "version_id": "Mys3P7lK",
+      "dependency_of": "fabricproxy-lite",
+      "env": {
+        "client": "optional",
+        "server": "optional"
+      },
+      "file": {
+        "name": "fabric-api-0.116.17+1.21.1.jar",
+        "url": "https://cdn.modrinth.com/data/P7dR8mSH/versions/Mys3P7lK/fabric-api-0.116.17%2B1.21.1.jar",
+        "size": 2452735,
+        "sha1": "810b2b0195371a012906241d8b85a32a1d6de53c",
+        "sha512": "98c478217da19181f0e4df3ea6c2da6bdbda271c7544a4aea048513a49b444f1ff5b71dc0df6303017c48e8ff69b7bb6af6179bdf0d0e09ab3c1ee08411857a8"
+      }
+    },
+    {
+      "slug": "fabric-language-kotlin",
+      "title": "Fabric Language Kotlin",
+      "version": "1.14.2+kotlin.2.4.21",
+      "version_id": "SKW1BTL3",
+      "dependency_of": "ledger",
+      "env": {
+        "client": "optional",
+        "server": "optional"
+      },
+      "file": {
+        "name": "fabric-language-kotlin-1.14.2+kotlin.2.4.21.jar",
+        "url": "https://cdn.modrinth.com/data/Ha28R6CL/versions/SKW1BTL3/fabric-language-kotlin-1.14.2%2Bkotlin.2.4.21.jar",
+        "size": 8142878,
+        "sha1": "f1d4ab6ecd54d9782521333a87eb50724ecb03e0",
+        "sha512": "7fb475c4a7e7bdf8d0aca4b5798a58a354c51443d5b1fbde3e8cf34dfbf7191ef4238b5f07d08ec9490ec180b371624523326c3ad45d4ed2b2be541de9407e5d"
+      }
+    },
+    {
+      "slug": "fabricproxy-lite",
+      "title": "FabricProxy-Lite",
+      "version": "v2.10.1",
+      "version_id": "KqB3UA0q",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "FabricProxy-Lite-2.10.1.jar",
+        "url": "https://cdn.modrinth.com/data/8dI2tmqs/versions/KqB3UA0q/FabricProxy-Lite-2.10.1.jar",
+        "size": 74135,
+        "sha1": "22d2df1447e28a5ac23f3805836c640cdeef7c22",
+        "sha512": "9c0c1d44ba27ed3483bb607f95441bea9fb1c65be26aa5dc0af743167fb7933623ba6129344738b084056aef7cb5a7db0db477348d07672d5c67a2e1204e9c94"
+      }
+    },
+    {
+      "slug": "factions",
+      "title": "Factions",
+      "version": "2.8.0-1.21",
+      "version_id": "JSZER60J",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "factions-mc1.21-2.8.0.jar",
+        "url": "https://cdn.modrinth.com/data/ZjwW8Q6n/versions/JSZER60J/factions-mc1.21-2.8.0.jar",
+        "size": 407156,
+        "sha1": "8de1af6c2ad2c3892b57f7899ea73e218b460aa7",
+        "sha512": "89e15f0552c122b05a61cf3e16f90dc59556f6d97ef3868bc5ea36654d026a4328ec8f34281074d86fef77c730e1c998bfce501d5333b42892a6d0a9451f10dc"
+      }
+    },
+    {
+      "slug": "fallingtree",
+      "title": "FallingTree",
+      "version": "1.21.1-1.21.1.11",
+      "version_id": "wxGXaJMA",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "required"
+      },
+      "file": {
+        "name": "FallingTree-1.21.1-1.21.1.11.jar",
+        "url": "https://cdn.modrinth.com/data/Fb4jn8m6/versions/wxGXaJMA/FallingTree-1.21.1-1.21.1.11.jar",
+        "size": 496356,
+        "sha1": "7e1b3ee0ba89b556d5a468797bb1b5f4e2b8ccb7",
+        "sha512": "21876b270ca40e3ad6168423f2aba04460f590be191c5558d53e4f542993efa6070589029cb3218557309b096cd920e4da65e53f19687b86c638ec6c342d83e5"
+      }
+    },
+    {
+      "slug": "ferrite-core",
+      "title": "FerriteCore",
+      "version": "7.0.3-fabric",
+      "version_id": "sOzRw3CG",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "optional"
+      },
+      "file": {
+        "name": "ferritecore-7.0.3-fabric.jar",
+        "url": "https://cdn.modrinth.com/data/uXXizFIs/versions/sOzRw3CG/ferritecore-7.0.3-fabric.jar",
+        "size": 123450,
+        "sha1": "a8a6a34fcda177da2828cedef44e0e538cf78aad",
+        "sha512": "3ad31620fac4ff44327dc7dedbe162b2d978f3f246dc16255a6e400ce9592a0d326fe36a626f3c1bf30a11f813093cbb4dcc107af039cff724d0cdf648541fdf"
+      }
+    },
+    {
+      "slug": "jamlib",
+      "title": "JamLib",
+      "version": "1.3.6+1.21.1",
+      "version_id": "wWGzYPkM",
+      "dependency_of": "rightclickharvest",
+      "env": {
+        "client": "required",
+        "server": "required"
+      },
+      "file": {
+        "name": "jamlib-fabric-1.3.6+1.21.1.jar",
+        "url": "https://cdn.modrinth.com/data/IYY9Siz8/versions/wWGzYPkM/jamlib-fabric-1.3.6%2B1.21.1.jar",
+        "size": 187766,
+        "sha1": "06812c82db4a195853fd29cc03c78bd690bac6ea",
+        "sha512": "9faeb50d37b39a3484a7147912f046d6ce5e648a0f50df5a90c98154e008560be3af56ad8f92ca1205b2bafa14833c549c34b36971b62f01d5f9907e30cc7fc0"
+      }
+    },
+    {
+      "slug": "krypton",
+      "title": "Krypton",
+      "version": "0.2.8",
+      "version_id": "Acz3ttTp",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "optional"
+      },
+      "file": {
+        "name": "krypton-0.2.8.jar",
+        "url": "https://cdn.modrinth.com/data/fQEb0iXm/versions/Acz3ttTp/krypton-0.2.8.jar",
+        "size": 161045,
+        "sha1": "73e792eb5f120787becda4b87b6ff18b26caea50",
+        "sha512": "5f8cf96c79bfd4d893f1d70da582e62026bed36af49a7fa7b1e00fb6efb28d9ad6a1eec147020496b4fe38693d33fe6bfcd1eebbd93475612ee44290c2483784"
+      }
+    },
+    {
+      "slug": "ledger",
+      "title": "Ledger",
+      "version": "1.3.5",
+      "version_id": "t1AtqfxZ",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "ledger-1.3.5.jar",
+        "url": "https://cdn.modrinth.com/data/LVN9ygNV/versions/t1AtqfxZ/ledger-1.3.5.jar",
+        "size": 20475069,
+        "sha1": "cd9b3722e540df48ba24b169a594132cbf1af1f3",
+        "sha512": "ab2407e568fd94d863ee178c6009e8a2f21887cc8a9b73d042f9bbc65ffd072848f426351c55e36ffa5430122e4487e7e5392b4a189fc530d62efa59a47f1234"
+      }
+    },
+    {
+      "slug": "lithium",
+      "title": "Lithium",
+      "version": "mc1.21.1-0.15.4-fabric",
+      "version_id": "N08Z8wog",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "optional"
+      },
+      "file": {
+        "name": "lithium-fabric-0.15.4+mc1.21.1.jar",
+        "url": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/N08Z8wog/lithium-fabric-0.15.4%2Bmc1.21.1.jar",
+        "size": 797454,
+        "sha1": "7d82a004403b7780d4443d8e40361a55cfd0ae63",
+        "sha512": "182064b00e6315e2255b857eaab8eb759e6b042ebd4cc8b855ff0d93f875a5a7188fac49f878d7b29d4ef7e6b6341190ad7f6f6f39f4a6d2c62003468b08e4c6"
+      }
+    },
+    {
+      "slug": "lithostitched",
+      "title": "Lithostitched",
+      "version": "1.8.1-fabric-21.1",
+      "version_id": "GZFp8lnS",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "lithostitched-1.8.1-fabric-21.1.jar",
+        "url": "https://cdn.modrinth.com/data/XaDC71GB/versions/GZFp8lnS/lithostitched-1.8.1-fabric-21.1.jar",
+        "size": 1015426,
+        "sha1": "f295e89ad7f18a2ba20da2deb33efabfbe63ed43",
+        "sha512": "4854c2bccc969c0a84d9600825d899b391353917e26eb5ce8dc190d666c10b59bdbe1c8a63e900c7473d7f774e71e63a2c0e6f9efa7f5577ed90710295bd2cd7"
+      }
+    },
+    {
+      "slug": "luckperms",
+      "title": "LuckPerms",
+      "version": "v5.4.140-fabric",
+      "version_id": "l47d4ZWk",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "LuckPerms-Fabric-5.4.140.jar",
+        "url": "https://cdn.modrinth.com/data/Vebnzrzj/versions/l47d4ZWk/LuckPerms-Fabric-5.4.140.jar",
+        "size": 1574861,
+        "sha1": "5368c9a12f181eeeae124b70395691780e5cb657",
+        "sha512": "386ff4d18981c830d21ddaa599d70c1c5430c1475e2c5960275bad535cbd572c77e38b3841f0a71e3ea4a795c56d45ff8c4a8dba3799dae26bff5a382c6e0a64"
+      }
+    },
+    {
+      "slug": "mes-moogs-end-structures",
+      "title": "MES - Moog's End Structures",
+      "version": "2.1.1",
+      "version_id": "S7bUhX4n",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "MoogsEndStructures-universal-1.21-2.1.1.jar",
+        "url": "https://cdn.modrinth.com/data/r4PuRGfV/versions/S7bUhX4n/MoogsEndStructures-universal-1.21-2.1.1.jar",
+        "size": 2285901,
+        "sha1": "ef5f57f0e5d06a2f8bec5c073e01ddb061ad477a",
+        "sha512": "5732c98bf3d1e6aa3c76cf23db77301065dd96f060fb9bf85e8af00769bc6a93e213aad7ff79a3116b3cfd5015fe98437bdadf9fdc0dd829eae1759e3c1fee96"
+      }
+    },
+    {
+      "slug": "midnightlib",
+      "title": "MidnightLib",
+      "version": "1.10.0+1.21.1-fabric",
+      "version_id": "jQ0KXdpD",
+      "dependency_of": "repurposed-structures-fabric",
+      "env": {
+        "client": "optional",
+        "server": "optional"
+      },
+      "file": {
+        "name": "midnightlib-fabric-1.10.0+1.21.1.jar",
+        "url": "https://cdn.modrinth.com/data/codAaoxh/versions/jQ0KXdpD/midnightlib-fabric-1.10.0%2B1.21.1.jar",
+        "size": 63975,
+        "sha1": "3120b1329ab0d01b4af4e659495259bffee2ddae",
+        "sha512": "5c1d174ec58bc90e2295a2e97f930bb2a97a5a1f6ee1e956f628237223386c9e40c50655b1238a2368735399472d9a1950d9f1c6ca472d279a57ee04dcf6d11e"
+      }
+    },
+    {
+      "slug": "modernfix",
+      "title": "ModernFix",
+      "version": "5.25.1+mc1.21.1",
+      "version_id": "NnNX8LBn",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "optional"
+      },
+      "file": {
+        "name": "modernfix-fabric-5.25.1+mc1.21.1.jar",
+        "url": "https://cdn.modrinth.com/data/nmDcB62a/versions/NnNX8LBn/modernfix-fabric-5.25.1%2Bmc1.21.1.jar",
+        "size": 471258,
+        "sha1": "4ab39e9c736e7204146792c545ec5b29fc0a3872",
+        "sha512": "dc67d6e023e1fcdeaf7837917c477cba212c611dfc2463c6ea021319c644087c79b477e0ea8194e113ddd7332fd5c6d82baa47c291eaac7f4a86252507b4e19f"
+      }
+    },
+    {
+      "slug": "moogs-structure-lib",
+      "title": "Moog's Structure Lib (moogs_structures)",
+      "version": "3.4.2-fabric-1.21.1",
+      "version_id": "wwRK5XgA",
+      "dependency_of": "mes-moogs-end-structures",
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "MoogsStructureLib-fabric-1.21.1-3.4.2.jar",
+        "url": "https://cdn.modrinth.com/data/1oUDhxuy/versions/wwRK5XgA/MoogsStructureLib-fabric-1.21.1-3.4.2.jar",
+        "size": 1092175,
+        "sha1": "9e2bb2e9452c5edb1ee1fc87db6b897125417888",
+        "sha512": "002cb9cbbc4b1a03f7bc05c4351a3e82310d6d308dd34a2bd951336a480480db354c1b3b8d656ace2b7f080593385eb666da8fed7a161582c38d1579146fc9b4"
+      }
+    },
+    {
+      "slug": "packet-fixer",
+      "title": "Packet Fixer",
+      "version": "3.3.1",
+      "version_id": "2C41Q8WX",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "optional"
+      },
+      "file": {
+        "name": "packetfixer-3.3.1-1.20.5-1.21.X-merged.jar",
+        "url": "https://cdn.modrinth.com/data/c7m1mi73/versions/2C41Q8WX/packetfixer-3.3.1-1.20.5-1.21.X-merged.jar",
+        "size": 46623,
+        "sha1": "a8bb6e25807682e72c23bf4065f3cd5f6373ece3",
+        "sha512": "d0acfaa6ef394fc7d9e677022bda06a6c8be7851ba8860897999775b657b5e10878578fe626505b0c9dbc01d26f559dbb1214aabb081d076824648047094e2e1"
+      }
+    },
+    {
+      "slug": "placeholder-api",
+      "title": "Text Placeholder API",
+      "version": "2.4.2+1.21",
+      "version_id": "U5bhVym2",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "optional"
+      },
+      "file": {
+        "name": "placeholder-api-2.4.2+1.21.jar",
+        "url": "https://cdn.modrinth.com/data/eXts2L7r/versions/U5bhVym2/placeholder-api-2.4.2%2B1.21.jar",
+        "size": 232325,
+        "sha1": "aa1b9a49f9f190dfe4825c502b150817dd2998c3",
+        "sha512": "fc13d3a5c048dbaab86318edaf8b6c6b46ef9f1d367e8f063d19f5a9b0da66c5ae419d92c8c4608edc89a01eb44d91ffcf017fea73f39b222cbd85e82f70a233"
+      }
+    },
+    {
+      "slug": "repurposed-structures-fabric",
+      "title": "Repurposed Structures - Fabric",
+      "version": "7.5.22+1.21.1-fabric",
+      "version_id": "JRMMCb1O",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "repurposed_structures-7.5.22+1.21.1-fabric.jar",
+        "url": "https://cdn.modrinth.com/data/muf0XoRe/versions/JRMMCb1O/repurposed_structures-7.5.22%2B1.21.1-fabric.jar",
+        "size": 8203618,
+        "sha1": "5cd080074996fbb0abdf1549bab5669094e73f69",
+        "sha512": "22378fa8b8ccd2640f303e6dee9d8656c15d90281346d6da67ac7aad6b013a252aea599ec6a58cd5e5a9b598518e343fb442eb0c3e2623cc9d0858c794ada55b"
+      }
+    },
+    {
+      "slug": "rightclickharvest",
+      "title": "RightClickHarvest",
+      "version": "4.6.1+1.21.1",
+      "version_id": "54VwuB27",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "rightclickharvest-fabric-4.6.1+1.21.1.jar",
+        "url": "https://cdn.modrinth.com/data/Cnejf5xM/versions/54VwuB27/rightclickharvest-fabric-4.6.1%2B1.21.1.jar",
+        "size": 286902,
+        "sha1": "f987a5a1963b5e1dd37a3b4c543369a2b17358a8",
+        "sha512": "27a43210d3a907a7f25f41a3b9038e4219e138cf13aa6b09bcada05bbd232bdca8c62a8d4ca7c20297727c201e4c969f145422046a8bad3af6ecb9f06e809dda"
+      }
+    },
+    {
+      "slug": "scalablelux",
+      "title": "ScalableLux",
+      "version": "0.1.0.1+fabric.d0d58ab",
+      "version_id": "Yx1tgJMI",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "optional"
+      },
+      "file": {
+        "name": "ScalableLux-0.1.0.1+fabric.d0d58ab-all.jar",
+        "url": "https://cdn.modrinth.com/data/Ps1zyz6x/versions/Yx1tgJMI/ScalableLux-0.1.0.1%2Bfabric.d0d58ab-all.jar",
+        "size": 177266,
+        "sha1": "2ce889d9b1b210eef005ea03c3bbb39289c26e3f",
+        "sha512": "bbfe02184c3bf3b0da28175574a5a236ce7c9acc00069addd69770857f2ac572924893f3eb033bbbc965afa9779c7a7f8fc54168f9e90481a40de92f6ee3645f"
+      }
+    },
+    {
+      "slug": "simple-voice-chat",
+      "title": "Simple Voice Chat",
+      "version": "fabric-1.21.1-2.6.22",
+      "version_id": "VS5X7jZd",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "optional"
+      },
+      "file": {
+        "name": "voicechat-fabric-1.21.1-2.6.22.jar",
+        "url": "https://cdn.modrinth.com/data/9eGKb6K1/versions/VS5X7jZd/voicechat-fabric-1.21.1-2.6.22.jar",
+        "size": 5369475,
+        "sha1": "2b3f229ed746955b756807a92e09e9a32d636776",
+        "sha512": "c44e69400ac7349ad6d4699263bde4d87359e03233c31a872eb02542658cfc73a185b46e4361c54cb1ac029a2991bd8eb4d4ea59b1c3e3b43f234087520b325a"
+      }
+    },
+    {
+      "slug": "spark",
+      "title": "spark",
+      "version": "1.10.109-fabric",
+      "version_id": "cALUj9l1",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "optional"
+      },
+      "file": {
+        "name": "spark-1.10.109-fabric.jar",
+        "url": "https://cdn.modrinth.com/data/l6YH9Als/versions/cALUj9l1/spark-1.10.109-fabric.jar",
+        "size": 3609981,
+        "sha1": "eff42cbeee6fe9a7f3c57031c23200256366dcd1",
+        "sha512": "367f574f6d28432067f09737577d799ced9c309c1725da1d09ffdfe10eacf461a66967205cc938131afbcc8b8255c8c25f8aa516e15f061c6481b6e7b8c94250"
+      }
+    },
+    {
+      "slug": "structory",
+      "title": "Structory",
+      "version": "1.3.17",
+      "version_id": "TUbwu7eG",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "required"
+      },
+      "file": {
+        "name": "Structory_26.2_v1.3.7.jar",
+        "url": "https://cdn.modrinth.com/data/aKCwCJlY/versions/TUbwu7eG/Structory_26.2_v1.3.7.jar",
+        "size": 1261346,
+        "sha1": "8a9a1a1b3f74398310420b6fbe2c26ef142bed42",
+        "sha512": "4178a15f32f6ed3d59a7eb2222a8e3f539efd7b54d8ffb790cbf1dfe5c54c6ce6ec33220e148424109c6360c4c6f081b9fbebfe74745fe3c8f05619a06ccb9ec"
+      }
+    },
+    {
+      "slug": "styled-chat",
+      "title": "Styled Chat",
+      "version": "2.6.1+1.21",
+      "version_id": "4e1xZSk3",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "styled-chat-2.6.1+1.21.jar",
+        "url": "https://cdn.modrinth.com/data/doqSKB0e/versions/4e1xZSk3/styled-chat-2.6.1%2B1.21.jar",
+        "size": 487791,
+        "sha1": "e6ab5db7b89994cb23e55de7f868731b22770a0b",
+        "sha512": "cf46ed692a18396c12deb5842c9b04287d8127ba8d3e3604743dc774bf22cd860a5bba3d00377ad671c2e54942394ea99359b20e802e021802e8ab0491bec94c"
+      }
+    },
+    {
+      "slug": "tectonic",
+      "title": "Tectonic",
+      "version": "3.0.28-fabric-21.1",
+      "version_id": "WdDiEKMn",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "required"
+      },
+      "file": {
+        "name": "tectonic-3.0.28-fabric-21.1.jar",
+        "url": "https://cdn.modrinth.com/data/lWDHr9jE/versions/WdDiEKMn/tectonic-3.0.28-fabric-21.1.jar",
+        "size": 458013,
+        "sha1": "41e58bae9c22e5999bfa56ae92f45ecdee07f1cf",
+        "sha512": "a15a85fb5c6d134d0967fa3ccd6797fa28348b69937b65b2a3bcd6173609e84ae97bd8400eb01013167ceca3434bf97216e879d4b0277c007f6deda7aa076afd"
+      }
+    },
+    {
+      "slug": "terralith",
+      "title": "Terralith",
+      "version": "2.6.2",
+      "version_id": "eWDLFabb",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "required"
+      },
+      "file": {
+        "name": "Terralith_1.21.x_v2.6.2.jar",
+        "url": "https://cdn.modrinth.com/data/8oi3bsk5/versions/eWDLFabb/Terralith_1.21.x_v2.6.2.jar",
+        "size": 2813817,
+        "sha1": "c200e0c01f48aecd7f34c4be337d8ff65b60c2dc",
+        "sha512": "1dcd6d8576b5a664ca39aa530964c3439275c9ec1f83e4a43a35eb1eea125158f18d3a1d1b453db869f3f353555dfe69abc0460221c66f50613b5b30079ac54a"
+      }
+    },
+    {
+      "slug": "towns-and-towers",
+      "title": "Towns and Towers",
+      "version": "1.13.11",
+      "version_id": "DZxwgj6V",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "required"
+      },
+      "file": {
+        "name": "t_and_t-fabric-neoforge-1.13.11.jar",
+        "url": "https://cdn.modrinth.com/data/DjLobEOy/versions/DZxwgj6V/t_and_t-fabric-neoforge-1.13.11.jar",
+        "size": 3553006,
+        "sha1": "8f00e36a11568c0b66bbdf5c0e9ee492e511b303",
+        "sha512": "7464b1556250ceee25b4b531e07f65568c98a9d26f97232c1f6016be63ff243891de8283e072981deb968ea7d8b83bdc1579ee842b6b792446f4c26a43af4b62"
+      }
+    },
+    {
+      "slug": "veinminer",
+      "title": "VeinMiner",
+      "version": "2.11.2",
+      "version_id": "XJrQXP5u",
+      "dependency_of": null,
+      "env": {
+        "client": "optional",
+        "server": "required"
+      },
+      "file": {
+        "name": "veinminer-fabric-2.11.2+1.21.1.jar",
+        "url": "https://cdn.modrinth.com/data/OhduvhIc/versions/XJrQXP5u/veinminer-fabric-2.11.2%2B1.21.1.jar",
+        "size": 643645,
+        "sha1": "67d3589a4ce4f3dd436af47c9dc4a1f439b9b12d",
+        "sha512": "9bdfc452920c93676a8de58ca8a314d9896c33f107da4ef8eabc990ef48c6f3adfd905497f7fa239b0deed7bfd42e5fbf93fa2b06f694880115f2d826f26542a"
+      }
+    },
+    {
+      "slug": "when-dungeons-arise",
+      "title": "When Dungeons Arise",
+      "version": "2.1.68",
+      "version_id": "g8oglmT0",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "DungeonsArise-1.21.1-2.1.68-fabric-release.jar",
+        "url": "https://cdn.modrinth.com/data/8DfbfASn/versions/g8oglmT0/DungeonsArise-1.21.1-2.1.68-fabric-release.jar",
+        "size": 11864952,
+        "sha1": "67c35d9a55e1f16ae5b7b00d180f61a1578476fb",
+        "sha512": "2485d748ea4595e8735421c0be7249cc8af693d7c091b69e96319f3129c0cce70dec61c037d6687ac0aea502958d1b2eaa2fbcdc982ef3341897b16c76259ac3"
+      }
+    },
+    {
+      "slug": "yungs-api",
+      "title": "YUNG's API",
+      "version": "1.21.1-Fabric-5.1.9",
+      "version_id": "9rzwORd6",
+      "dependency_of": "yungs-better-dungeons",
+      "env": {
+        "client": "required",
+        "server": "required"
+      },
+      "file": {
+        "name": "YungsApi-1.21.1-Fabric-5.1.9.jar",
+        "url": "https://cdn.modrinth.com/data/Ua7DFN59/versions/9rzwORd6/YungsApi-1.21.1-Fabric-5.1.9.jar",
+        "size": 1284146,
+        "sha1": "28f46d1f21cf5b1ccb2efbccda6ba66ab2168407",
+        "sha512": "5043333d42236c477f7269d4735ec1e0b782ccabf8152adfd2ed2767ebec9d22c5d05b7cb90464934241fc223b3d12ed4d786ac68b4b0dd46dfe5aa69149b4c3"
+      }
+    },
+    {
+      "slug": "yungs-better-desert-temples",
+      "title": "YUNG's Better Desert Temples",
+      "version": "1.21.1-Fabric-4.1.5",
+      "version_id": "M6eeDRkC",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "YungsBetterDesertTemples-1.21.1-Fabric-4.1.5.jar",
+        "url": "https://cdn.modrinth.com/data/XNlO7sBv/versions/M6eeDRkC/YungsBetterDesertTemples-1.21.1-Fabric-4.1.5.jar",
+        "size": 1033207,
+        "sha1": "cdefe7b69ea8f3d14dffbad19024a85cccc9478a",
+        "sha512": "2bed532391cd1f2e5ed7986220f3b4c23d0c1302366b61baf1ca62a9620000bd58964cfd9a62fc52abbc95e76c1b3a4f85fbe88ca0a4006612f0493585c99084"
+      }
+    },
+    {
+      "slug": "yungs-better-dungeons",
+      "title": "YUNG's Better Dungeons",
+      "version": "1.21.1-Fabric-5.1.4",
+      "version_id": "fQ7EjDPE",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "YungsBetterDungeons-1.21.1-Fabric-5.1.4.jar",
+        "url": "https://cdn.modrinth.com/data/o1C1Dkj5/versions/fQ7EjDPE/YungsBetterDungeons-1.21.1-Fabric-5.1.4.jar",
+        "size": 909660,
+        "sha1": "1596a14713ed6c1d9deb5a3a328774e9bfa39de6",
+        "sha512": "4a11b1b1f845ddd1709e6a6cad6c6d5043704afbd4b97cb2afcd316f8fdcf6e398f8dd55480d02e32326ac5b49b6b273ec99cd2b1e311bed24f786e6d176612c"
+      }
+    },
+    {
+      "slug": "yungs-better-end-island",
+      "title": "YUNG's Better End Island",
+      "version": "1.21.1-Fabric-3.1.2",
+      "version_id": "zpUYcjIg",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "YungsBetterEndIsland-1.21.1-Fabric-3.1.2.jar",
+        "url": "https://cdn.modrinth.com/data/2BwBOmBQ/versions/zpUYcjIg/YungsBetterEndIsland-1.21.1-Fabric-3.1.2.jar",
+        "size": 522278,
+        "sha1": "22baef6e01ec03f9c340ce79750954557ef0a758",
+        "sha512": "b26e84469e6d66bbc2deefec0b6ed7d93db2b374d7c4bb495e7178e668efb320a5793b42c1b0dd08f71513a4c25faee881e8d81b64eadacb1c34af1619a0f6cf"
+      }
+    },
+    {
+      "slug": "yungs-better-jungle-temples",
+      "title": "YUNG's Better Jungle Temples",
+      "version": "1.21.1-Fabric-3.1.2",
+      "version_id": "uiGCmR8O",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "YungsBetterJungleTemples-1.21.1-Fabric-3.1.2.jar",
+        "url": "https://cdn.modrinth.com/data/z9Ve58Ih/versions/uiGCmR8O/YungsBetterJungleTemples-1.21.1-Fabric-3.1.2.jar",
+        "size": 923910,
+        "sha1": "e07884b736c40c6bc7632eb6ae57b7642f96128f",
+        "sha512": "0b2912606607e4e85cd9b713c3d08986c4e7662da8964cad86d230ef13f57fd53adc7b7447145db95c6c3e9c85edb6c3a115a9f3126965855577792e29876e97"
+      }
+    },
+    {
+      "slug": "yungs-better-mineshafts",
+      "title": "YUNG's Better Mineshafts",
+      "version": "1.21.1-Fabric-5.1.1",
+      "version_id": "4ybDuGhA",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "YungsBetterMineshafts-1.21.1-Fabric-5.1.1.jar",
+        "url": "https://cdn.modrinth.com/data/HjmxVlSr/versions/4ybDuGhA/YungsBetterMineshafts-1.21.1-Fabric-5.1.1.jar",
+        "size": 615927,
+        "sha1": "109ff2fb19cd42d1731ea4ed17efbd9b5c1187dc",
+        "sha512": "f19c53ecac52866f65e1791f7b46ecc68fff6b1912ac47b42bf64097012262691c7184ea4a95db5e7bfcfda6c9532138dfe29e29af4ab108a407807a8db28074"
+      }
+    },
+    {
+      "slug": "yungs-better-nether-fortresses",
+      "title": "YUNG's Better Nether Fortresses",
+      "version": "1.21.1-Fabric-3.1.5",
+      "version_id": "gxBGYcIL",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "YungsBetterNetherFortresses-1.21.1-Fabric-3.1.5.jar",
+        "url": "https://cdn.modrinth.com/data/Z2mXHnxP/versions/gxBGYcIL/YungsBetterNetherFortresses-1.21.1-Fabric-3.1.5.jar",
+        "size": 736418,
+        "sha1": "99096e90aba45f3fb4eec5b9daa8acdb6497fa72",
+        "sha512": "74f9327ce3d17e78bef1945d6b241498f517e6e5ffae37c5c7a8acdc15b53bebf7447644517f76c4cecbf8a8530a888b6ee5035cf4f3b8e9441a2f665f7385d3"
+      }
+    },
+    {
+      "slug": "yungs-better-ocean-monuments",
+      "title": "YUNG's Better Ocean Monuments",
+      "version": "1.21.1-Fabric-4.1.2",
+      "version_id": "TGK6gpeO",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "YungsBetterOceanMonuments-1.21.1-Fabric-4.1.2.jar",
+        "url": "https://cdn.modrinth.com/data/3dT9sgt4/versions/TGK6gpeO/YungsBetterOceanMonuments-1.21.1-Fabric-4.1.2.jar",
+        "size": 1150417,
+        "sha1": "e8b566f5c941018cbd0bf8a32aa4c4ea3a410bfd",
+        "sha512": "2ad568affe005aa49be225ca1ce43272d773140dee7053ee4a5981288b5ef7ee92536a1d041ae3f00b6399de2f499abd1bf905cfbb764d569a99dd9b2cf8841f"
+      }
+    },
+    {
+      "slug": "yungs-better-strongholds",
+      "title": "YUNG's Better Strongholds",
+      "version": "1.21.1-Fabric-5.1.3",
+      "version_id": "uYZShp1p",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "YungsBetterStrongholds-1.21.1-Fabric-5.1.3.jar",
+        "url": "https://cdn.modrinth.com/data/kidLKymU/versions/uYZShp1p/YungsBetterStrongholds-1.21.1-Fabric-5.1.3.jar",
+        "size": 587855,
+        "sha1": "1ef8824995ea5e4e556b354d3195a3187aa1602f",
+        "sha512": "01e467a5237a338d8347b79d2e99659a362b777c4ac10bf6e75382be072b645277b58c655b9b4ad69956f9836601c3a52c733ad437d1f6bd53ea13976545edaa"
+      }
+    },
+    {
+      "slug": "yungs-better-witch-huts",
+      "title": "YUNG's Better Witch Huts",
+      "version": "1.21.1-Fabric-4.1.1",
+      "version_id": "bdpPtvTn",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "YungsBetterWitchHuts-1.21.1-Fabric-4.1.1.jar",
+        "url": "https://cdn.modrinth.com/data/t5FRdP87/versions/bdpPtvTn/YungsBetterWitchHuts-1.21.1-Fabric-4.1.1.jar",
+        "size": 298721,
+        "sha1": "52389a853f0b0d7d134147a1be842675e5c67e40",
+        "sha512": "ca6749bd01cd5b623d6f58561a57c2e2a8f769c31e3947fceac22e495f5da5b803d05777c6e3e122da40c4dd49444d58aaface0220b0a3106a5b5e27658b2d9f"
+      }
+    },
+    {
+      "slug": "yungs-bridges",
+      "title": "YUNG's Bridges",
+      "version": "1.21.1-Fabric-5.1.1",
+      "version_id": "8h9N9fvs",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "YungsBridges-1.21.1-Fabric-5.1.1.jar",
+        "url": "https://cdn.modrinth.com/data/Ht4BfYp6/versions/8h9N9fvs/YungsBridges-1.21.1-Fabric-5.1.1.jar",
+        "size": 261209,
+        "sha1": "58dc490d1ba8e1cfa08ef42f805eb03df2314fb0",
+        "sha512": "435c18442ca94c3b44a6972dddca7ca0f2437427627340b1c5aab7ac41001c9d9e5225de34b493acb0fec57f0fc1fe93818e0dc05d76bb059c6608e0155efb2f"
+      }
+    },
+    {
+      "slug": "yungs-extras",
+      "title": "YUNG's Extras",
+      "version": "1.21.1-Fabric-5.1.1",
+      "version_id": "aVsikHca",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "YungsExtras-1.21.1-Fabric-5.1.1.jar",
+        "url": "https://cdn.modrinth.com/data/ZYgyPyfq/versions/aVsikHca/YungsExtras-1.21.1-Fabric-5.1.1.jar",
+        "size": 325985,
+        "sha1": "9f27e1c879b6569f4a1a4b4ef082698081082a32",
+        "sha512": "a5b3281fc482167864745df34d80c834c42aa434f372ebb6ccb0cd84a8882ce344c247db5a8dea0300fe30ef39e2a85fa650216ff12adeb6c435e182e0ae2e55"
+      }
+    }
+  ],
+  "velocity_plugins": [
+    {
+      "slug": "viaversion",
+      "title": "ViaVersion",
+      "version": "5.12.1",
+      "version_id": "5WgnasGG",
+      "file": {
+        "name": "ViaVersion-5.12.1.jar",
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/5WgnasGG/ViaVersion-5.12.1.jar",
+        "size": 6503217,
+        "sha1": "9d7788788a0b2960edd4bab5fce55f55fa50702f",
+        "sha512": "b2e5c03689e2265410613a928640076cfcd576e7a3dc7ca1276a76dbe624f2f5467348c3b3eaf8b5987ed7662afb93cc5cb9373035f4c5512884116e4bb6add9"
+      }
+    },
+    {
+      "slug": "viabackwards",
+      "title": "ViaBackwards",
+      "version": "5.12.1",
+      "version_id": "dWw67APC",
+      "file": {
+        "name": "ViaBackwards-5.12.1.jar",
+        "url": "https://cdn.modrinth.com/data/NpvuJQoq/versions/dWw67APC/ViaBackwards-5.12.1.jar",
+        "size": 1436080,
+        "sha1": "3104ffbe8668f85ce4ceb15208bb5d59fe331b67",
+        "sha512": "65752dd113bf1266ef2c3b25a748e79e9808bb67682a3f5fbcf3e2b097d76182786d0871562175af8d491bde7ec6addfeaf97fdb23987cb11b829b0c22f6e5ff"
+      }
+    },
+    {
+      "slug": "viarewind",
+      "title": "ViaRewind",
+      "version": "4.2.0",
+      "version_id": "EPLCoxMK",
+      "file": {
+        "name": "ViaRewind-4.2.0.jar",
+        "url": "https://cdn.modrinth.com/data/TbHIxhx5/versions/EPLCoxMK/ViaRewind-4.2.0.jar",
+        "size": 408809,
+        "sha1": "b83bfbe592e74a6b87adc0fd4a1766cb7666516b",
+        "sha512": "7f3a2a972a3fe45f9c16b48a2e2b08fca6aa70da77eb8e47644726f19a43dc24116c2f7e126434f9f9388fa1b987a014efe287e3980f773b6e261313e7e939b2"
+      }
+    }
+  ]
+}
