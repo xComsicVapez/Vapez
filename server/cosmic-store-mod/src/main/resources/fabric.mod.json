@@ -1,0 +1,19 @@
+{
+	"schemaVersion": 1,
+	"id": "cosmic-store",
+	"version": "${version}",
+	"name": "Cosmic Store",
+	"description": "Server side of the play.cosmicpixel.org web store: /store gives a website login code, op-only /cosmicstore commands charge or refund the Savs Common Economy balance and grant bonus hearts that go past the lifesteal heart cap. Server-side only.",
+	"license": "MIT",
+	"environment": "server",
+	"entrypoints": {
+		"main": ["dev.cosmicpixel.cosmicstore.CosmicStore"]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.1",
+		"java": ">=25",
+		"fabric-api": "*",
+		"savs-common-economy": "*"
+	}
+}

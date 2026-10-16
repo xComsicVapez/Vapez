@@ -1,0 +1,9 @@
+{
+	"required": true,
+	"package": "dev.cosmicpixel.economylink.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": ["AuctionEconomyMixin", "ShopEconomyMixin"],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

@@ -1,0 +1,21 @@
+{
+  "config_name": "CosmicPixel",
+  "update_tick_time": 20,
+  "page_change": 5,
+  "title_change": 10,
+  "scroll_speed": 1,
+  "scroll_loop": true,
+  "title": [
+    "<b><gradient:#38bdf8:#a855f7>COSMICPIXEL SMP</gradient></b>"
+  ],
+  "lines": [
+    "",
+    ["<#22c55e>$ <white>Money ", "<#22c55e>%economy:balance%"],
+    ["<#ef4444>⚔ <white>Kills ", "<#ef4444>%player:statistic minecraft:player_kills%"],
+    ["<#f97316>☠ <white>Deaths ", "<#f97316>%player:statistic minecraft:deaths%"],
+    ["<#eab308>⌚ <white>Playtime ", "<#eab308>%player:playtime%"],
+    ["<#38bdf8>☺ <white>Online ", "<#38bdf8>%server:online%"],
+    "",
+    ["<gray>play.cosmicpixel.org ", "<gray>%player:ping%ms"]
+  ]
+}

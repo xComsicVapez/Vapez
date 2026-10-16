@@ -1,0 +1,260 @@
+PLAY.COSMICPIXEL.ORG (lifesteal2) - COMMAND LIST
+================================================
+<x> = required, [x] = optional, a|b = pick one.
+"Everyone" commands work for every player. "Owner / ops" commands need op
+(run "op <name>" from the server console) unless noted.
+
+
+EVERYONE - TELEPORTING
+----------------------
+Teleports take 5 seconds: stand still and don't get hit, or it is cancelled.
+For 15 seconds after PvP you are "in combat": /spawn, /rtp, /home, /tpa, /tpaccept,
+/back, /warp, /suicide and /afk are blocked, and logging out kills you.
+/spawn                      Go to spawn
+/rtp   (/randomteleport)    Random teleport about 1000 blocks from spawn (30 s cooldown)
+/tpa <player>               Ask to teleport to a player
+/tpahere <player>           Ask a player to teleport to you
+/tpaccept [player]          Accept a teleport request (name only needed with 2+ requests)
+/tpdeny [player]            Deny a teleport request
+/tpcancel                   Cancel the request you sent
+/back                       Go back to where you last teleported from
+/warp <name>  /warp list    Use a warp set by an op
+
+EVERYONE - HOMES (3 homes per player)
+-------------------------------------
+/sethome [name]             Set a home where you stand (default name "home")
+/home <name>                Teleport to a home
+/homes                      List your homes
+/delhome [name]             Delete a home
+(Long forms also work: /home set|tp|delete|list <name>)
+
+EVERYONE - ECONOMY AND SHOPS
+----------------------------
+One wallet for everything: selling, /pay, the auction house and /bal all use the
+same money (shown on the sidebar).
+/sell                       Open the sell menu
+/shop                       Open the shop (selling only, buying is turned off)
+/sellhand [all|<amount>]    Sell the item in your hand
+/worth [all|<item>]         See what an item sells for
+/bal [player]  /balance     Check money
+/baltop                     Richest players
+/pay <player> <amount>      Send money
+/ah                         Auction house (/ah sell <price>, /ah buy, /ah claim, /ah cancel)
+                            You also get 10 coins for every 15 minutes played
+/enchants  (/ce)            Custom enchant menu: spend XP levels on random enchant books
+                            Common 5 lvls, Epic 15, Legendary 25, Exclusive 40
+                            (The "Custom Enchants" villager at spawn also sells max-level books)
+/bounty                     The 10 biggest bounties
+/bounty <player>            See someone's bounty
+/bounty <player> <amount>   Add to someone's bounty from your /bal (at least $100). Whoever kills
+                            them collects all of it.
+/stats <player> <category> <stat>   Look up a stat, e.g. /stats Steve mined diamond_ore
+/stats top <category> <stat>        Leaderboard, e.g. /stats top killed zombie
+Spawners: mine them with a Silk Touch pickaxe to keep them (you also get the mob's spawn egg to set the
+spawner's type again). Any other pickaxe destroys them.
+
+EVERYONE - LIFESTEAL
+--------------------
+/withdraw <amount>          Turn hearts into Heart items (needs at least 1 heart crystal first)
+Heart recipe (crafting table):
+    Diamond Block | Gold Block      | Diamond Block
+    Gold Block    | Netherite Ingot | Gold Block
+    Diamond Block | Gold Block      | Diamond Block
+Right-click a Heart to use it.
+Out of hearts? You are banned until revived: wait 3 days for a free automatic revive, or buy one on the
+web store with the 8-letter code from your ban screen (friends can buy it for you too).
+
+EVERYONE - WEB STORE AND SPAWN PLOTS
+------------------------------------
+/store                      Get a one-time code (10 minutes) and the link to the web store: kits, supplies,
+                            revives and spawn plots for in-game money (your /bal); kits and supplies can
+                            also be bought with a card once the owner turns card payments on.
+                            Every kit or supply has a small chance of a bonus heart past the 20 heart cap
+                            (up to 5 extra). Kits have a cooldown (24-72 hours).
+/plot                       Your spawn plot: which one, until when. The plots at spawn can be rented
+                            on the web store ($2,500 a week, one per player). In your dome only you can
+                            build and break, you get no mining fatigue, and only you can open your chests.
+/plot home                  Teleport to your plot          /plot sethome   Set where /plot home takes you
+When a rental ends you get 1 extra day to renew before your blocks are removed.
+Spawn itself can't be broken or griefed (no TNT, lava, fire, pistons there); ender chests, doors,
+buttons and crafting tables at spawn still work for everyone.
+Kill CosmicAI (the AI player) for a random, numbered trophy: gear, a $1,500 bounty or even a bonus
+heart. One trophy per player per day.
+
+EVERYONE - TEAMS
+----------------
+/allied create <name> <tag>     Make a team (the tag shows next to your name)
+/allied invite <player>         Invite someone   /allied invAccept <team>  Join a team you were invited to
+/allied join <name>             Ask to join a team   /allied accept|deny <player>  Answer join requests
+/allied tm                      Toggle team chat
+/allied leave  /allied disband  /allied kick <player>  /allied info  /allied settings
+
+EVERYONE - HANDY STUFF
+----------------------
+/enderchest                 Open your ender chest anywhere
+/workbench                  Portable crafting table
+/stonecutter                Portable stonecutter
+/grindstone                 Portable grindstone
+/wastebin                   Trash can
+/afk                        Mark yourself AFK
+/suicide                    Kill yourself
+/rules                      Server rules
+/gametime                   Current in-game time
+/msg <player> <message>     Private message (also /tell, /w)
+/me <action>                Action message
+/list                       Who's online
+/sidebar <style>            Change the sidebar ("donut" is the default, "disable" hides it)
+/voicechat                  Simple Voice Chat (needs the client mod; press V in-game)
+
+Rules of the world: spawn has no fall damage and no PvP. Death drops can be
+picked up by anyone. Bedrock players join on port 19132.
+
+
+OWNER / OPS - AI ADMIN (xCosmicVapez only, op not required)
+-----------------------------------------------------------
+/ai <request>               Ask the server AI to do something ("install a mod for X", "what's the tps").
+                            It works on its own now (thinks first, checks its work, up to 20 steps);
+                            it only asks first for stop, op, deop, ban-ip, pardon-ip, kill @e,
+                            whitelist off and save-off.
+/ai yes   /ai no            Approve or reject one of those actions
+/ai reset                   Start a fresh conversation
+/ai play on   /ai play off  Make the AI player "CosmicAI" join or leave the game
+/ai bot <goal>              Give CosmicAI something to do ("follow me and help me mine")
+/ai play                    Is CosmicAI playing, and what is it doing
+/ai bot build a base        CosmicAI gathers stone itself and builds a 7x7 cobblestone base (protected
+                            area, door, chest, furnace, bed spot); it plays like a survival player and
+                            uses /rtp now and then.
+(Players can talk to CosmicAI in chat by saying its name or "ai".)
+
+OWNER / OPS - PLAYERS AND MODERATION
+------------------------------------
+/op <player>  /deop <player>
+/kick <player> [reason]
+/ban <player> [reason]  /pardon <player>  /ban-ip  /pardon-ip  /banlist
+/whitelist on|off|add|remove|list
+/gamemode survival|creative|spectator [player]
+/tp <player> [player|x y z]
+/give <player> <item> [count]
+/clear [player]
+/xp add <player> <amount> levels
+/heal [player]  /feed [player]  /repair [player]
+/fly [player]  /invuln [player]
+/top                        Teleport to the highest block above you
+/near [range]               Players near you
+/lastPos <player>           A player's last position
+/nickname set|clear|reveal
+/vanish [on|off]            Turn invisible (hidden from the player list)
+/day  /night  /time set day|noon|night  /weather clear|rain|thunder
+/spawn set                  Set the /spawn point where you stand
+/warp set <name>  /warp delete <name>
+/say <message>  /tellraw  /title
+
+OWNER / OPS - LIFESTEAL
+-----------------------
+/lifesteal settings                    Settings menu (recipes, ender pearls, totems, max hearts...)
+/lifesteal give <player> <hearts>      Give hearts
+/lifesteal take <player> <hearts>      Take hearts
+/lifesteal set_hearts <player> <hearts>
+/lifesteal reset_hearts <player>
+/lifesteal item give_heart_item        Get a Heart item
+/lifesteal item give_revive_item       Get a Revive Beacon
+/revive <player>                       Bring back an eliminated (banned) player
+
+OWNER / OPS - WEB STORE AND PLOTS
+---------------------------------
+Store files: config/web-store.json (prices, wait days, public_url), server-tools/web-store/catalog.json
+(kits). Logs: logs/web-store.log. Runs in tmux "web-store"; the public link comes from tmux "store-tunnel"
+until a fixed address (store.cosmicpixel.org) is set as "public_url" (server-tools/store-tunnel-setup.sh
+does that after "cloudflared tunnel login"). Card payments: put your Stripe secret key in
+"stripe_secret_key"; card prices are the "usd" fields in catalog.json; card orders: config/web-store/card-orders.json.
+/plot admin rent <id> <uuid> <name> <days>   Give someone a plot        /plot admin evict <id>  End a rental (1 grace day)
+/plot admin clear <id>                       Free a plot now and remove its blocks
+/plot admin list                             Every plot with its corners (click to get a /tp command)
+/plot admin setarea <id> <x y z> <x y z> [name]   Create plot <id> or move/resize it (two opposite
+                                             corners; ~ ~ ~ works, and tab completes the block you look at)
+/plot admin remove <id>                      Delete a plot (only when nobody rents it)
+/cosmicstore balance|charge|refund <uuid> [amount]     (used by the store over RCON)
+/cosmicstore bonushearts add|reset|get <uuid> [n]      Bonus hearts above the cap
+
+OWNER / OPS - ECONOMY
+---------------------
+/givemoney <player> <amount>  /takemoney  /setmoney  /resetmoney
+/eco set|add|take|balance <player> [amount]
+/ecolog <player> <time> <unit>         Money history
+/adminshop edit|reload|item|category|multiplier   Shop editor (only level-4 ops can buy)
+/ah admin
+
+OWNER / OPS - FAKE PLAYERS (Carpet)
+-----------------------------------
+/player <name> spawn        Spawn a fake player (keeps chunks loaded, e.g. for farms)
+/player <name> kill|attack|use|move|look|jump|sneak|sprint|drop|stop ...
+/carpet <rule> [value]      Carpet settings (/carpet list)
+
+OWNER / OPS - GRIEF LOGS AND ROLLBACK (MineTracer)
+--------------------------------------------------
+/mt i                        Inspector: click blocks/chests to see who changed them
+/mt l user:<name> time:1h    Look up what someone did
+/mt rb user:<name> time:1h   Roll back a player's changes
+/mt rs ...                   Restore (undo a rollback)
+/mt undo
+
+OWNER / OPS - WORLD AND PERFORMANCE
+-----------------------------------
+/chunky radius <blocks>, /chunky start   Pre-generate the world (reduces lag when exploring)
+/chunky pause|continue|cancel|progress
+/spark profiler start|stop               Lag profiler
+/spark tps  /spark health
+/tps  /mspt  /ping [player]  /mobcaps  /statistics   Performance and connection info
+/viaversion                              Client version support (Java 1.8+ can join)
+/tick query                              Tick timing
+/worldborder set <size>
+/gamerule <rule> [value]                 e.g. keep_inventory, advance_time, pvp, respawn_radius
+/forceload add|remove
+/save-all [flush]  /stop
+/servercore settings|status|reload
+/combatlog reload
+/styledchat reload
+/rules reload
+/essentialcommands config reload
+
+OWNER / OPS - PERMISSIONS (LuckPerms)
+-------------------------------------
+/lp user <player> permission set <node> true
+/lp group default permission set <node> true    Give a permission to everyone
+/lp user <player> permission check <node>
+(Essential Commands nodes start with essentialcommands., e.g. essentialcommands.home.limit.2)
+
+OWNER / OPS - BUILDING (WorldEdit, all ops-only)
+------------------------------------------------
+//wand                       Selection wand (left click = pos1, right click = pos2)
+//pos1  //pos2  //sel  //desel  //size  //count <block>
+//set <block>  //replace <from> <to>  //walls  //outline  //overlay  //fill  //drain
+//copy  //cut  //paste  //rotate <deg>  //flip  //move  //stack
+//undo  //redo  //clearhistory
+//sphere  //hsphere  //cyl  //hcyl  //pyramid  //hpyramid
+//schem save <name>  //schem load <name>  //schem list   (schematics)
+//brush (//br) sphere|cyl|smooth ...   /tool  /superpickaxe
+/butcher [radius]            Kill mobs nearby
+/removenear <type> <radius>  /extinguish  /fixlava  /fixwater  /snow  /thaw  /green
+/up <n>  /ascend  /descend  /jumpto  /thru  /unstuck
+//regen  //generate  //setbiome  //help
+
+OWNER / OPS - OTHER VANILLA
+---------------------------
+/advancement /attribute /bossbar /clone /damage /data /datapack /debug
+/defaultgamemode /dialog /difficulty /effect /enchant /execute /fill /fillbiome
+/function /item /jfr /kill /locate /loot /particle /perf /place /playsound
+/random /recipe /reload /return /ride /rotate /schedule /scoreboard /seed
+/setblock /setidletimeout /setworldspawn /spawnpoint /spectate /spreadplayers
+/stopsound /stopwatch /summon /tag /team /teammsg /test /tick /transfer
+/trigger /version /waypoint
+
+
+FROM THE SERVER MACHINE (SSH as cosmic, not in-game)
+----------------------------------------------------
+mc lifesteal2 start          Start the server
+mc lifesteal2 stop           Save and stop
+mc lifesteal2 restart [secs] Warn players, save, restart
+mc lifesteal2 console        Open the console (leave with Ctrl+B then D)
+mc lifesteal2 cmd <command>  Run a console command, e.g. mc lifesteal2 cmd op xCosmicVapez
+mc lifesteal2 status

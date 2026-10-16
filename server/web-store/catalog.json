@@ -1,0 +1,273 @@
+{
+  "kits": [
+    {
+      "id": "starter",
+      "name": "Starter Kit",
+      "price": 250,
+      "cooldown_hours": 24,
+      "heart_chance": 2,
+      "blurb": "Everything for your first night: iron tools, food and light.",
+      "items": [
+        [
+          "iron_sword",
+          1
+        ],
+        [
+          "iron_pickaxe",
+          1
+        ],
+        [
+          "iron_axe",
+          1
+        ],
+        [
+          "iron_shovel",
+          1
+        ],
+        [
+          "bread",
+          16
+        ],
+        [
+          "torch",
+          32
+        ],
+        [
+          "oak_log",
+          32
+        ],
+        [
+          "white_bed",
+          1
+        ]
+      ],
+      "usd": 2.99
+    },
+    {
+      "id": "farmer",
+      "name": "Farmer Kit",
+      "price": 150,
+      "cooldown_hours": 24,
+      "heart_chance": 2,
+      "blurb": "Seeds, crops and bone meal to start a farm.",
+      "items": [
+        [
+          "iron_hoe",
+          1
+        ],
+        [
+          "wheat_seeds",
+          32
+        ],
+        [
+          "carrot",
+          16
+        ],
+        [
+          "potato",
+          16
+        ],
+        [
+          "bone_meal",
+          32
+        ],
+        [
+          "water_bucket",
+          1
+        ],
+        [
+          "bread",
+          16
+        ]
+      ],
+      "usd": 1.99
+    },
+    {
+      "id": "builder",
+      "name": "Builder Kit",
+      "price": 300,
+      "cooldown_hours": 24,
+      "heart_chance": 2,
+      "blurb": "A stack of building blocks, glass and light.",
+      "items": [
+        [
+          "stone_bricks",
+          64
+        ],
+        [
+          "stone_bricks",
+          64
+        ],
+        [
+          "oak_planks",
+          64
+        ],
+        [
+          "oak_planks",
+          64
+        ],
+        [
+          "glass",
+          32
+        ],
+        [
+          "torch",
+          32
+        ],
+        [
+          "iron_axe",
+          1
+        ]
+      ],
+      "usd": 2.99
+    },
+    {
+      "id": "miner",
+      "name": "Miner Kit",
+      "price": 400,
+      "cooldown_hours": 48,
+      "heart_chance": 3,
+      "blurb": "An Efficiency II pickaxe, torches, ladders and food for a long trip down.",
+      "items": [
+        [
+          "iron_pickaxe[enchantments={efficiency:2,unbreaking:1}]",
+          1
+        ],
+        [
+          "iron_shovel",
+          1
+        ],
+        [
+          "torch",
+          64
+        ],
+        [
+          "ladder",
+          32
+        ],
+        [
+          "cooked_beef",
+          16
+        ],
+        [
+          "water_bucket",
+          1
+        ]
+      ],
+      "usd": 3.99
+    },
+    {
+      "id": "warrior",
+      "name": "Warrior Kit",
+      "price": 900,
+      "cooldown_hours": 72,
+      "heart_chance": 4,
+      "blurb": "Iron armour with Protection I, a Sharpness II sword, a shield and a bow.",
+      "items": [
+        [
+          "iron_helmet[enchantments={protection:1}]",
+          1
+        ],
+        [
+          "iron_chestplate[enchantments={protection:1}]",
+          1
+        ],
+        [
+          "iron_leggings[enchantments={protection:1}]",
+          1
+        ],
+        [
+          "iron_boots[enchantments={protection:1}]",
+          1
+        ],
+        [
+          "iron_sword[enchantments={sharpness:2}]",
+          1
+        ],
+        [
+          "shield",
+          1
+        ],
+        [
+          "bow",
+          1
+        ],
+        [
+          "arrow",
+          32
+        ],
+        [
+          "golden_apple",
+          2
+        ],
+        [
+          "cooked_beef",
+          16
+        ]
+      ],
+      "usd": 6.99
+    }
+  ],
+  "supplies": [
+    {
+      "id": "food",
+      "name": "Food Crate",
+      "price": 60,
+      "cooldown_hours": 0,
+      "heart_chance": 1,
+      "blurb": "32 steak.",
+      "items": [
+        [
+          "cooked_beef",
+          32
+        ]
+      ],
+      "usd": 0.99
+    },
+    {
+      "id": "torches",
+      "name": "Torch Bundle",
+      "price": 25,
+      "cooldown_hours": 0,
+      "heart_chance": 1,
+      "blurb": "64 torches.",
+      "items": [
+        [
+          "torch",
+          64
+        ]
+      ],
+      "usd": 0.99
+    },
+    {
+      "id": "iron",
+      "name": "Iron Crate",
+      "price": 250,
+      "cooldown_hours": 0,
+      "heart_chance": 1,
+      "blurb": "16 iron ingots.",
+      "items": [
+        [
+          "iron_ingot",
+          16
+        ]
+      ],
+      "usd": 1.99
+    },
+    {
+      "id": "xp",
+      "name": "XP Bottles",
+      "price": 150,
+      "cooldown_hours": 0,
+      "heart_chance": 1,
+      "blurb": "16 bottles o' enchanting.",
+      "items": [
+        [
+          "experience_bottle",
+          16
+        ]
+      ],
+      "usd": 1.49
+    }
+  ]
+}

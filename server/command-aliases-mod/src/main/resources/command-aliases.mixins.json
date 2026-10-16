@@ -1,0 +1,9 @@
+{
+	"required": false,
+	"package": "dev.cosmicpixel.aliases.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": ["CarpetSpawnCommandMixin"],
+	"injectors": {
+		"defaultRequire": 0
+	}
+}

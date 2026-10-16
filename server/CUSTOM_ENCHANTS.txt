@@ -1,0 +1,629 @@
+CUSTOM ENCHANTS ON PLAY.COSMICPIXEL.ORG
+=======================================
+
+Where to get them:
+  /shop -> Enchanted Books   buy a specific enchant book for money (price per level below)
+  /enchants (or /ce)         random book for XP levels: Common 5, Epic 15, Legendary 25, Exclusive 40
+  Put the book and your item in an anvil to apply it.
+
+Rules that apply to every custom enchant:
+  - Only ONE Slayer enchant per sword (Livestock, Zombie, Skeleton, Spider, Ender, ... Slayer).
+  - Effects like Speed, Night Vision or Fire Resistance only work while the item is worn or held.
+  - Enchants in the REMOVED list at the end cannot be bought or rolled. The reason is listed next to them.
+
+COMBAT (swords)
+---------------
+Cresselia I-III
+    Goes on: Swords
+    Does:    +0.5 damage per level during the day.
+    Price:   $800 per level ($2,400 for III)
+    Note:    Only one of Cresselia, Darkrai or Torrent.
+
+Darkrai I-III
+    Goes on: Swords
+    Does:    +0.5 damage per level at night.
+    Price:   $800 per level ($2,400 for III)
+    Note:    Only one of Cresselia, Darkrai or Torrent.
+
+Ender Dragon Slayer I-V
+    Goes on: Swords
+    Does:    +1 damage per level against the Ender Dragon.
+    Price:   $400 per level ($2,000 for V)
+    Note:    Only one Slayer enchant per sword.
+
+Ender Slayer I-V
+    Goes on: Swords
+    Does:    +1 damage per level against endermen and endermites.
+    Price:   $200 per level ($1,000 for V)
+    Note:    Only one Slayer enchant per sword.
+
+Equipment Drops Bonus I-II
+    Goes on: Swords
+    Does:    +10% (I) or +15% (II) chance that mobs drop the gear they wear.
+    Price:   $1,500 per level ($3,000 for II)
+
+Fast Sweeping I-II
+    Goes on: Swords
+    Does:    Faster attack speed.
+    Price:   $1,200 per level ($2,400 for II)
+    Note:    Not with Advance Sharpness.
+
+Flame Sword
+    Goes on: Swords
+    Does:    A ring of flame particles appears around whatever you hit (cosmetic, no extra damage).
+    Price:   $300
+
+Guardian Slayer I-V
+    Goes on: Swords
+    Does:    +1 damage per level against guardians and elder guardians.
+    Price:   $150 per level ($750 for V)
+    Note:    Only one Slayer enchant per sword.
+
+Illager Slayer I-V
+    Goes on: Swords
+    Does:    +1 damage per level against pillagers, vindicators, evokers, witches and ravagers.
+    Price:   $250 per level ($1,250 for V)
+    Note:    Only one Slayer enchant per sword.
+
+Inquisitive I-V
+    Goes on: Swords
+    Does:    Undead mobs drop 1.5x to 3.5x more XP.
+    Price:   $400 per level ($2,000 for V)
+
+Livestock Slayer I-V
+    Goes on: Swords
+    Does:    +1 damage per level against cows, sheep, pigs and chickens.
+    Price:   $80 per level ($400 for V)
+    Note:    Only one Slayer enchant per sword.
+
+Mob Egg Grinder
+    Goes on: Swords
+    Does:    0.1% chance that a mob you kill drops its spawn egg.
+    Price:   $4,000
+
+Poison Aspect
+    Goes on: Swords
+    Does:    10% chance to poison the target for 3-6 seconds.
+    Price:   $2,500
+    Note:    Not with Fire Aspect.
+
+Skeleton Slayer I-V
+    Goes on: Swords
+    Does:    +1 damage per level against skeletons, strays and wither skeletons.
+    Price:   $150 per level ($750 for V)
+    Note:    Only one Slayer enchant per sword.
+
+Slime Slayer I-V
+    Goes on: Swords
+    Does:    +1 damage per level against slimes and magma cubes.
+    Price:   $100 per level ($500 for V)
+    Note:    Only one Slayer enchant per sword.
+
+Spider Slayer I-V
+    Goes on: Swords
+    Does:    +1 damage per level against spiders and cave spiders.
+    Price:   $120 per level ($600 for V)
+    Note:    Only one Slayer enchant per sword.
+
+Torrent I-III
+    Goes on: Swords
+    Does:    +0.5 damage per level while it is raining.
+    Price:   $800 per level ($2,400 for III)
+    Note:    Only one of Cresselia, Darkrai or Torrent.
+
+Warden Slayer I-V
+    Goes on: Swords
+    Does:    +1 damage per level against the Warden.
+    Price:   $500 per level ($2,500 for V)
+    Note:    Only one Slayer enchant per sword.
+
+Wither Slayer I-V
+    Goes on: Swords
+    Does:    +1 damage per level against the Wither.
+    Price:   $400 per level ($2,000 for V)
+    Note:    Only one Slayer enchant per sword.
+
+Zombie Slayer I-V
+    Goes on: Swords
+    Does:    +1 damage per level against zombies, husks, drowned and zombie villagers.
+    Price:   $150 per level ($750 for V)
+    Note:    Only one Slayer enchant per sword.
+
+ARMOR
+-----
+Anti Gravity
+    Goes on: Boots
+    Does:    No fall damage while worn.
+    Price:   $6,000
+
+Armor Plus I-II
+    Goes on: Chestplates
+    Does:    +1 (I) or +2 (II) armor points.
+    Price:   $2,500 per level ($5,000 for II)
+
+Auto Jump I-II
+    Goes on: Boots
+    Does:    Walk straight up blocks: step height +2 (I) or +3 (II), no jumping needed.
+    Price:   $150 per level ($300 for II)
+
+Baby Mode
+    Goes on: Turtle Shell helmet
+    Does:    Shrinks you to half size while worn.
+    Price:   $500
+
+Blue Aura
+    Goes on: Boots
+    Does:    Blue particles swirl around you (cosmetic).
+    Price:   $250
+    Note:    Only one aura per pair of boots.
+
+Dolphin's Grace
+    Goes on: Boots
+    Does:    Permanent Dolphin's Grace (fast swimming) while worn.
+    Price:   $1,500
+
+Fire Resistance
+    Goes on: Leggings
+    Does:    Permanent Fire Resistance while worn.
+    Price:   $5,000
+
+Green Aura
+    Goes on: Boots
+    Does:    Green particles swirl around you (cosmetic).
+    Price:   $250
+    Note:    Only one aura per pair of boots.
+
+Item Magnet
+    Goes on: Boots
+    Does:    Pulls dropped items within 5 blocks to you.
+    Price:   $3,000
+
+Jump Boost I-III
+    Goes on: Boots
+    Does:    Permanent Jump Boost I-III while worn.
+    Price:   $800 per level ($2,400 for III)
+
+Night Vision
+    Goes on: Helmets
+    Does:    Permanent Night Vision while worn.
+    Price:   $800
+
+Orange Aura
+    Goes on: Boots
+    Does:    Orange particles swirl around you (cosmetic).
+    Price:   $250
+    Note:    Only one aura per pair of boots.
+
+Purple Aura
+    Goes on: Boots
+    Does:    Purple particles swirl around you (cosmetic).
+    Price:   $250
+    Note:    Only one aura per pair of boots.
+
+RGB Aura
+    Goes on: Boots
+    Does:    Rainbow particles swirl around you (cosmetic).
+    Price:   $400
+    Note:    Only one aura per pair of boots.
+
+Red Aura
+    Goes on: Boots
+    Does:    Red particles swirl around you (cosmetic).
+    Price:   $250
+    Note:    Only one aura per pair of boots.
+
+Saturation
+    Goes on: Helmets
+    Does:    Permanent Saturation (you never get hungry) while worn.
+    Price:   $6,000
+
+Speed Boost I-III
+    Goes on: Boots
+    Does:    Permanent Speed I-III while worn.
+    Price:   $2,000 per level ($6,000 for III)
+
+Upgrade Frost Walker
+    Goes on: Boots
+    Does:    Hold the boots in your MAIN hand and they become Frost Walker V.
+    Price:   $600
+
+Water Breathing
+    Goes on: Helmets
+    Does:    Gives Water Breathing for 30 seconds every 4 minutes.
+    Price:   $600
+
+Yellow Aura
+    Goes on: Boots
+    Does:    Yellow particles swirl around you (cosmetic).
+    Price:   $250
+    Note:    Only one aura per pair of boots.
+
+TOOLS
+-----
+Advance Efficiency I-III
+    Goes on: Pickaxes, axes, shovels and hoes
+    Does:    Huge mining speed: +50 / +85 / +120 efficiency (near-instant mining).
+    Price:   $3,000 per level ($9,000 for III)
+    Note:    Not with Efficiency.
+
+Advance Riptide I-V
+    Goes on: Trident
+    Does:    A stronger Riptide that launches you further.
+    Price:   $500 per level ($2,500 for V)
+    Note:    Not with Riptide, Loyalty or Loyalty Speed.
+
+Apple of Midas
+    Goes on: Shears
+    Does:    1% chance for a golden apple when you break oak leaves.
+    Price:   $1,500
+
+Auto Beetroot Planter
+    Goes on: Hoes
+    Does:    Plants beetroot seeds from your inventory on empty farmland you walk over.
+    Price:   $300
+    Note:    Only one Auto Planter per hoe.
+
+Auto Carrot Planter
+    Goes on: Hoes
+    Does:    Plants carrots from your inventory on empty farmland you walk over.
+    Price:   $300
+    Note:    Only one Auto Planter per hoe.
+
+Auto Farmland
+    Goes on: Hoes
+    Does:    Grass and dirt you walk over turn into farmland.
+    Price:   $400
+
+Auto Potato Planter
+    Goes on: Hoes
+    Does:    Plants potatoes from your inventory on empty farmland you walk over.
+    Price:   $300
+    Note:    Only one Auto Planter per hoe.
+
+Auto Smelt
+    Goes on: Pickaxes and shovels
+    Does:    Mined stone, ores, sand, clay and ancient debris drop already smelted. Fortune still works.
+    Price:   $4,000
+    Note:    Not with Silk Touch.
+
+Auto Wheat Planter
+    Goes on: Hoes
+    Does:    Plants wheat seeds from your inventory on empty farmland you walk over.
+    Price:   $300
+    Note:    Only one Auto Planter per hoe.
+
+Break Reach I-II
+    Goes on: Pickaxes, axes, shovels and hoes
+    Does:    Break blocks from further away.
+    Price:   $2,500 per level ($5,000 for II)
+
+Glass Breaker
+    Goes on: Shears
+    Does:    Break glass instantly.
+    Price:   $300
+
+Haste I-III
+    Goes on: Pickaxes, axes, shovels and hoes
+    Does:    Haste I-III while you hold the tool.
+    Price:   $1,000 per level ($3,000 for III)
+
+Loyalty Speed I-III
+    Goes on: Trident
+    Does:    A Loyalty trident flies back to you faster.
+    Price:   $200 per level ($600 for III)
+    Note:    Not with Riptide.
+
+Lucky I-III
+    Goes on: Fishing Rod
+    Does:    Luck I-III while you hold the rod (better fishing loot).
+    Price:   $500 per level ($1,500 for III)
+
+Mining Experience Bonus I-V
+    Goes on: Pickaxes
+    Does:    A little extra XP from mining.
+    Price:   $150 per level ($750 for V)
+
+Self Repair I-IV
+    Goes on: Pickaxes, axes, shovels and hoes
+    Does:    30% chance that using the tool costs no durability.
+    Price:   $1,500 per level ($6,000 for IV)
+    Note:    Not with Mending or Unbreakable.
+
+Unbreakable
+    Goes on: Tools, weapons, shears, fishing rods, flint and steel
+    Does:    The item never loses durability.
+    Price:   $12,000
+    Note:    Not with Unbreaking, Mending or Self Repair.
+
+Upgrade Lure
+    Goes on: Fishing Rod
+    Does:    The rod becomes Lure V (fish bite very fast).
+    Price:   $800
+
+Upgrade MultiShot I-II
+    Goes on: Bow
+    Does:    The bow fires extra arrows like Multishot.
+    Price:   $1,500 per level ($3,000 for II)
+
+Water Mining I-III
+    Goes on: Pickaxes, axes and shovels
+    Does:    Mine faster while underwater.
+    Price:   $300 per level ($900 for III)
+
+PETS
+----
+Pet Glow
+    Goes on: Horse armor and wolf armor
+    Does:    Your horse or wolf glows so you can find it.
+    Price:   $150
+
+Pet Jump
+    Goes on: Horse armor and wolf armor
+    Does:    Gives your horse or wolf Jump Boost III.
+    Price:   $300
+
+Pet Max Health
+    Goes on: Horse armor and wolf armor
+    Does:    Gives your horse or wolf more health.
+    Price:   $800
+
+Pet Regeneration
+    Goes on: Horse armor and wolf armor
+    Does:    Gives your horse or wolf Regeneration IV.
+    Price:   $1,000
+
+Pet Resistance
+    Goes on: Horse armor and wolf armor
+    Does:    Gives your horse or wolf Resistance II.
+    Price:   $600
+
+Pet Speed
+    Goes on: Horse armor and wolf armor
+    Does:    Gives your horse or wolf Speed III.
+    Price:   $400
+
+EVERYTHING ELSE
+---------------
+Allay Item Display
+    Goes on: Item Frame
+    Does:    Hit a block with the enchanted item frame to place a decorative allay that holds an item.
+    Price:   $150
+
+Auto Craft
+    Goes on: Nether Star (hold it in your offhand)
+    Does:    Automatically compacts items in your inventory into blocks (9 ingots -> block, 4 -> block).
+    Price:   $2,000
+    Note:    Not with the Infinite Bucket enchants.
+
+Head Cosmetic
+    Goes on: Decorative blocks (glass, flowers, lanterns and similar)
+    Does:    Hit a block while holding the enchanted block to wear it as a hat. Your helmet slot must be empty.
+    Price:   $300
+
+Infinite Lava Bucket
+    Goes on: Nether Star (hold it in your offhand)
+    Does:    Turns an empty bucket in your inventory into a lava bucket.
+    Price:   $5,000
+    Note:    Careful: it removes ALL empty buckets you carry and gives back only one lava bucket.
+
+Infinite Milk Bucket
+    Goes on: Nether Star (hold it in your offhand)
+    Does:    Turns an empty bucket in your inventory into a milk bucket.
+    Price:   $2,000
+    Note:    Careful: it removes ALL empty buckets you carry and gives back only one milk bucket.
+
+Infinite Water Bucket
+    Goes on: Nether Star (hold it in your offhand)
+    Does:    Turns an empty bucket in your inventory into a water bucket.
+    Price:   $3,000
+    Note:    Careful: it removes ALL empty buckets you carry and gives back only one water bucket.
+
+Invisible Item Frame
+    Goes on: Item Frame / Glow Item Frame
+    Does:    Item frames you place are invisible, so only the item shows.
+    Price:   $200
+
+Super Firework I-II
+    Goes on: Firework Rocket
+    Does:    Rockets boost your elytra for longer (flight duration 4 or 5).
+    Price:   $1,000 per level ($2,000 for II)
+
+REMOVED (cannot be bought or rolled)
+------------------------------------
+Advance Sharpness I-III
+    Goes on: Swords
+    Does:    +15 / +20 / +25 attack damage.
+    Price:   not sold
+    Note:    REMOVED: one-shots players.
+
+Burning Time I-V
+    Goes on: Boots
+    Does:    Makes you stay on fire LONGER.
+    Price:   not sold
+    Note:    REMOVED: it only hurts the wearer.
+
+Chaos Attacker
+    Goes on: Swords
+    Does:    Gives YOU Darkness on every hit, with tiny random effects on you or the target.
+    Price:   not sold
+    Note:    REMOVED: mostly hurts the user.
+
+Coal Generator
+    Goes on: Block of Coal
+    Does:    Turns the block into a mob that drops coal every 5 minutes forever.
+    Price:   not sold
+    Note:    REMOVED: infinite free resources.
+
+Compact Totem
+    Goes on: Totem of Undying
+    Does:    Totems stack up to 3.
+    Price:   not sold
+    Note:    REMOVED: totems are disabled on this server.
+
+Copper Generator
+    Goes on: Block of Copper
+    Does:    Turns the block into a mob that drops copper every 5 minutes forever.
+    Price:   not sold
+    Note:    REMOVED: infinite free resources.
+
+Curse of Blindness
+    Goes on: Any armor piece
+    Does:    Blindness for 10 seconds every minute.
+    Price:   not sold
+    Note:    REMOVED: curse.
+
+Curse of Glowing
+    Goes on: Any armor piece
+    Does:    You glow through walls.
+    Price:   not sold
+    Note:    REMOVED: curse.
+
+Curse of Mining Fatigue
+    Goes on: Tools
+    Does:    Mining Fatigue III while held.
+    Price:   not sold
+    Note:    REMOVED: curse.
+
+Curse of Poison
+    Goes on: Any armor piece
+    Does:    Poison for 10 seconds every minute.
+    Price:   not sold
+    Note:    REMOVED: curse.
+
+Curse of Slowness
+    Goes on: Any armor piece
+    Does:    Slowness for 10 seconds every minute.
+    Price:   not sold
+    Note:    REMOVED: curse.
+
+Curse of Sound
+    Goes on: Swords
+    Does:    Plays anvil and donkey sounds when you hit.
+    Price:   not sold
+    Note:    REMOVED: curse.
+
+Curse of Unluck
+    Goes on: Any armor piece
+    Does:    Bad Luck for 20 seconds every minute.
+    Price:   not sold
+    Note:    REMOVED: curse.
+
+Diamond Generator
+    Goes on: Block of Diamond
+    Does:    Turns the block into a mob that drops a diamond every 5 minutes forever.
+    Price:   not sold
+    Note:    REMOVED: infinite free diamonds.
+
+Emerald Generator
+    Goes on: Block of Emerald
+    Does:    Turns the block into a mob that drops an emerald every 5 minutes forever.
+    Price:   not sold
+    Note:    REMOVED: infinite free resources.
+
+Exp Mastery
+    Goes on: Boots
+    Does:    Meant to boost XP gain.
+    Price:   not sold
+    Note:    REMOVED: broken in this version (does nothing).
+
+Fangs Sword
+    Goes on: Swords
+    Does:    30% chance to summon evoker fangs under the target on hit.
+    Price:   not sold
+    Note:    REMOVED: too strong in PvP.
+
+Food Generator
+    Goes on: Raw Chicken
+    Does:    Turns the item into a mob that drops raw chicken every 5 minutes forever.
+    Price:   not sold
+    Note:    REMOVED: infinite free resources.
+
+Gold Generator
+    Goes on: Block of Gold
+    Does:    Turns the block into a mob that drops gold every 5 minutes forever.
+    Price:   not sold
+    Note:    REMOVED: infinite free resources.
+
+Iron Generator
+    Goes on: Block of Iron
+    Does:    Turns the block into a mob that drops iron every 5 minutes forever.
+    Price:   not sold
+    Note:    REMOVED: infinite free resources.
+
+Lapis Generator
+    Goes on: Block of Lapis
+    Does:    Turns the block into a mob that drops lapis every 5 minutes forever.
+    Price:   not sold
+    Note:    REMOVED: infinite free resources.
+
+Lightning Sword
+    Goes on: Swords
+    Does:    30% chance to strike the target with lightning.
+    Price:   not sold
+    Note:    REMOVED: too strong in PvP.
+
+Max Health
+    Goes on: Leggings
+    Does:    Health Boost III (+6 hearts).
+    Price:   not sold
+    Note:    REMOVED: bypasses the lifesteal heart system.
+
+Netherite Generator
+    Goes on: Block of Netherite
+    Does:    Turns the block into a mob that drops netherite scrap every 5 minutes forever.
+    Price:   not sold
+    Note:    REMOVED: infinite free netherite.
+
+Random Enchant
+    Goes on: (internal)
+    Does:    Internal helper used by the mod.
+    Price:   not sold
+    Note:    REMOVED: not a real enchant.
+
+Redstone Generator
+    Goes on: Block of Redstone
+    Does:    Turns the block into a mob that drops redstone every 5 minutes forever.
+    Price:   not sold
+    Note:    REMOVED: infinite free resources.
+
+Regeneration I-II
+    Goes on: Leggings
+    Does:    Permanent Regeneration I-II (despite the name it goes on leggings).
+    Price:   not sold
+    Note:    REMOVED: too strong in PvP.
+
+Spawner Breaker
+    Goes on: Pickaxes
+    Does:    Spawners drop themselves when mined.
+    Price:   not sold
+    Note:    REMOVED: not needed, any Silk Touch pickaxe mines spawners now (mineable-spawner mod).
+
+Strength Gift
+    Goes on: Swords
+    Does:    10% chance on hit to give you Strength.
+    Price:   not sold
+    Note:    REMOVED: too strong in PvP.
+
+Super Knockback I-III
+    Goes on: Swords
+    Does:    +5 / +6 / +7 knockback.
+    Price:   not sold
+    Note:    REMOVED: launches players off the map.
+
+Upgrade Fortune
+    Goes on: Pickaxes
+    Does:    The pickaxe becomes Fortune V while held.
+    Price:   not sold
+    Note:    REMOVED: breaks the economy.
+
+Upgrade Looting
+    Goes on: Swords
+    Does:    The sword becomes Looting V while held.
+    Price:   not sold
+    Note:    REMOVED: breaks the economy.
+
+Upgrade Power
+    Goes on: Bow
+    Does:    The bow becomes Power X while held.
+    Price:   not sold
+    Note:    REMOVED: Power X one-shots players.

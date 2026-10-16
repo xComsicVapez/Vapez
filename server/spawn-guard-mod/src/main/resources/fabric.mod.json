@@ -1,0 +1,19 @@
+{
+	"schemaVersion": 1,
+	"id": "spawn-guard",
+	"version": "${version}",
+	"name": "Spawn Guard",
+	"description": "Protects the overworld spawn build (no breaking or placing, ender chests and other containers stay usable), gives Mining Fatigue III in spawn, and runs the 8 rentable spawn plots where renters build and break only their own blocks. Players take no fall damage and cannot hurt each other in spawn; areas in config/spawn-guard-areas.json can only be changed by their owners and ops. Server-side only.",
+	"license": "MIT",
+	"environment": "server",
+	"entrypoints": {
+		"main": ["dev.cosmicpixel.spawnguard.SpawnGuard"]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.1",
+		"java": ">=25",
+		"fabric-api": "*"
+	},
+	"mixins": ["spawn-guard.mixins.json"]
+}
