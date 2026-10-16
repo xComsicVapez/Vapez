@@ -1127,7 +1127,10 @@ class AIPlayer:
                     problems.append(result)
             if short:
                 break
-        remaining = [p for p in floor + plan if blocks[at(p)] in SOFT]
+        # Corner columns only touch the room diagonally, which nothing can squeeze through, so the base is sealed
+        # without them; they are tried above but never hold up finishing the base.
+        needed = [p for p in floor + plan if not corner(p)]
+        remaining = [p for p in needed if blocks[at(p)] in SOFT]
 
         # 3. Door, furnishings and home once the shell is closed.
         counts = self.counts()
@@ -1153,7 +1156,7 @@ class AIPlayer:
         if not has_door:
             missing.append("a door (craft one from 6 planks)")
         status = (f"placed {placed} and mined {mined} blocks; base at {base['x']} {base['y']} {base['z']} is "
-                  f"{100 * (len(floor + plan) - len(remaining)) // len(floor + plan)}% built")
+                  f"{100 * (len(needed) - len(remaining)) // len(needed)}% built")
         if problems:
             status += "; problems: " + "; ".join(dict.fromkeys(problems[:4]))
         if missing:
