@@ -646,11 +646,21 @@ class AIPlayer:
             point = (x + 0.5 + 0.5 * dx, y + 0.5 + 0.5 * dy, z + 0.5 + 0.5 * dz)
             axis = 0 if dx else 1 if dy else 2
             result.append((point, (x + dx, y + dy, z + dz), axis))
-        return sorted(result, key=lambda s: sum((a - b) ** 2 for a, b in zip(s[0], eye)))
+        result.sort(key=lambda s: sum((a - b) ** 2 for a, b in zip(s[0], eye)))
+        # Off-centre aim points as a fallback, for faces only partly visible through a gap.
+        extra = []
+        for point, support, axis in result:
+            for u, v in ((0.3, 0.3), (0.3, -0.3), (-0.3, 0.3), (-0.3, -0.3)):
+                shifted = list(point)
+                a, b = [i for i in range(3) if i != axis]
+                shifted[a] += u
+                shifted[b] += v
+                extra.append((tuple(shifted), support, axis))
+        return result + extra
 
     def _aimed_at(self, point, support, axis):
         hit = self._trace()
-        return bool(hit) and hit[0] == support and abs(hit[1][axis] - point[axis]) < 0.02
+        return bool(hit) and hit[0] == support and (axis is None or abs(hit[1][axis] - point[axis]) < 0.02)
 
     def place_block(self, x, y, z, item, jump=True):
         x, y, z = (int(float(number(v)) // 1) for v in (x, y, z))
@@ -668,6 +678,9 @@ class AIPlayer:
         if item not in self.counts():
             return f"you have no {item}"
         supports = self._supports(x, y, z, eye)
+        if before != "air":
+            # Grass, snow layers and the like get replaced by clicking them directly, like a player would.
+            supports.insert(0, ((x + 0.5, y + 0.3, z + 0.5), (x, y, z), None))
         if not supports:
             return f"nothing to place it against at {x} {y} {z}: it needs a solid block next to or below it"
         self.hold(item)
@@ -976,9 +989,16 @@ class AIPlayer:
         def stand_near(target, high=False):
             """Walk to a spot inside the base from which target is within reach (on the platform when high)."""
             tx, ty, tz = target
+
+            def close(eye):
+                # From the floor, keep the whole block (and so the faces to place against) well inside reach.
+                if high:
+                    return reach_to(eye, tx, ty, tz) <= REACH - 0.4
+                return sum((a - b - 0.5) ** 2 for a, b in zip(eye, target)) ** 0.5 <= REACH - 0.9
+
             pos = self.position()
             eye = (pos[0], pos[1] + 1.62, pos[2])
-            if reach_to(eye, tx, ty, tz) <= REACH - 0.4 and (not high or pos[1] >= g + 0.9):
+            if close(eye) and (not high or pos[1] >= g + 0.9):
                 return True
             if high:
                 spots = [at((3, 1, 3))]
@@ -990,8 +1010,7 @@ class AIPlayer:
                     continue
                 if blocks.get((sx, sy, sz), "air") not in SOFT or blocks.get((sx, sy + 1, sz), "air") not in SOFT:
                     continue
-                spot_eye = (sx + 0.5, sy + 1.62, sz + 0.5)
-                if reach_to(spot_eye, tx, ty, tz) > REACH - 0.4:
+                if not close((sx + 0.5, sy + 1.62, sz + 0.5)):
                     continue
                 walk = (sx + 0.5 - pos[0]) ** 2 + (sz + 0.5 - pos[2]) ** 2
                 if best is None or walk < best[0]:
@@ -1048,8 +1067,34 @@ class AIPlayer:
 
         # 2. Fill holes in the floor, then the walls row by row, then the roof (from the platform for high rows).
         floor = [(i, -1, k) for i in range(BASE_SIZE) for k in range(BASE_SIZE)]
-        todo = [p for p in floor + plan if blocks[at(p)] in SOFT]
+        corner = lambda p: p[0] in (0, edge) and p[2] in (0, edge)
+        # Corners first: once both neighbouring walls stand, a corner has no face the bot can see from inside.
+        todo = sorted((p for p in floor + plan if blocks[at(p)] in SOFT), key=lambda p: (p[1], not corner(p)))
         short = 0
+
+        def place_through_wall(p, block):
+            """Open a neighbouring wall block, place p through the gap, then close the wall again."""
+            for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                n = (p[0] + dx, p[1], p[2] + dz)
+                if n not in walls or blocks.get(at(n), "air") in SOFT:
+                    continue
+                if not stand_near(at(n), high=n[1] >= 2):
+                    problems.append(f"could not get within reach of {' '.join(map(str, at(n)))}")
+                    continue
+                broke = self.mine_block(*at(n))
+                if not broke.startswith("broke"):
+                    problems.append(broke)
+                    continue
+                blocks[at(n)] = "air"
+                result = self.place_block(*at(p), block)
+                again = self.place_block(*at(n), material() or block)
+                if again.startswith("placed"):
+                    blocks[at(n)] = block
+                else:
+                    todo.append(n)
+                if result.startswith("placed"):
+                    return result
+            return None
         progress = True
         while todo and progress and time.time() < deadline and self.enabled:
             progress = False
@@ -1071,11 +1116,15 @@ class AIPlayer:
                     problems.append(f"could not get within reach of {' '.join(map(str, at(p)))}")
                     continue
                 result = self.place_block(*at(p), block)
+                if "no visible face" in result:
+                    result = place_through_wall(p, block) or result
                 if result.startswith("placed"):
                     placed += 1
                     blocks[at(p)] = block
                     todo.remove(p)
                     progress = True
+                else:
+                    problems.append(result)
             if short:
                 break
         remaining = [p for p in floor + plan if blocks[at(p)] in SOFT]
