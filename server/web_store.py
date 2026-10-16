@@ -907,7 +907,7 @@ def home_page(session, message):
     extras = (f'<section class="grid two"><article class="card"><h3>Revive</h3><p>Out of hearts? You are revived '
               f'automatically after {CONFIG["revive_wait_days"]:g} days, or right away for '
               f'{money(CONFIG["revive_price"])}. You can buy one for a friend too.</p><a class="button" href="/revive">'
-              f'Revives</a></article><article class="card"><h3>Spawn plots</h3><p>Rent one of the 8 domes at spawn '
+              f'Revives</a></article><article class="card"><h3>Spawn plots</h3><p>Rent one of the {len(plots())} plots at spawn '
               f'for {money(CONFIG["plot_price_per_week"])} a week. Only you can build and break there.</p>'
               f'<a class="button" href="/plots">Spawn plots</a></article></section>')
     body = (f'{intro}<h2>Kits</h2><section class="grid">{kits}</section><h2>Supplies</h2>'
@@ -970,8 +970,8 @@ def plots_page(session, message):
         rows.append(f'<tr><td>#{int(plot["id"])} {e(plot.get("name", ""))}</td><td>{status}</td><td>{action}</td></tr>')
     table = ('<table><tr><th>Plot</th><th>Status</th><th></th></tr>' + "".join(rows) + '</table>') if rows else \
         "<p>The spawn plots are not set up yet.</p>"
-    body = (f"<h1>Spawn plots</h1><p>Spawn has 8 domes you can rent for {money(CONFIG['plot_price_per_week'])} a "
-            f"week (one per player). Inside your dome only you can build and break blocks, you don't get mining "
+    body = (f"<h1>Spawn plots</h1><p>Spawn has {len(all_plots)} plots you can rent for {money(CONFIG['plot_price_per_week'])} a "
+            f"week (one per player). Inside your plot only you can build and break blocks, you don't get mining "
             f"fatigue, and nobody else can open your chests. Spawn blocks themselves can't be broken. In game: "
             f"<code>/plot</code> for info, <code>/plot home</code> to go there.</p>"
             f"<p>When a rental runs out you get one extra day to renew before your blocks are removed.</p>{table}")

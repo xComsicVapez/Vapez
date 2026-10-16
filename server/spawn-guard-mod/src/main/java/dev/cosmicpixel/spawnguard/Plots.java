@@ -10,6 +10,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -17,6 +18,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -60,8 +62,8 @@ public final class Plots {
 
 	static final class Plot {
 		final int id;
-		final String name;
-		final int minX, minY, minZ, maxX, maxY, maxZ;
+		String name;
+		int minX, minY, minZ, maxX, maxY, maxZ;
 		UUID renter;
 		String renterName;
 		long until;
@@ -77,6 +79,23 @@ public final class Plots {
 			this.maxX = maxX;
 			this.maxY = maxY;
 			this.maxZ = maxZ;
+		}
+
+		void setArea(BlockPos a, BlockPos b) {
+			minX = Math.min(a.getX(), b.getX());
+			minY = Math.min(a.getY(), b.getY());
+			minZ = Math.min(a.getZ(), b.getZ());
+			maxX = Math.max(a.getX(), b.getX());
+			maxY = Math.max(a.getY(), b.getY());
+			maxZ = Math.max(a.getZ(), b.getZ());
+		}
+
+		boolean overlaps(Plot o) {
+			return minX <= o.maxX && maxX >= o.minX && minY <= o.maxY && maxY >= o.minY && minZ <= o.maxZ && maxZ >= o.minZ;
+		}
+
+		String corners() {
+			return minX + " " + minY + " " + minZ + " to " + maxX + " " + maxY + " " + maxZ;
 		}
 
 		boolean contains(BlockPos pos) {
@@ -347,7 +366,95 @@ public final class Plots {
 				.then(Commands.literal("evict")
 					.then(Commands.argument("id", IntegerArgumentType.integer(1)).executes(Plots::adminEvict)))
 				.then(Commands.literal("clear")
-					.then(Commands.argument("id", IntegerArgumentType.integer(1)).executes(Plots::adminClear)))));
+					.then(Commands.argument("id", IntegerArgumentType.integer(1)).executes(Plots::adminClear)))
+				.then(Commands.literal("setarea")
+					.then(Commands.argument("id", IntegerArgumentType.integer(1, 99))
+						.then(Commands.argument("from", BlockPosArgument.blockPos())
+							.then(Commands.argument("to", BlockPosArgument.blockPos())
+								.executes(ctx -> adminSetArea(ctx, null))
+								.then(Commands.argument("name", StringArgumentType.greedyString())
+									.executes(ctx -> adminSetArea(ctx, StringArgumentType.getString(ctx, "name"))))))))
+				.then(Commands.literal("remove")
+					.then(Commands.argument("id", IntegerArgumentType.integer(1)).executes(Plots::adminRemove)))
+				.then(Commands.literal("list").executes(Plots::adminList))));
+	}
+
+	/** Creates plot <id> or moves/resizes it. A rented plot keeps its renter and the blocks still inside it. */
+	private static int adminSetArea(CommandContext<CommandSourceStack> ctx, String name) throws CommandSyntaxException {
+		int id = IntegerArgumentType.getInteger(ctx, "id");
+		BlockPos from = BlockPosArgument.getBlockPos(ctx, "from"), to = BlockPosArgument.getBlockPos(ctx, "to");
+		Plot area = new Plot(id, "", 0, 0, 0, 0, 0, 0);
+		area.setArea(from, to);
+		long blocks = (long) (area.maxX - area.minX + 1) * (area.maxY - area.minY + 1) * (area.maxZ - area.minZ + 1);
+		if (blocks > 2_000_000) {
+			ctx.getSource().sendFailure(Component.literal("That area is too big (" + blocks + " blocks, the limit is 2,000,000)."));
+			return 0;
+		}
+		Plot result;
+		boolean created;
+		synchronized (Plots.class) {
+			Plot clash = PLOTS.stream().filter(p -> p.id != id && p.overlaps(area)).findFirst().orElse(null);
+			if (clash != null) {
+				ctx.getSource().sendFailure(Component.literal("That area overlaps plot #" + clash.id + " (" + clash.corners() + ")."));
+				return 0;
+			}
+			Plot plot = PLOTS.stream().filter(p -> p.id == id).findFirst().orElse(null);
+			created = plot == null;
+			if (created) {
+				plot = new Plot(id, name != null ? name : "Plot " + id, 0, 0, 0, 0, 0, 0);
+				PLOTS.add(plot);
+				PLOTS.sort((a, b) -> Integer.compare(a.id, b.id));
+			} else if (name != null) {
+				plot.name = name;
+			}
+			plot.setArea(from, to);
+			Plot moved = plot;
+			plot.placed.removeIf(pos -> !moved.contains(pos));
+			if (plot.home != null && !plot.contains(plot.home)) plot.home = null;
+			result = plot;
+			save();
+		}
+		LOGGER.info("Plot {} ({}) set to {}", result.id, result.name, result.corners());
+		ctx.getSource().sendSuccess(() -> Component.literal((created ? "Created" : "Updated") + " plot #" + result.id + " \"" + result.name
+			+ "\": " + result.corners()).withStyle(ChatFormatting.GREEN), true);
+		return 1;
+	}
+
+	private static int adminRemove(CommandContext<CommandSourceStack> ctx) {
+		int id = IntegerArgumentType.getInteger(ctx, "id");
+		synchronized (Plots.class) {
+			Plot plot = PLOTS.stream().filter(p -> p.id == id).findFirst().orElse(null);
+			if (plot == null) {
+				ctx.getSource().sendFailure(Component.literal("There is no plot #" + id + "."));
+				return 0;
+			}
+			if (plot.renter != null) {
+				ctx.getSource().sendFailure(Component.literal("Plot #" + id + " is rented by " + plot.renterName
+					+ "; use /plot admin clear " + id + " first."));
+				return 0;
+			}
+			PLOTS.remove(plot);
+			save();
+		}
+		ctx.getSource().sendSuccess(() -> Component.literal("Removed plot #" + id + ".").withStyle(ChatFormatting.GREEN), true);
+		return 1;
+	}
+
+	private static int adminList(CommandContext<CommandSourceStack> ctx) {
+		MutableComponent text = Component.literal("Spawn plots (corners):").withStyle(ChatFormatting.GOLD);
+		synchronized (Plots.class) {
+			for (Plot plot : PLOTS) {
+				String tp = "/tp @s " + (plot.minX + plot.maxX) / 2 + " " + (plot.maxY + 1) + " " + (plot.minZ + plot.maxZ) / 2;
+				text.append(Component.literal("\n #" + plot.id + " " + plot.name + ": ").withStyle(ChatFormatting.YELLOW))
+					.append(Component.literal(plot.corners()).withStyle(style -> style.withColor(ChatFormatting.WHITE)
+						.withClickEvent(new ClickEvent.SuggestCommand(tp))))
+					.append(Component.literal(plot.renter != null ? " (rented by " + plot.renterName + ")" : " (free)")
+						.withStyle(ChatFormatting.GRAY));
+			}
+			if (PLOTS.isEmpty()) text.append(Component.literal("\n none - add one with /plot admin setarea").withStyle(ChatFormatting.GRAY));
+		}
+		ctx.getSource().sendSuccess(() -> text, false);
+		return 1;
 	}
 
 	/** Ends a rental right now, without the grace day, and removes the renter's blocks. */
@@ -387,7 +494,7 @@ public final class Plots {
 		CommandSourceStack source = ctx.getSource();
 		ServerPlayer player = source.getPlayer();
 		long now = now();
-		MutableComponent text = Component.literal("Spawn plots (the 8 domes around spawn):").withStyle(ChatFormatting.GOLD);
+		MutableComponent text = Component.literal("Spawn plots:").withStyle(ChatFormatting.GOLD);
 		synchronized (Plots.class) {
 			for (Plot plot : PLOTS) {
 				text.append(Component.literal("\n #" + plot.id + " " + plot.name + ": ").withStyle(ChatFormatting.YELLOW));
