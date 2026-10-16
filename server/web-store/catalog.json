@@ -40,7 +40,8 @@
           "white_bed",
           1
         ]
-      ]
+      ],
+      "usd": 2.99
     },
     {
       "id": "farmer",
@@ -78,7 +79,8 @@
           "bread",
           16
         ]
-      ]
+      ],
+      "usd": 1.99
     },
     {
       "id": "builder",
@@ -116,7 +118,8 @@
           "iron_axe",
           1
         ]
-      ]
+      ],
+      "usd": 2.99
     },
     {
       "id": "miner",
@@ -150,7 +153,8 @@
           "water_bucket",
           1
         ]
-      ]
+      ],
+      "usd": 3.99
     },
     {
       "id": "warrior",
@@ -200,7 +204,8 @@
           "cooked_beef",
           16
         ]
-      ]
+      ],
+      "usd": 6.99
     }
   ],
   "supplies": [
@@ -216,7 +221,8 @@
           "cooked_beef",
           32
         ]
-      ]
+      ],
+      "usd": 0.99
     },
     {
       "id": "torches",
@@ -230,7 +236,8 @@
           "torch",
           64
         ]
-      ]
+      ],
+      "usd": 0.99
     },
     {
       "id": "iron",
@@ -244,7 +251,8 @@
           "iron_ingot",
           16
         ]
-      ]
+      ],
+      "usd": 1.99
     },
     {
       "id": "xp",
@@ -258,7 +266,8 @@
           "experience_bottle",
           16
         ]
-      ]
+      ],
+      "usd": 1.49
     }
   ]
 }

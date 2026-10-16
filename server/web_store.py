@@ -6,6 +6,10 @@ same balance as /bal) on kits, supplies, revives and spawn plot rentals. Every k
 chance of a bonus heart above the lifesteal cap. Eliminated players wait a few days for an automatic revive or buy
 one here (any player can also buy a revive for a friend).
 
+Kits and supplies with a "usd" price in the catalog can also be bought with a card through Stripe Checkout once
+"stripe_secret_key" is set in config/web-store.json. Paid sessions are confirmed with the Stripe API (on the return
+page and by a sweep every minute), so no webhook is needed and each session is fulfilled exactly once.
+
 Everything goes through RCON and the cosmic-store / spawn-guard mods:
   /cosmicstore charge|refund|balance|bonushearts ...   money and bonus hearts
   /plot admin rent <id> <uuid> <name> <days>            spawn plots
@@ -28,6 +32,7 @@ import sys
 import threading
 import time
 import traceback
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -57,6 +62,10 @@ DEFAULTS = {
     "max_bonus_hearts": 5,
     # Bots revived by their own tooling (the AI bridge unbans CosmicAI itself).
     "ignore_players": ["CosmicAI", "AITest"],
+    # Card payments through Stripe Checkout for products with a "usd" price. Empty key: card payments are off.
+    "stripe_secret_key": "",
+    "stripe_currency": "usd",
+    "stripe_api": "https://api.stripe.com",
 }
 CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 SESSION_SECONDS = 12 * 3600
@@ -587,30 +596,151 @@ def buy_product(session, product_id):
         ok, detail = charge(uuid, float(product["price"]))
         if not ok:
             return f"Payment failed: {detail}.", False
-        queue_delivery(uuid, name, product)
         cooldowns = read_json(DATA / "cooldowns.json", {})
         cooldowns.setdefault(uuid, {})[product["id"]] = int(time.time())
         write_json(DATA / "cooldowns.json", cooldowns)
-        heart = ""
-        chance = float(product.get("heart_chance", 0))
-        if chance > 0 and secrets.randbelow(10000) < chance * 100:
-            reply = RCON.run(f"cosmicstore bonushearts add {uuid} 1")
-            if reply.startswith("OK"):
-                heart = " LUCKY! You also won a bonus heart that goes past the 20 heart limit!"
-                RCON.run(f'tellraw @a {{"text":"[Store] {name} won a bonus heart from the web store!","color":"light_purple"}}')
-            elif reply.startswith("MAX"):
-                heart = " You rolled a bonus heart, but you already have the most bonus hearts allowed."
-            log("HEART", name, reply)
-        record({"type": "buy", "uuid": uuid, "name": name, "item": product["id"], "amount": product["price"],
-                "heart": bool(heart and heart.startswith(" LUCKY"))})
+        heart = grant_product(uuid, name, product, {"amount": product["price"]})
         log("BUY", name, product["id"], money(product["price"]), "->", detail)
+    return f"You bought the {product['name']} for {money(product['price'])}. {where_delivered(uuid)}{heart}", True
+
+
+def grant_product(uuid, name, product, receipt):
+    """Queue the items, roll the bonus heart and record the purchase. Returns the bonus heart message (or "")."""
+    queue_delivery(uuid, name, product)
+    heart = ""
+    chance = float(product.get("heart_chance", 0))
+    if chance > 0 and secrets.randbelow(10000) < chance * 100:
+        try:
+            reply = RCON.run(f"cosmicstore bonushearts add {uuid} 1")
+        except ConnectionError as e:
+            reply = f"ERROR {e}"
+        if reply.startswith("OK"):
+            heart = " LUCKY! You also won a bonus heart that goes past the 20 heart limit!"
+            RCON.run(f'tellraw @a {{"text":"[Store] {name} won a bonus heart from the web store!","color":"light_purple"}}')
+        elif reply.startswith("MAX"):
+            heart = " You rolled a bonus heart, but you already have the most bonus hearts allowed."
+        log("HEART", name, reply)
+    record({"type": "buy", "uuid": uuid, "name": name, "item": product["id"],
+            "heart": heart.startswith(" LUCKY"), **receipt})
+    return heart
+
+
+def where_delivered(uuid):
     try:
         online = uuid in online_players()
     except ConnectionError:
         online = False
-    where = "It will be put in your inventory now." if online else \
+    return "It will be put in your inventory now." if online else \
         "It will be put in your inventory the next time you join."
-    return f"You bought the {product['name']} for {money(product['price'])}. {where}{heart}", True
+
+
+# ---------------------------------------------------------------------------------------------------- card payments
+
+def card_enabled():
+    return bool(CONFIG.get("stripe_secret_key"))
+
+
+def card_price(product):
+    """Price in cents, or None when the product can't be bought with a card."""
+    usd = product.get("usd")
+    return int(round(float(usd) * 100)) if card_enabled() and usd else None
+
+
+def stripe(method, path, params=None):
+    data = urllib.parse.urlencode(params or {}).encode() if method == "POST" else None
+    url = CONFIG["stripe_api"].rstrip("/") + path
+    if method == "GET" and params:
+        url += "?" + urllib.parse.urlencode(params)
+    request = urllib.request.Request(url, data=data, method=method, headers={
+        "Authorization": "Bearer " + CONFIG["stripe_secret_key"], "Stripe-Version": "2024-06-20"})
+    try:
+        with urllib.request.urlopen(request, timeout=20) as r:
+            return json.loads(r.read().decode())
+    except urllib.error.HTTPError as e:
+        try:
+            detail = json.loads(e.read().decode())["error"]["message"]
+        except (ValueError, KeyError):
+            detail = f"HTTP {e.code}"
+        raise ConnectionError(f"Stripe: {detail}") from e
+
+
+def start_checkout(session, product_id):
+    """(checkout URL, None) or (None, error message)."""
+    product = catalog().get(product_id)
+    cents = card_price(product) if product else None
+    base = public_url()
+    if cents is None or session["kind"] != "player":
+        return None, "That item can't be bought with a card."
+    if not base:
+        return None, "Card payments are not available right now; try again in a minute."
+    currency = CONFIG["stripe_currency"].lower()
+    params = {
+        "mode": "payment",
+        "success_url": f"{base}/paid?session_id={{CHECKOUT_SESSION_ID}}",
+        "cancel_url": f"{base}/",
+        "client_reference_id": session["uuid"],
+        "line_items[0][quantity]": 1,
+        "line_items[0][price_data][currency]": currency,
+        "line_items[0][price_data][unit_amount]": cents,
+        "line_items[0][price_data][product_data][name]": f"{product['name']} (play.cosmicpixel.org)",
+        "line_items[0][price_data][product_data][description]":
+            f"In-game items for Minecraft player {session['name']}: "
+            + ", ".join(item_label(i, c) for i, c in product["items"]),
+        "metadata[store]": "cosmicpixel",
+        "metadata[uuid]": session["uuid"],
+        "metadata[name]": session["name"],
+        "metadata[item]": product["id"],
+        "payment_intent_data[metadata][uuid]": session["uuid"],
+        "payment_intent_data[metadata][item]": product["id"],
+    }
+    try:
+        checkout = stripe("POST", "/v1/checkout/sessions", params)
+    except (ConnectionError, OSError) as e:
+        log("CHECKOUT failed", session["name"], product_id, e)
+        return None, "Card payments are not available right now; try again in a minute."
+    log("CHECKOUT", session["name"], product_id, checkout["id"])
+    return checkout["url"], None
+
+
+def fulfil_checkout(checkout):
+    """Hand out a paid Checkout Session once. Returns (message, good) for the buyer, or None if it isn't ours/paid."""
+    meta = checkout.get("metadata") or {}
+    if meta.get("store") != "cosmicpixel" or checkout.get("payment_status") != "paid":
+        return None
+    with LOCK:
+        done = read_json(DATA / "card-orders.json", {})
+        product = catalog().get(meta.get("item", ""))
+        if checkout["id"] in done:
+            if done[checkout["id"]].get("error"):
+                return "Your payment went through but the item is no longer sold; contact staff for a refund.", False
+            return f"Thanks! Your {product['name'] if product else 'order'} is already on its way.", True
+        if not product or not UUID_RE.match(meta.get("uuid", "")):
+            log("CARD ORDER cannot be fulfilled", checkout["id"], meta)
+            done[checkout["id"]] = {"at": int(time.time()), "error": "unknown product or player"}
+            write_json(DATA / "card-orders.json", done)
+            return "Your payment went through but the item is no longer sold; contact staff for a refund.", False
+        amount = (checkout.get("amount_total") or 0) / 100
+        done[checkout["id"]] = {"at": int(time.time()), "uuid": meta["uuid"], "item": product["id"], "usd": amount}
+        write_json(DATA / "card-orders.json", done)
+        heart = grant_product(meta["uuid"], meta.get("name", ""), product,
+                              {"card": True, "usd": amount, "checkout": checkout["id"]})
+        log("CARD ORDER", meta.get("name"), product["id"], f"{amount:.2f}", checkout.get("currency", ""), checkout["id"])
+    return f"Payment received! You bought the {product['name']}. {where_delivered(meta['uuid'])}{heart}", True
+
+
+def card_sweep_loop():
+    """Catch paid sessions whose buyer never came back to the return page."""
+    while True:
+        time.sleep(60)
+        if not card_enabled():
+            continue
+        try:
+            listing = stripe("GET", "/v1/checkout/sessions",
+                             {"limit": 100, "status": "complete", "created[gte]": int(time.time()) - 3 * 86400})
+            for checkout in listing.get("data", []):
+                fulfil_checkout(checkout)
+        except (ConnectionError, OSError, ValueError) as e:
+            log("CARD sweep failed:", e)
 
 
 def buy_revive(session, target):
@@ -707,7 +837,7 @@ def page(title, body, session=None, message=None):
 <title>{e(title)} - CosmicPixel Store</title><link rel="stylesheet" href="/static/style.css"></head>
 <body><header><a class="brand" href="/"><span class="heart">&#10084;</span> CosmicPixel <b>Store</b></a>
 <nav>{nav}</nav></header><main>{note}{body}</main>
-<footer>play.cosmicpixel.org &middot; Lifesteal &middot; Everything costs in-game money (your /bal). Not affiliated with Mojang or Microsoft.</footer>
+<footer>play.cosmicpixel.org &middot; Lifesteal &middot; {"Pay with in-game money (your /bal) or a card. Card payments are handled by Stripe; " if card_enabled() else "Everything costs in-game money (your /bal). "}Not affiliated with Mojang or Microsoft.</footer>
 </body></html>"""
 
 
@@ -717,7 +847,8 @@ def product_card(product, session, bal):
     if product.get("heart_chance"):
         tags.append(f'<span class="tag heart">{product["heart_chance"]:g}% bonus heart</span>')
     if product.get("cooldown_hours"):
-        tags.append(f'<span class="tag">every {product["cooldown_hours"]:g}h</span>')
+        tags.append(f'<span class="tag">every {product["cooldown_hours"]:g}h with /bal money</span>')
+    cents = card_price(product)
     button = ""
     if session and session["kind"] == "player":
         left = cooldown_left(session["uuid"], product)
@@ -728,8 +859,13 @@ def product_card(product, session, bal):
             button = (f'<form method="post" action="/buy"><input type="hidden" name="csrf" value="{csrf_token(session)}">'
                       f'<input type="hidden" name="item" value="{e(product["id"])}">'
                       f'<button{" class=\"muted\"" if short else ""}>Buy for {money(product["price"])}</button></form>')
+        if cents:
+            button += (f'<form method="post" action="/checkout"><input type="hidden" name="csrf" '
+                       f'value="{csrf_token(session)}"><input type="hidden" name="item" value="{e(product["id"])}">'
+                       f'<button class="card-pay">Buy with card ${cents / 100:.2f}</button></form>')
     else:
-        button = f'<div class="price">{money(product["price"])}</div>'
+        button = f'<div class="price">{money(product["price"])}' + \
+                 (f' <span>or ${cents / 100:.2f} by card</span>' if cents else '') + '</div>'
     return (f'<article class="card"><h3>{e(product["name"])}</h3><p>{e(product.get("blurb", ""))}</p>'
             f'<ul>{items}</ul><div class="tags">{"".join(tags)}</div>{button}</article>')
 
@@ -763,7 +899,7 @@ def home_page(session, message):
                  f'{waiting}</section>')
     else:
         intro = (f'<section class="hero"><h1>Gear up. Survive. Steal hearts.</h1><p>Kits and supplies for '
-                 f'in-game money, spawn plots to rent and revives when you run out of hearts. Every kit has a '
+                 f'in-game money{" or a card" if card_enabled() else ""}, spawn plots to rent and revives when you run out of hearts. Every kit has a '
                  f'chance to give a <b>bonus heart</b> that goes past the 20 heart limit (up to '
                  f'{CONFIG["max_bonus_hearts"]} extra).</p></section>{login_box()}')
     kits = "".join(product_card(p, session, bal) for p in products.values() if p["group"] == "kits")
@@ -858,8 +994,9 @@ def history_page(session, message):
             what = f"plot {entry.get('plot')} for {entry.get('weeks')} week(s)"
         elif entry["type"] == "refund":
             what = entry.get("why", "")
+        paid = f'${float(entry["usd"]):.2f} card' if entry.get("card") else money(float(entry.get("amount", 0)))
         rows.append(f'<tr><td>{when(entry["at"])}</td><td>{labels.get(entry["type"], entry["type"])}</td>'
-                    f'<td>{e(str(what))}</td><td>{money(float(entry.get("amount", 0)))}</td></tr>')
+                    f'<td>{e(str(what))}</td><td>{paid}</td></tr>')
     body = "<h1>Your purchases</h1>" + (
         '<table><tr><th>When</th><th>Type</th><th>What</th><th>Amount</th></tr>' + "".join(rows) + "</table>"
         if rows else "<p>No purchases yet.</p>")
@@ -899,7 +1036,9 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("X-Frame-Options", "DENY")
         self.send_header("Referrer-Policy", "same-origin")
-        self.send_header("Content-Security-Policy", "default-src 'self'; form-action 'self'; frame-ancestors 'none'")
+        # The checkout form answers with a redirect to Stripe, which form-action also has to allow.
+        self.send_header("Content-Security-Policy",
+                         "default-src 'self'; form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'")
         if content_type.startswith("text/html"):
             self.send_header("Cache-Control", "no-store")
         for key, value in headers:
@@ -941,6 +1080,17 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(200, history_page(session, message))
             if url.path == "/history":
                 return self.redirect("/")
+            if url.path == "/paid":
+                checkout_id = query.get("session_id", [""])[0]
+                if not card_enabled() or not re.fullmatch(r"cs_[A-Za-z0-9_]{10,200}", checkout_id):
+                    return self.redirect("/")
+                try:
+                    result = fulfil_checkout(stripe("GET", f"/v1/checkout/sessions/{checkout_id}"))
+                except (ConnectionError, OSError) as e:
+                    log("PAID page lookup failed", checkout_id, e)
+                    result = None if "No such checkout.session" in str(e) else ("Thanks! We couldn't confirm the payment yet; your items arrive within a few minutes "
+                              "once it goes through.", True)
+                return self.redirect("/", result or ("That payment hasn't gone through.", False))
             self.send(404, page("Not found", "<h1>Not found</h1><p><a href=\"/\">Back to the store</a></p>", session))
         except Exception:
             log("HTTP error", traceback.format_exc(limit=4))
@@ -970,6 +1120,11 @@ class Handler(BaseHTTPRequestHandler):
                 return self.redirect("/", ("Signed out.", True), "")
             if path == "/buy" and session["kind"] == "player":
                 return self.redirect("/", buy_product(session, form.get("item", "")))
+            if path == "/checkout" and session["kind"] == "player":
+                if rate_limited("checkout:" + session["uuid"], limit=20):
+                    return self.redirect("/", ("Too many checkouts started; wait a few minutes.", False))
+                url, error = start_checkout(session, form.get("item", ""))
+                return self.send(303, "", headers=[("Location", url)]) if url else self.redirect("/", (error, False))
             if path == "/revive":
                 return self.redirect("/revive", buy_revive(session, form.get("uuid", "")))
             if path == "/plot" and session["kind"] == "player":
@@ -987,7 +1142,7 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     DATA.mkdir(parents=True, exist_ok=True)
     os.chmod(DATA, 0o700)
-    for target in (deliver_loop, elimination_loop, tunnel_loop):
+    for target in (deliver_loop, elimination_loop, tunnel_loop, card_sweep_loop):
         threading.Thread(target=target, daemon=True, name=target.__name__).start()
     server = ThreadingHTTPServer((CONFIG["bind"], int(CONFIG["port"])), Handler)
     server.daemon_threads = True
