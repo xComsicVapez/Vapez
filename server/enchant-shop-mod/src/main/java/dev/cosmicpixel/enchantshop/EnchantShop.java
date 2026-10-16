@@ -25,8 +25,18 @@ import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import net.fabricmc.loader.api.FabricLoader;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public class EnchantShop implements ModInitializer {
 	private static final Random RANDOM = new Random();
@@ -58,6 +68,30 @@ public class EnchantShop implements ModInitializer {
 		});
 	}
 
+	// Enchants switched off in the /shop book catalog (OP, broken or harmful ones) are never rolled either.
+	private static final Path SHOP_CONFIG = FabricLoader.getInstance().getConfigDir().resolve("guishop/enchantments.json");
+	private static Set<String> disabled = Set.of();
+	private static long disabledStamp = Long.MIN_VALUE;
+
+	private static synchronized Set<String> disabledInShop() {
+		try {
+			long stamp = Files.getLastModifiedTime(SHOP_CONFIG).toMillis();
+			if (stamp != disabledStamp) {
+				JsonObject offers = JsonParser.parseString(Files.readString(SHOP_CONFIG)).getAsJsonObject().getAsJsonObject("offers");
+				Set<String> off = new HashSet<>();
+				for (Map.Entry<String, JsonElement> offer : offers.entrySet()) {
+					JsonElement enabled = offer.getValue().getAsJsonObject().get("enabled");
+					if (enabled != null && !enabled.getAsBoolean()) off.add(offer.getKey());
+				}
+				disabled = off;
+				disabledStamp = stamp;
+			}
+		} catch (Exception ignored) {
+			// Keep the last list if the shop config is missing or being rewritten.
+		}
+		return disabled;
+	}
+
 	private static ItemStack icon(Tier tier) {
 		ItemStack stack = new ItemStack(tier.icon());
 		stack.set(DataComponents.CUSTOM_NAME, Component.literal(tier.name() + " Enchant Book")
@@ -80,7 +114,8 @@ public class EnchantShop implements ModInitializer {
 			.lookupOrThrow(Registries.ENCHANTMENT).listElements()
 			.filter(holder -> {
 				String path = holder.key().identifier().toString();
-				return tier.groups().stream().anyMatch(group -> path.startsWith("enchantplus:" + group + "/"));
+				return tier.groups().stream().anyMatch(group -> path.startsWith("enchantplus:" + group + "/"))
+					&& !disabledInShop().contains(path);
 			})
 			.toList();
 		if (pool.isEmpty()) {
