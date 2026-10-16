@@ -109,9 +109,10 @@ start_ai_bridge() {
 
 # Web store (web_store.py) on 127.0.0.1:8080. Without a fixed "public_url" in config/web-store.json it is
 # published through a cloudflared quick tunnel, whose random https://....trycloudflare.com address the store
-# picks up by itself (and shows in /store).
+# picks up by itself (and shows in /store). A named tunnel config (set up by store-tunnel-setup.sh) replaces it.
 STORE_SESSION="web-store"
 TUNNEL_SESSION="store-tunnel"
+STORE_TUNNEL_CONFIG="$HOME/.cloudflared/cosmic-store.yml"
 start_web_store() {
   [ -f "$DIR/config/web-store.json" ] || return 0
   if ! tmux has-session -t "=$STORE_SESSION" 2>/dev/null; then
@@ -119,7 +120,12 @@ start_web_store() {
       "while true; do python3 '$TOOLS_DIR/web_store.py' '$DIR' 2>&1 | tee -a '$DIR/logs/web-store.log'; sleep 5; done"
     log "started the web store for $NAME"
   fi
-  if ! grep -q '"public_url": *"http' "$DIR/config/web-store.json" && ! tmux has-session -t "=$TUNNEL_SESSION" 2>/dev/null; then
+  tmux has-session -t "=$TUNNEL_SESSION" 2>/dev/null && return 0
+  if [ -f "$STORE_TUNNEL_CONFIG" ]; then
+    tmux new-session -d -s "$TUNNEL_SESSION" \
+      "while true; do cloudflared tunnel --no-autoupdate --config '$STORE_TUNNEL_CONFIG' run 2>&1 | tee /tmp/store-tunnel.log; sleep 5; done"
+    log "started the named tunnel for the web store"
+  elif ! grep -q '"public_url": *"http' "$DIR/config/web-store.json"; then
     tmux new-session -d -s "$TUNNEL_SESSION" \
       "cloudflared tunnel --no-autoupdate --url http://127.0.0.1:8080 --metrics 127.0.0.1:20242 2>&1 | tee /tmp/store-tunnel.log"
     log "started the quick tunnel for the web store"
@@ -189,8 +195,9 @@ case "$ACTION" in
     fi
     if [ -f "$DIR/config/web-store.json" ]; then
       tmux has-session -t "=$STORE_SESSION" 2>/dev/null && echo "web store: running" || echo "web store: stopped"
-      grep -q '"public_url": *"http' "$DIR/config/web-store.json" \
-        || { tmux has-session -t "=$TUNNEL_SESSION" 2>/dev/null && echo "store tunnel: running" || echo "store tunnel: stopped"; }
+      if [ -f "$STORE_TUNNEL_CONFIG" ] || ! grep -q '"public_url": *"http' "$DIR/config/web-store.json"; then
+        tmux has-session -t "=$TUNNEL_SESSION" 2>/dev/null && echo "store tunnel: running" || echo "store tunnel: stopped"
+      fi
     fi
     ;;
   watch-mods)
