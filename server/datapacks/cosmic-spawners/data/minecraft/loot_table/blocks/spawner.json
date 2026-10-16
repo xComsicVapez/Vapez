@@ -1,0 +1,80 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:spawner",
+          "conditions": [
+            {
+              "condition": "minecraft:any_of",
+              "terms": [
+                {
+                  "condition": "minecraft:all_of",
+                  "terms": [
+                    {
+                      "condition": "minecraft:value_check",
+                      "value": {
+                        "type": "minecraft:score",
+                        "target": {
+                          "type": "minecraft:fixed",
+                          "name": "&break_spawner_pickaxe"
+                        },
+                        "score": "mineable_spawner.config"
+                      },
+                      "range": 1
+                    },
+                    {
+                      "condition": "minecraft:match_tool",
+                      "predicate": {
+                        "items": "#minecraft:pickaxes"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "condition": "minecraft:all_of",
+                  "terms": [
+                    {
+                      "condition": "minecraft:all_of",
+                      "terms": [
+                        {
+                          "condition": "minecraft:value_check",
+                          "value": {
+                            "type": "minecraft:score",
+                            "target": {
+                              "type": "minecraft:fixed",
+                              "name": "&break_spawner_pickaxe"
+                            },
+                            "score": "mineable_spawner.config"
+                          },
+                          "range": 0
+                        },
+                        {
+                          "condition": "minecraft:match_tool",
+                          "predicate": {
+                            "items": "#minecraft:pickaxes",
+                            "predicates": {
+                              "minecraft:enchantments": [
+                                {
+                                  "enchantments": "minecraft:silk_touch",
+                                  "levels": 1
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
