@@ -130,3 +130,6 @@ Known incompatibilities, found by test-booting:
 - **Oh The Biomes We've Gone:** world generation crashes ("Feature order cycle") together
   with Terralith.
 - **C2ME 0.4.x:** needs Java 25, so it's pinned to 0.3.0.
+- **Java 25:** spark's profiler crashes the JVM on startup (SIGSEGV). Use Java 21; `start.sh`
+  picks `/usr/lib/jvm/java-21-openjdk*` when it's installed, even if `java` points at a newer one.
+  It also turns off JVM core dumps, which would otherwise try to write a 100 GB file on a crash.
