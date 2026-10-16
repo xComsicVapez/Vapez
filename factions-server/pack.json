@@ -1,0 +1,9 @@
+{
+  "name": "Vapez Factions",
+  "slug": "vapez-factions",
+  "version": "1.0.0",
+  "summary": "Kitchen-sink Fabric factions server with a maxed-out overworld",
+  "minecraft": "1.21.1",
+  "loader": "fabric",
+  "fabric_loader": "0.19.5"
+}

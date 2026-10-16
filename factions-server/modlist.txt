@@ -1,0 +1,116 @@
+# Modrinth project slugs for Fabric 1.21.1. Required dependencies are added
+# automatically by `tools/modpack.py lock`. Client-only mods go in the client
+# .mrpack but are never installed on the server.
+
+# --- Factions & server admin ---
+factions                 # /f create, claims, power, allies/enemies, raiding
+luckperms
+placeholder-api
+ledger                   # block/container rollback for griefing reports
+universal-graves
+styled-chat
+spark
+chunky                   # world pre-generation
+
+# --- Performance (big world, many players) ---
+lithium
+ferrite-core
+krypton
+c2me-fabric==0.3.0+alpha.0.364+1.21.1   # 0.4.x needs Java 25
+modernfix
+alternate-current
+packet-fixer
+scalablelux
+
+# --- Massive overworld terrain & biomes ---
+tectonic                 # continent-scale terrain, taller mountains, deeper oceans
+terralith
+biomes-o-plenty
+# oh-the-biomes-weve-gone   # feature-order crash with Terralith on 1.21.1
+natures-spirit
+terrablender
+lithostitched
+
+# --- Nether / End / caves ---
+betternether
+betterend
+deeperdarker
+
+# --- Structures ---
+yungs-better-dungeons
+yungs-better-mineshafts
+yungs-better-strongholds
+yungs-better-nether-fortresses
+yungs-better-ocean-monuments
+yungs-better-desert-temples
+yungs-better-jungle-temples
+yungs-better-witch-huts
+yungs-better-end-island
+yungs-bridges
+yungs-extras
+towns-and-towers
+dungeons-and-taverns
+when-dungeons-arise
+repurposed-structures-fabric
+mes-moogs-end-structures
+ct-overhaul-village
+structory
+
+# --- Mobs ---
+naturalist
+friends-and-foes
+creeper-overhaul
+aquamirae
+ecologics
+
+# --- Combat & gear ---
+better-combat
+artifacts
+advanced-netherite
+elytra-slot
+
+# --- Tech, storage & travel ---
+techreborn
+toms-storage
+storagedrawers
+travelersbackpack
+sophisticated-backpacks-unoffical-fabric-port
+waystones
+immersive-aircraft
+lootr
+
+# --- Building, food & farming ---
+farmers-delight-refabricated
+lets-do-vinery
+supplementaries
+amendments
+handcrafted
+another-furniture
+macaws-windows
+macaws-fences-and-walls
+chipped
+beautify-refabricated
+comforts
+
+# --- Quality of life ---
+veinminer
+fallingtree
+rightclickharvest
+carry-on
+natures-compass
+explorers-compass
+easy-anvils
+easy-magic
+simple-voice-chat
+ping-wheel
+jei
+jade
+appleskin
+xaeros-minimap
+xaeros-world-map
+
+# --- Client-only extras (shipped in the .mrpack only) ---
+sodium            @client
+iris              @client
+distanthorizons   @client   # see the massive world out to the horizon
+entityculling     @client
