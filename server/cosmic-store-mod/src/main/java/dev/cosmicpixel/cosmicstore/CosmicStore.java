@@ -57,6 +57,7 @@ public class CosmicStore implements ModInitializer {
 	public void onInitialize() {
 		writeDefaultConfig();
 		BonusHearts.register();
+		Bounties.register();
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			dispatcher.register(Commands.literal("store").executes(CosmicStore::loginCode));
 			dispatcher.register(Commands.literal("cosmicstore")
