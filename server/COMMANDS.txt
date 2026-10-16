@@ -53,6 +53,24 @@ Heart recipe (crafting table):
     Gold Block    | Netherite Ingot | Gold Block
     Diamond Block | Gold Block      | Diamond Block
 Right-click a Heart to use it.
+Out of hearts? You are banned until revived: wait 3 days for a free automatic revive, or buy one on the
+web store with the 8-letter code from your ban screen (friends can buy it for you too).
+
+EVERYONE - WEB STORE AND SPAWN PLOTS
+------------------------------------
+/store                      Get a one-time code (10 minutes) and the link to the web store. Everything
+                            there costs in-game money (your /bal): kits, supplies, revives, spawn plots.
+                            Every kit or supply has a small chance of a bonus heart past the 20 heart cap
+                            (up to 5 extra). Kits have a cooldown (24-72 hours).
+/plot                       Your spawn plot: which one, until when. The 8 domes at spawn can be rented
+                            on the web store ($2,500 a week, one per player). In your dome only you can
+                            build and break, you get no mining fatigue, and only you can open your chests.
+/plot home                  Teleport to your plot          /plot sethome   Set where /plot home takes you
+When a rental ends you get 1 extra day to renew before your blocks are removed.
+Spawn itself can't be broken or griefed (no TNT, lava, fire, pistons there); ender chests, doors,
+buttons and crafting tables at spawn still work for everyone.
+Kill CosmicAI (the AI player) for a random, numbered trophy: gear, a $1,500 bounty or even a bonus
+heart. One trophy per player per day.
 
 EVERYONE - TEAMS
 ----------------
@@ -94,6 +112,9 @@ OWNER / OPS - AI ADMIN (xCosmicVapez only, op not required)
 /ai play on   /ai play off  Make the AI player "CosmicAI" join or leave the game
 /ai bot <goal>              Give CosmicAI something to do ("follow me and help me mine")
 /ai play                    Is CosmicAI playing, and what is it doing
+/ai bot build a base        CosmicAI gathers stone itself and builds a 7x7 cobblestone base (protected
+                            area, door, chest, furnace, bed spot); it plays like a survival player and
+                            uses /rtp now and then.
 (Players can talk to CosmicAI in chat by saying its name or "ai".)
 
 OWNER / OPS - PLAYERS AND MODERATION
@@ -129,6 +150,16 @@ OWNER / OPS - LIFESTEAL
 /lifesteal item give_heart_item        Get a Heart item
 /lifesteal item give_revive_item       Get a Revive Beacon
 /revive <player>                       Bring back an eliminated (banned) player
+
+OWNER / OPS - WEB STORE AND PLOTS
+---------------------------------
+Store files: config/web-store.json (prices, wait days, public_url), server-tools/web-store/catalog.json
+(kits). Logs: logs/web-store.log. Runs in tmux "web-store"; the public link comes from tmux "store-tunnel"
+until a fixed address (store.cosmicpixel.org) is set as "public_url".
+/plot admin rent <id> <uuid> <name> <days>   Give someone a plot        /plot admin evict <id>  End a rental (1 grace day)
+/plot admin clear <id>                       Free a plot now and remove its blocks
+/cosmicstore balance|charge|refund <uuid> [amount]     (used by the store over RCON)
+/cosmicstore bonushearts add|reset|get <uuid> [n]      Bonus hearts above the cap
 
 OWNER / OPS - ECONOMY
 ---------------------
