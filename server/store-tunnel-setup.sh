@@ -37,7 +37,7 @@ ingress:
     service: http://127.0.0.1:8080
   - service: http_status:404
 EOF
-cloudflared tunnel ingress validate --config "$CONFIG"
+cloudflared tunnel --config "$CONFIG" ingress validate
 
 cloudflared tunnel route dns "$TUNNEL" "$HOSTNAME_" || {
   echo "Could not create the DNS record. If $HOSTNAME_ already exists in Cloudflare DNS, delete it there and re-run."
