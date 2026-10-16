@@ -71,7 +71,7 @@ EVERYONE - WEB STORE AND SPAWN PLOTS
                             also be bought with a card once the owner turns card payments on.
                             Every kit or supply has a small chance of a bonus heart past the 20 heart cap
                             (up to 5 extra). Kits have a cooldown (24-72 hours).
-/plot                       Your spawn plot: which one, until when. The 8 domes at spawn can be rented
+/plot                       Your spawn plot: which one, until when. The plots at spawn can be rented
                             on the web store ($2,500 a week, one per player). In your dome only you can
                             build and break, you get no mining fatigue, and only you can open your chests.
 /plot home                  Teleport to your plot          /plot sethome   Set where /plot home takes you
@@ -169,6 +169,10 @@ does that after "cloudflared tunnel login"). Card payments: put your Stripe secr
 "stripe_secret_key"; card prices are the "usd" fields in catalog.json; card orders: config/web-store/card-orders.json.
 /plot admin rent <id> <uuid> <name> <days>   Give someone a plot        /plot admin evict <id>  End a rental (1 grace day)
 /plot admin clear <id>                       Free a plot now and remove its blocks
+/plot admin list                             Every plot with its corners (click to get a /tp command)
+/plot admin setarea <id> <x y z> <x y z> [name]   Create plot <id> or move/resize it (two opposite
+                                             corners; ~ ~ ~ works, and tab completes the block you look at)
+/plot admin remove <id>                      Delete a plot (only when nobody rents it)
 /cosmicstore balance|charge|refund <uuid> [amount]     (used by the store over RCON)
 /cosmicstore bonushearts add|reset|get <uuid> [n]      Bonus hearts above the cap
 

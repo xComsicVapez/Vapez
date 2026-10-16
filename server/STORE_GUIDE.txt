@@ -23,7 +23,7 @@ Out of hearts:
   balance. A friend can also sign in with their own /store code and buy the revive for you on the "Revives" page.
 - Revived players come back at spawn with 10 hearts. Bonus hearts are lost when you are eliminated.
 
-Spawn plots (the 8 diamond domes):
+Spawn plots (the 8 diamond domes, or whatever areas you set with /plot admin setarea):
 - Rent one on the "Spawn plots" page ($2,500 a week, 1 to 4 weeks at a time, one plot per player).
 - In game: /plot shows which plot and until when, /plot home teleports you there, /plot sethome changes that spot.
 - Inside your dome only you can build and break, no mining fatigue, nobody else opens your chests.
@@ -103,6 +103,21 @@ Data files (don't edit while the store runs): ~/lifesteal2/config/web-store/
 /plot admin rent <plot 1-8> <uuid> <name> <days>   give someone a plot for free
 /plot admin evict <plot>      end a rental (their blocks are removed after the 1 day grace)
 /plot admin clear <plot>      free a plot right now and remove its blocks
+/plot admin list              all plots with their corners
+/plot admin setarea <id> <x1 y1 z1> <x2 y2 z2> [name]   add a plot or move/resize one (see below)
+/plot admin remove <id>       delete a plot nobody rents
+
+Setting the shop areas (rentable plots) at spawn:
+  1. Stand at one corner of the area (floor level) and press F3 to read your block coordinates, or look at
+     the corner block: when you type the command, Tab fills in the block you are looking at.
+  2. Do the same for the opposite corner, at the top (include the space above the floor that renters may
+     build in).
+  3. Type, for example:   /plot admin setarea 9 300 100 -20 312 115 -8 Market Stall 9
+     The id is the plot number on the website; use a new number to add a plot, or an existing one to move
+     or resize it (a rented plot keeps its renter). Plots can't overlap.
+  4. /plot admin list to check. The website and /plot show the new plot right away.
+  Plots should be inside spawn: there, everyone else is blocked from building, and only the renter can build
+  and break their own blocks inside the plot.
 /revive <player>              revive someone for free
 /cosmicstore balance <uuid>   /cosmicstore refund <uuid> <amount>   (refund = give money back)
 /cosmicstore bonushearts get|add|reset <uuid> [n]
