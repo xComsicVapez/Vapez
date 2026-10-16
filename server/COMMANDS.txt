@@ -7,6 +7,9 @@ PLAY.COSMICPIXEL.ORG (lifesteal2) - COMMAND LIST
 
 EVERYONE - TELEPORTING
 ----------------------
+Teleports take 5 seconds: stand still and don't get hit, or it is cancelled.
+For 15 seconds after PvP you are "in combat": /spawn, /rtp, /home, /tpa, /tpaccept,
+/back, /warp, /suicide and /afk are blocked, and logging out kills you.
 /spawn                      Go to spawn
 /rtp   (/randomteleport)    Random teleport about 1000 blocks from spawn (30 s cooldown)
 /tpa <player>               Ask to teleport to a player
@@ -17,8 +20,8 @@ EVERYONE - TELEPORTING
 /back                       Go back to where you last teleported from
 /warp <name>  /warp list    Use a warp set by an op
 
-EVERYONE - HOMES (1 home per player)
-------------------------------------
+EVERYONE - HOMES (3 homes per player)
+-------------------------------------
 /sethome [name]             Set a home where you stand (default name "home")
 /home <name>                Teleport to a home
 /homes                      List your homes
@@ -27,13 +30,17 @@ EVERYONE - HOMES (1 home per player)
 
 EVERYONE - ECONOMY AND SHOPS
 ----------------------------
+One wallet for everything: selling, /pay, the auction house and /bal all use the
+same money (shown on the sidebar).
+/sell                       Open the sell menu
 /shop                       Open the shop (selling only, buying is turned off)
 /sellhand [all|<amount>]    Sell the item in your hand
 /worth [all|<item>]         See what an item sells for
 /bal [player]  /balance     Check money
-/baltop  /money top         Richest players
+/baltop                     Richest players
 /pay <player> <amount>      Send money
 /ah                         Auction house (/ah sell <price>, /ah buy, /ah claim, /ah cancel)
+                            You also get 10 coins for every 15 minutes played
 /enchants  (/ce)            Custom enchant menu: spend XP levels on random enchant books
                             Common 5 lvls, Epic 15, Legendary 25, Exclusive 40
                             (The "Custom Enchants" villager at spawn also sells max-level books)
@@ -46,6 +53,14 @@ Heart recipe (crafting table):
     Gold Block    | Netherite Ingot | Gold Block
     Diamond Block | Gold Block      | Diamond Block
 Right-click a Heart to use it.
+
+EVERYONE - TEAMS
+----------------
+/allied create <name> <tag>     Make a team (the tag shows next to your name)
+/allied invite <player>         Invite someone   /allied invAccept <team>  Join a team you were invited to
+/allied join <name>             Ask to join a team   /allied accept|deny <player>  Answer join requests
+/allied tm                      Toggle team chat
+/allied leave  /allied disband  /allied kick <player>  /allied info  /allied settings
 
 EVERYONE - HANDY STUFF
 ----------------------
@@ -61,8 +76,7 @@ EVERYONE - HANDY STUFF
 /msg <player> <message>     Private message (also /tell, /w)
 /me <action>                Action message
 /list                       Who's online
-/simpleskills togglehud     Show/hide the skills HUD
-/simpleskills leaderboard   Skills leaderboard
+/sidebar <style>            Change the sidebar ("donut" is the default, "disable" hides it)
 /voicechat                  Simple Voice Chat (needs the client mod; press V in-game)
 
 Rules of the world: spawn has no fall damage and no PvP. Death drops can be
@@ -71,8 +85,16 @@ picked up by anyone. Bedrock players join on port 19132.
 
 OWNER / OPS - AI ADMIN (xCosmicVapez only, op not required)
 -----------------------------------------------------------
-/ai <request>               Ask the server AI to do something ("install a mod for X", "what's the tps")
-/ai yes   /ai no            Approve or reject an action the AI wants to run
+/ai <request>               Ask the server AI to do something ("install a mod for X", "what's the tps").
+                            It works on its own now (thinks first, checks its work, up to 20 steps);
+                            it only asks first for stop, op, deop, ban-ip, pardon-ip, kill @e,
+                            whitelist off and save-off.
+/ai yes   /ai no            Approve or reject one of those actions
+/ai reset                   Start a fresh conversation
+/ai play on   /ai play off  Make the AI player "CosmicAI" join or leave the game
+/ai bot <goal>              Give CosmicAI something to do ("follow me and help me mine")
+/ai play                    Is CosmicAI playing, and what is it doing
+(Players can talk to CosmicAI in chat by saying its name or "ai".)
 
 OWNER / OPS - PLAYERS AND MODERATION
 ------------------------------------
@@ -116,10 +138,11 @@ OWNER / OPS - ECONOMY
 /adminshop edit|reload|item|category|multiplier   Shop editor (only level-4 ops can buy)
 /ah admin
 
-OWNER / OPS - SKILLS
---------------------
-/simpleskills query|setlevel|addxp|setprestige|reset <player> ...
-/simpleskills reload
+OWNER / OPS - FAKE PLAYERS (Carpet)
+-----------------------------------
+/player <name> spawn        Spawn a fake player (keeps chunks loaded, e.g. for farms)
+/player <name> kill|attack|use|move|look|jump|sneak|sprint|drop|stop ...
+/carpet <rule> [value]      Carpet settings (/carpet list)
 
 OWNER / OPS - GRIEF LOGS AND ROLLBACK (MineTracer)
 --------------------------------------------------
