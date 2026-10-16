@@ -291,6 +291,24 @@
       }
     },
     {
+      "slug": "bluemap",
+      "title": "BlueMap",
+      "version": "5.7-fabric",
+      "version_id": "Dr2hvJBc",
+      "dependency_of": null,
+      "env": {
+        "client": "unsupported",
+        "server": "required"
+      },
+      "file": {
+        "name": "bluemap-5.7-fabric.jar",
+        "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/Dr2hvJBc/bluemap-5.7-fabric.jar",
+        "size": 5517229,
+        "sha1": "42777d6140234a75243c04156b63cfbe562a1cdb",
+        "sha512": "b7483d6ff90f09258f994a6f487846c1dfe814f1d0af931bd50426fd0afc98ccad033c5f440705edc08a8ced03cf216171ba1571db2221aca4ec620d676443a4"
+      }
+    },
+    {
       "slug": "c2me-fabric",
       "title": "Concurrent Chunk Management Engine (Fabric)",
       "version": "0.3.0+alpha.0.364+1.21.1",
@@ -1625,19 +1643,19 @@
     {
       "slug": "supplementaries",
       "title": "Supplementaries",
-      "version": "1.21.1-4.0.1",
-      "version_id": "q5DOgja6",
+      "version": "1.21.1-4.0.2",
+      "version_id": "CjTooKpp",
       "dependency_of": null,
       "env": {
         "client": "required",
         "server": "required"
       },
       "file": {
-        "name": "supplementaries-1.21.1-4.0.1-fabric.jar",
-        "url": "https://cdn.modrinth.com/data/fFEIiSDQ/versions/q5DOgja6/supplementaries-1.21.1-4.0.1-fabric.jar",
-        "size": 13670415,
-        "sha1": "fdd5f803457b3bc8fbd6544b796e30e1a22dc180",
-        "sha512": "a249eace57a6c3def3d0d959daf23d7f35c927d29fcdf7a7b2e66bafb6501ac77699013345f163e682656106ae898fa3fb6b9ca57c278033c1082d98791def3a"
+        "name": "supplementaries-1.21.1-4.0.2-fabric.jar",
+        "url": "https://cdn.modrinth.com/data/fFEIiSDQ/versions/CjTooKpp/supplementaries-1.21.1-4.0.2-fabric.jar",
+        "size": 13669146,
+        "sha1": "761a561938ced83d5e38da50cdc44899b5052f3e",
+        "sha512": "b55d0251f0f563ea6d7a415d0d99041eeba98b1ba0db0b884e9f10039ea2690fd9f2a9bf7b598b0235bfd8990e95a5c422b02df828bef6967927d92a7c00c476"
       }
     },
     {

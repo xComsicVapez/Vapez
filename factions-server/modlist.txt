@@ -11,6 +11,7 @@ universal-graves
 styled-chat
 spark
 chunky                   # world pre-generation
+bluemap                  # web map with faction claims, http://<server>:8100
 
 # --- Performance (big world, many players) ---
 lithium
