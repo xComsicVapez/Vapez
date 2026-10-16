@@ -52,7 +52,7 @@ public final class SpawnRules {
 	private static final Set<Item> BANNED = Set.of(Items.TNT, Items.TNT_MINECART, Items.END_CRYSTAL, Items.RESPAWN_ANCHOR,
 		Items.FLINT_AND_STEEL, Items.FIRE_CHARGE, Items.LAVA_BUCKET, Items.PISTON, Items.STICKY_PISTON, Items.DISPENSER,
 		Items.WITHER_SKELETON_SKULL);
-	private static final int FATIGUE_TICKS = 60, FATIGUE_LEVEL = 2;
+	private static final int FATIGUE_TICKS = 60, FATIGUE_LEVEL = 127;
 	private static final Set<UUID> FATIGUED = new HashSet<>();
 	private static int ticks;
 
