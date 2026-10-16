@@ -6,6 +6,7 @@ it reads public chat and chat is untrusted.
 """
 
 import json
+import random
 import re
 import threading
 import time
@@ -14,6 +15,8 @@ from pathlib import Path
 
 NAME_RE = re.compile(r"^\.?[A-Za-z0-9_]{1,16}$")
 CHAT_RE = re.compile(r"\]: <([^>]{1,20})> (.+)$")
+# "<bot> was slain by Steve", "... shot by Steve using [Bow]", "... whilst fighting Steve", "... to escape Steve".
+DEATH_BY_RE = re.compile(r"(?: by | fighting | escape )(\.?[A-Za-z0-9_]{1,32})")
 POS_RE = re.compile(r"^(.+?) has the following entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]", re.M)
 ITEM_ID_RE = re.compile(r'\bid: "minecraft:([a-z0-9_]+)"')
 COUNT_RE = re.compile(r"\bcount: (\d+)")
@@ -58,6 +61,8 @@ blocks away in a new direction, or player_command "rtp" to go to the wilderness.
 - walk_to goes in a straight line and jumps over 1-block steps; if it says you are stuck, try a different \
 route. Use teleport_to_player only when a player asks you to come to them or you are very far away.
 - Eat when food is below 14 (select the food with hotbar, then use once). Flee or fight when health is low.
+- Players win a trophy for killing you, so they will hunt you: wear your best armour, keep your distance from \
+strangers with weapons and don't stand still in the open. Now and then you are teleported somewhere new with /rtp.
 - Chat only when you have something to say: answer people who talk to you, at most 2 short sentences.
 - Never attack players; fight only hostile mobs.
 
@@ -244,6 +249,24 @@ def planks_for(log):
 # earned in survival.
 GEAR_TAG = "custom_data={cosmicai:1b}"
 
+# What a player can win for killing the bot: (weight, name, description, item or special, count). Kept modest, like
+# the web store: nice to have, never game-breaking. "bounty" pays in-game money, "heart" is a bonus heart above the cap.
+KILL_REWARDS = [
+    (10, "Circuit Blade", "A sword pulled from the bot's code", "iron_sword[enchantments={sharpness:3,unbreaking:2}]", 1),
+    (10, "Overclocked Pickaxe", "It still hums a little", "iron_pickaxe[enchantments={efficiency:3,unbreaking:2}]", 1),
+    (8, "Shock Absorbers", "The bot never took fall damage", "iron_boots[enchantments={feather_falling:3,unbreaking:2}]", 1),
+    (10, "Bot's Lunchbox", "It was saving these", "golden_apple", 3),
+    (10, "Ender Cache", "Emergency exits", "ender_pearl", 8),
+    (8, "Spare Batteries", "Fully charged", "redstone_block", 8),
+    (8, "Data Shard", "Fragments of an AI's memories", "amethyst_shard", 1),
+    (6, "Antenna", "How it heard the server chat", "lightning_rod", 1),
+    (6, "CosmicAI Trophy Head", "Proof you beat the machine", "player_head[profile={name:\"CosmicAI\"}]", 1),
+    (10, "Bounty", "$1,500 bounty", "bounty", 1500),
+    (3, "Machine Heart", "A bonus heart past the 20 heart limit", "heart", 1),
+]
+KILL_REWARD_COOLDOWN = 24 * 3600   # per player, so nobody farms the bot
+KILL_REWARD_MIN_ALIVE = 300        # the bot must have been back for 5 minutes since its last death
+
 SMELTS = {
     "raw_iron": "iron_ingot", "raw_gold": "gold_ingot", "raw_copper": "copper_ingot", "sand": "glass",
     "red_sand": "glass", "cobblestone": "stone", "cobbled_deepslate": "deepslate", "stone": "smooth_stone",
@@ -328,6 +351,11 @@ class AIPlayer:
         self.last_cycle = 0.0
         self.last_chat = 0.0
         self.idle = 0
+        self.trophies_file = server_dir / "config" / "ai-player-trophies.json"
+        self.spawned_at = time.time()
+        low, high = self.cfg.get("rtp_minutes", [20, 60])
+        self.rtp_minutes = (float(low), float(high))
+        self.next_rtp = time.time() + 60 * random.uniform(*self.rtp_minutes)
 
     # ------------------------------------------------------------ control
 
@@ -365,6 +393,7 @@ class AIPlayer:
         if self.name.lower() in self.run("banlist players").lower():
             self.run(f"pardon {self.name}")
         result = self.carpet(f"spawn at {self.spawn} facing 0 0 in minecraft:overworld in survival")
+        self.spawned_at = time.time()
         self.audit(f"{self.name} spawned: {result}")
         time.sleep(2)
         self.run(f"clear {self.name} *[{GEAR_TAG}]")
@@ -1261,11 +1290,90 @@ class AIPlayer:
             self.log_offset = log.tell()
         mentioned = False
         for line in lines:
+            death = re.search(r"\[Server thread/INFO\]: " + re.escape(self.name) + r" (.+)$", COLOR_CODES.sub("", line.rstrip()))
+            if death and not death.group(1).startswith(("joined", "left", "lost connection", "has ", "[")):
+                killer = DEATH_BY_RE.search(death.group(1))
+                if killer and killer.group(1) != self.name:
+                    try:
+                        self.reward_killer(killer.group(1))
+                    except Exception as error:
+                        print(f"AI kill reward error: {error!r}", flush=True)
             match = CHAT_RE.search(COLOR_CODES.sub("", line.rstrip()))
             if match and match.group(1) != self.name:
                 self.chat.append(f"<{match.group(1)}> {match.group(2)[:200]}")
                 mentioned |= self.name.lower() in match.group(2).lower() or "ai" in match.group(2).lower().split()
         return mentioned
+
+    # ------------------------------------------------------------ being hunted
+
+    def reward_killer(self, killer):
+        """A player killed the bot: give them a random, serial-numbered trophy (once a day per player)."""
+        online = dict(re.findall(r"(\.?[A-Za-z0-9_]{1,32}) \(([0-9a-f\-]{36})\)", self.run("list uuids")))
+        if killer not in online:
+            return
+        now = time.time()
+        state = json.loads(self.trophies_file.read_text()) if self.trophies_file.exists() else {}
+        state.setdefault("count", 0)
+        cooldowns = state.setdefault("cooldowns", {})
+        if now - self.spawned_at < KILL_REWARD_MIN_ALIVE:
+            return
+        if now - cooldowns.get(online[killer], 0) < KILL_REWARD_COOLDOWN:
+            self.run(f'tellraw {killer} {{"text":"You already took a trophy from {self.name} today.","color":"gray"}}')
+            return
+        uuid = online[killer]
+        rewards = list(KILL_REWARDS)
+        while rewards:
+            weight, name, about, item, count = random.choices(rewards, [r[0] for r in rewards])[0]
+            rewards.remove((weight, name, about, item, count))
+            serial = state["count"] + 1
+            if item == "bounty":
+                ok = self.run(f"cosmicstore refund {uuid} {count}").startswith("OK")
+            elif item == "heart":
+                ok = self.run(f"cosmicstore bonushearts add {uuid} 1").startswith("OK")
+            else:
+                base, _, components = item.partition("[")
+                parts = [components.rstrip("]")] if components else []
+                lore = [about, f"Taken from {self.name} by {killer}", f"Trophy #{serial} - {time.strftime('%b %d %Y')}"]
+                parts.append("custom_name=" + json.dumps({"text": f"{name} #{serial}", "color": "gold", "italic": False}))
+                parts.append("lore=" + json.dumps([{"text": line, "color": "gray", "italic": False} for line in lore]))
+                ok = self.run(f"give {killer} minecraft:{base}[{','.join(parts)}] {count}").startswith("Gave")
+            if ok:
+                break
+        else:
+            return
+        state["count"] = serial
+        cooldowns[uuid] = now
+        state.setdefault("given", []).append({"serial": serial, "player": killer, "uuid": uuid, "reward": name,
+                                             "at": time.strftime("%Y-%m-%d %H:%M:%S")})
+        tmp = self.trophies_file.with_suffix(".tmp")
+        tmp.write_text(json.dumps(state, indent=2))
+        tmp.replace(self.trophies_file)
+        self.audit(f"{killer} killed {self.name} and won trophy #{serial}: {name}")
+        self.run("tellraw @a " + json.dumps([
+            {"text": f"{killer} hunted down {self.name} and found ", "color": "yellow"},
+            {"text": f"{name} #{serial}", "color": "gold", "bold": True},
+            {"text": f" ({about})!", "color": "yellow"}]))
+        self.memory.append(f"{killer} killed you and took {name}; avoid them or fight back better")
+
+    def maybe_rtp(self):
+        """Now and then jump somewhere new with /rtp, unless the owner gave a goal or a base is half built."""
+        if time.time() < self.next_rtp or self.goal:
+            return
+        base = self.saved_base()
+        if base and not base.get("done"):
+            self.next_rtp = time.time() + 600
+            return
+        before = self.position()
+        self.run(f"execute as {self.name} at @s run rtp")
+        time.sleep(8)
+        after = self.position()
+        moved = abs(after[0] - before[0]) + abs(after[2] - before[2]) > 50
+        # A cooldown or failed search: try again a bit later instead of waiting a full interval.
+        self.next_rtp = time.time() + (60 * random.uniform(*self.rtp_minutes) if moved else 300)
+        if moved:
+            self.audit(f"{self.name} randomly teleported to {after[0]:.0f} {after[1]:.0f} {after[2]:.0f}")
+            self.memory.append(f"you used /rtp and are now at {after[0]:.0f} {after[1]:.0f} {after[2]:.0f}; "
+                               "explore and gather here")
 
     # ------------------------------------------------------------ tools
 
@@ -1364,6 +1472,7 @@ class AIPlayer:
             self.spawn_bot()
             if not self.online():
                 return
+        self.maybe_rtp()
         user = (f"Owner's goal: {self.goal or 'none, play freely'}\n"
                 f"Your recent turns: {' | '.join(self.memory) or 'none yet'}\n\n"
                 f"Observation:\n{self.observe()}\n\n"

@@ -345,7 +345,29 @@ public final class Plots {
 								.then(Commands.argument("days", IntegerArgumentType.integer(1, 365))
 									.executes(Plots::adminRent))))))
 				.then(Commands.literal("evict")
-					.then(Commands.argument("id", IntegerArgumentType.integer(1)).executes(Plots::adminEvict)))));
+					.then(Commands.argument("id", IntegerArgumentType.integer(1)).executes(Plots::adminEvict)))
+				.then(Commands.literal("clear")
+					.then(Commands.argument("id", IntegerArgumentType.integer(1)).executes(Plots::adminClear)))));
+	}
+
+	/** Ends a rental right now, without the grace day, and removes the renter's blocks. */
+	private static int adminClear(CommandContext<CommandSourceStack> ctx) {
+		int id = IntegerArgumentType.getInteger(ctx, "id");
+		int left;
+		synchronized (Plots.class) {
+			Plot plot = PLOTS.stream().filter(p -> p.id == id).findFirst().orElse(null);
+			if (plot == null || plot.renter == null) {
+				ctx.getSource().sendFailure(Component.literal("ERROR plot " + id + " is not rented"));
+				return 0;
+			}
+			plot.until = Math.min(plot.until, now() - GRACE_SECONDS - 1);
+			expire(ctx.getSource().getServer());
+			left = plot.renter == null ? 0 : plot.placed.size();
+			save();
+		}
+		ctx.getSource().sendSuccess(() -> Component.literal(left == 0 ? "OK cleared"
+			: "OK " + left + " blocks are in unloaded chunks; they are removed when the plot frees up"), false);
+		return 1;
 	}
 
 	private static String duration(long seconds) {

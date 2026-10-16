@@ -55,6 +55,8 @@ DEFAULTS = {
     "plot_price_per_week": 2500,
     "plot_max_weeks": 4,
     "max_bonus_hearts": 5,
+    # Bots revived by their own tooling (the AI bridge unbans CosmicAI itself).
+    "ignore_players": ["CosmicAI", "AITest"],
 }
 CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 SESSION_SECONDS = 12 * 3600
@@ -395,7 +397,8 @@ def check_eliminations():
         elims = read_json(DATA / "eliminations.json", {})
         for uuid, ban in bans.items():
             entry = elims.get(uuid)
-            if ban.get("source") != "LifestealMod" or (entry and entry["status"] == "waiting"):
+            if ban.get("source") != "LifestealMod" or (entry and entry["status"] == "waiting") \
+                    or ban.get("name") in CONFIG["ignore_players"]:
                 continue
             created = parse_ban_time(ban.get("created"))
             entry = {"uuid": uuid, "name": ban["name"], "at": created,
@@ -408,7 +411,8 @@ def check_eliminations():
     for entry in new:
         log("ELIMINATED", entry["name"], "auto revive", when(entry["revive_at"]))
         RCON.run(f"cosmicstore bonushearts reset {entry['uuid']}")
-        reban(entry)
+        if entry["revive_at"] > now:
+            reban(entry)
 
     unbanned = []
     with LOCK:
