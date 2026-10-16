@@ -1,6 +1,7 @@
 package dev.cosmicpixel.spawnguard;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
@@ -13,6 +14,10 @@ public class SpawnGuard implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		ProtectedAreas.register();
+		Plots.register();
+		SpawnRules.register();
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> Plots.commands(dispatcher));
 		ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
 			if (!(entity instanceof ServerPlayer victim)) {
 				return true;
@@ -27,8 +32,15 @@ public class SpawnGuard implements ModInitializer {
 	}
 
 	private static boolean inSpawn(Entity entity) {
-		double x = entity.getX(), z = entity.getZ();
-		return entity.level().dimension() == Level.OVERWORLD
-			&& x >= MIN_X && x < MAX_X + 1 && z >= MIN_Z && z < MAX_Z + 1;
+		return inSpawn(entity.level(), entity.getX(), entity.getZ());
+	}
+
+	static boolean inSpawn(Level level, double x, double z) {
+		return inSpawn(level, x, z, 0);
+	}
+
+	static boolean inSpawn(Level level, double x, double z, int margin) {
+		return level.dimension() == Level.OVERWORLD
+			&& x >= MIN_X - margin && x < MAX_X + 1 + margin && z >= MIN_Z - margin && z < MAX_Z + 1 + margin;
 	}
 }
