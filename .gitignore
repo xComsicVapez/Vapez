@@ -1,0 +1,10 @@
+firmware/.pio/
+__pycache__/
+hardware/output/*.kicad_prl
+hardware/output/*.dsn
+hardware/output/*.ses
+hardware/output/freerouting.log
+hardware/output/fp-info-cache
+hardware/output/*-backups/
+hardware/output/jlcpcb/gerbers/
+logs/
