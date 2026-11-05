@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>240 FPS Superglide Timing Helper</title>
+  <style>
+    :root {
+      --bg: #0e1412;
+      --panel: #17201c;
+      --ink: #e7f0ea;
+      --muted: #9bb0a4;
+      --accent: #3dcf8e;
+      --warn: #e6b35a;
+      --bad: #e07070;
+      --line: #2a3a33;
+      --font-display: "Segoe UI", "Helvetica Neue", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-display);
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #1c3a2d 0%, transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, #243028 0%, transparent 45%),
+        var(--bg);
+      padding: 2rem 1.25rem 3rem;
+    }
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      letter-spacing: -0.03em;
+      margin: 0 0 0.4rem;
+    }
+    .lede {
+      color: var(--muted);
+      margin: 0 0 1.5rem;
+      line-height: 1.45;
+      max-width: 40rem;
+    }
+    section {
+      background: color-mix(in srgb, var(--panel) 92%, black);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1.1rem 1.2rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 0 0 0.85rem;
+      font-weight: 600;
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+      margin-bottom: 0.85rem;
+    }
+    @media (max-width: 560px) {
+      .row { grid-template-columns: 1fr; }
+    }
+    input[type="number"] {
+      width: 100%;
+      background: #0c1210;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 0.55rem 0.7rem;
+      font-size: 1rem;
+    }
+    .result {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0.2rem 0 0.35rem;
+    }
+    .meta { color: var(--muted); font-size: 0.92rem; line-height: 1.4; }
+    .good { color: var(--accent); }
+    .mid { color: var(--warn); }
+    .bad { color: var(--bad); }
+    ul { margin: 0.4rem 0 0; padding-left: 1.1rem; color: var(--muted); }
+    li { margin: 0.25rem 0; }
+    a { color: var(--accent); }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.9em;
+      background: #0c1210;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+    }
+    button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: #13201a;
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 0.55rem 0.9rem;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+    button:hover { border-color: var(--accent); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>240 FPS Superglide Timing Helper</h1>
+    <p class="lede">
+      Matches the chance math used by
+      <a href="https://apexmovement.tech/superglidetrainer/" target="_blank" rel="noreferrer">apexmovement.tech</a>.
+      Perfect at 240 FPS is Jump, then Crouch <strong>4.17 ms</strong> later (1.0 frame).
+    </p>
+
+    <section>
+      <h2>Chance from delay</h2>
+      <div class="row">
+        <div>
+          <label for="fps">FPS</label>
+          <input id="fps" type="number" min="30" max="500" step="1" value="240" />
+        </div>
+        <div>
+          <label for="delay">Jump → Crouch delay (ms)</label>
+          <input id="delay" type="number" min="0" max="50" step="0.05" value="4.17" />
+        </div>
+      </div>
+      <p id="chance" class="result good">—</p>
+      <p id="feedback" class="meta">—</p>
+    </section>
+
+    <section>
+      <h2>DKS travel → expected delay</h2>
+      <div class="row">
+        <div>
+          <label for="gap">Actuation gap (mm)</label>
+          <input id="gap" type="number" min="0.05" max="3" step="0.05" value="0.2" />
+        </div>
+        <div>
+          <label for="speed">Finger travel speed (mm/s)</label>
+          <input id="speed" type="number" min="10" max="500" step="1" value="48" />
+        </div>
+      </div>
+      <p id="travel" class="result">—</p>
+      <p class="meta">
+        Delay ≈ gap ÷ speed. At 240 FPS you want ~4.17 ms.
+        Default <code>0.2 mm</code> gap needs ~<code>48 mm/s</code> release/press speed.
+      </p>
+      <div class="actions">
+        <button type="button" id="snapIdeal">Snap speed for 1.0 frame</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Profile defaults (your binds)</h2>
+      <ul>
+        <li>DKS key: <code>C</code></li>
+        <li>Jump output: <code>Space</code></li>
+        <li>Crouch output: <code>Left Ctrl</code></li>
+        <li>Release method start: Space <code>2.7 mm</code> → Ctrl <code>2.5 mm</code></li>
+        <li>Press method start: Space <code>0.3 mm</code> → Ctrl <code>0.55 mm</code></li>
+      </ul>
+    </section>
+  </main>
+  <script>
+    function calcChance(fps, delayMs) {
+      const frame = 1 / fps;
+      const delayS = delayMs / 1000;
+      const frames = delayS / frame;
+      let chance = 0;
+      let tip = "";
+      if (frames < 1) {
+        chance = frames * 100;
+        tip = `Crouch later by ${(1 - frames).toFixed(2)} frames (${(frame - delayS).toFixed(5)}s)`;
+      } else if (frames < 2) {
+        chance = (2 - frames) * 100;
+        tip = `Crouch sooner by ${(frames - 1).toFixed(2)} frames (${(delayS - frame).toFixed(5)}s)`;
+      } else {
+        chance = 0;
+        tip = `Crouched too late by ${(frames - 1).toFixed(2)} frames`;
+      }
+      return { frames, chance, tip, frameMs: frame * 1000 };
+    }
+
+    function tone(chance) {
+      if (chance >= 85) return "good";
+      if (chance >= 40) return "mid";
+      return "bad";
+    }
+
+    function render() {
+      const fps = Number(document.getElementById("fps").value) || 240;
+      const delay = Number(document.getElementById("delay").value) || 0;
+      const { frames, chance, tip, frameMs } = calcChance(fps, delay);
+      const el = document.getElementById("chance");
+      el.className = "result " + tone(chance);
+      el.textContent = `${chance.toFixed(2)}% chance`;
+      document.getElementById("feedback").textContent =
+        `${frames.toFixed(2)} frames @ ${fps} FPS (1 frame = ${frameMs.toFixed(3)} ms). ${tip}`;
+
+      const gap = Number(document.getElementById("gap").value) || 0.2;
+      const speed = Number(document.getElementById("speed").value) || 48;
+      const travelMs = (gap / speed) * 1000;
+      const t = calcChance(fps, travelMs);
+      const travel = document.getElementById("travel");
+      travel.className = "result " + tone(t.chance);
+      travel.textContent = `${travelMs.toFixed(2)} ms → ${t.chance.toFixed(1)}%`;
+    }
+
+    document.getElementById("snapIdeal").addEventListener("click", () => {
+      const fps = Number(document.getElementById("fps").value) || 240;
+      const gap = Number(document.getElementById("gap").value) || 0.2;
+      const idealMs = 1000 / fps;
+      const speed = (gap / idealMs) * 1000;
+      document.getElementById("speed").value = speed.toFixed(1);
+      document.getElementById("delay").value = idealMs.toFixed(3);
+      render();
+    });
+
+    ["fps", "delay", "gap", "speed"].forEach((id) => {
+      document.getElementById(id).addEventListener("input", render);
+    });
+    render();
+  </script>
+</body>
+</html>

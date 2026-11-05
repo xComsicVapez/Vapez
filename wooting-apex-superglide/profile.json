@@ -1,0 +1,108 @@
+{
+  "name": "Apex 240FPS Superglide (C = DKS)",
+  "device": "Wooting 60HE",
+  "game": "Apex Legends",
+  "target_fps": 240,
+  "frame_time_ms": 4.1667,
+  "ideal_jump_to_crouch_delay_ms": 4.1667,
+  "trainer": "https://apexmovement.tech/superglidetrainer/",
+  "in_game_binds": {
+    "jump": "Space",
+    "crouch": "Left Ctrl",
+    "note": "Keep these binds in Apex. Do NOT bind crouch to C in-game — C becomes a dedicated DKS key that synthesizes Space then Left Ctrl."
+  },
+  "performance": {
+    "tachyon_mode": true,
+    "polling_rate_hz": 8000,
+    "rapid_trigger": {
+      "enabled": true,
+      "keys": ["W", "A", "S", "D"],
+      "continuous": true,
+      "sensitivity_mm": 0.2,
+      "note": "Leave Rapid Trigger OFF on C so DKS release points stay predictable."
+    },
+    "actuation": {
+      "global_mm": 0.4,
+      "wasd_mm": 0.2,
+      "space_mm": 0.3,
+      "left_ctrl_mm": 0.3,
+      "c_key_note": "C uses DKS actuation points below, not the global value."
+    }
+  },
+  "dks": {
+    "key": "C",
+    "recommended_method": "release_upstroke",
+    "methods": {
+      "release_upstroke": {
+        "description": "Official Wooting Apex approach. Hold C while mantling, release at the end of the mantle. Jump fires first on the way up, crouch one travel segment later.",
+        "how_to_use_in_game": "Sprint into mantle → hold C through the climb → release C in the last ~0.15s of the mantle.",
+        "bindings": [
+          {
+            "row": 1,
+            "output": "Space",
+            "role": "Jump",
+            "trigger": "single",
+            "section": "Key Release (upstroke)",
+            "actuation_mm": 2.7,
+            "order": "fires first as you release past 2.7mm"
+          },
+          {
+            "row": 2,
+            "output": "Left Ctrl",
+            "role": "Crouch",
+            "trigger": "single",
+            "section": "Key Release (upstroke)",
+            "actuation_mm": 2.5,
+            "order": "fires second as you continue releasing past 2.5mm"
+          }
+        ],
+        "gap_mm": 0.2,
+        "tuning": {
+          "if_crouch_too_early_same_frame": "Widen gap: move crouch shallower (e.g. 2.7 → 2.4) or slow your release slightly.",
+          "if_crouch_too_late_2plus_frames": "Narrow gap: move crouch closer to jump (e.g. 2.5 → 2.55–2.6) or release a bit faster.",
+          "start_points_mm": [2.7, 2.5],
+          "adjust_step_mm": 0.05
+        }
+      },
+      "press_downstroke": {
+        "description": "Alternate smash method. Tap/smash C at the end of the mantle. Jump actuates first, crouch a hair deeper.",
+        "how_to_use_in_game": "Sprint into mantle → smash C once in the last ~0.15s of the mantle.",
+        "bindings": [
+          {
+            "row": 1,
+            "output": "Space",
+            "role": "Jump",
+            "trigger": "single",
+            "section": "Key Press (downstroke)",
+            "actuation_mm": 0.3,
+            "order": "fires first when you pass 0.3mm"
+          },
+          {
+            "row": 2,
+            "output": "Left Ctrl",
+            "role": "Crouch",
+            "trigger": "single",
+            "section": "Key Press (downstroke)",
+            "actuation_mm": 0.55,
+            "order": "fires second when you pass 0.55mm"
+          }
+        ],
+        "gap_mm": 0.25,
+        "tuning": {
+          "if_crouch_too_early_same_frame": "Increase crouch mm (wider gap) or press a bit slower.",
+          "if_crouch_too_late_2plus_frames": "Decrease crouch mm toward jump (narrower gap) or press harder/faster.",
+          "start_points_mm": [0.3, 0.55],
+          "adjust_step_mm": 0.05
+        }
+      }
+    }
+  },
+  "trainer_verification": {
+    "fps": 240,
+    "jump_bind": "Space",
+    "crouch_bind": "Control",
+    "perfect_delay_ms": 4.1667,
+    "chance_formula": "frames = delay_s * fps; if frames < 1: chance = frames*100; elif frames < 2: chance = (2-frames)*100; else 0",
+    "target_consistency_pct": 85
+  }
+}
