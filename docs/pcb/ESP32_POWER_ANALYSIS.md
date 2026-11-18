@@ -47,11 +47,12 @@ Summary diagram: `esp32_power_pin_verdict.png`
 
 If copper is right, these are the usual kill switches:
 
-1. **Wrong module type** — bare WROOM / bare chip instead of DevKit.
-2. **USB flipped 180°** — seats `VIN` on the unpowered end and can put board power on the wrong corner; always match USB to the power-fed end / silk mark.
-3. **Buck not actually at 5.0V** — adjustable modules can leave the factory above 5V; some “5V fixed” clones are mis-set. Measure **before** plugging ESP32s.
-4. **Battery / VM shorted onto logic** — if the buck is installed backwards or bridged to the motor rail, ESP `VIN` can see pack voltage.
-5. **5V on GPIO** — DevKit IO is **3.3V only**; a 5V signal into a GPIO can kill the chip even when power pins are correct.
+1. **Wrong power source / overvoltage event** — using a **monitor power cable** (or any high-V brick) with the buck + ESP32s already installed. Monitor DC bricks are often **12V / 19V / 19.5V**; a wall **AC** monitor cord is catastrophic if it touches the robot supply. A **spark on the other cable** (not on the PCB) still means a short / wrong polarity / surge dumped into the board supply. Mini bucks commonly **fail short IN→OUT** under that abuse, so raw high V lands on the **5V rail → ESP VIN** and kills both modules. See `renders/monitor_cable_yes_that_can_kill.png`.
+2. **Wrong module type** — bare WROOM / bare chip instead of DevKit.
+3. **USB flipped 180°** — seats `VIN` on the unpowered end and can put board power on the wrong corner; always match USB to the power-fed end / silk mark.
+4. **Buck not actually at 5.0V** — adjustable modules can leave the factory above 5V; some “5V fixed” clones are mis-set. Measure **before** plugging ESP32s.
+5. **Battery / VM shorted onto logic** — if the buck is installed backwards or bridged to the motor rail, ESP `VIN` can see pack voltage.
+6. **5V on GPIO** — DevKit IO is **3.3V only**; a 5V signal into a GPIO can kill the chip even when power pins are correct.
 
 ## Bring-up checklist (do this before another ESP32)
 
@@ -83,3 +84,5 @@ If you export the EasyEDA project (schematic + PCB), we can add those labels and
 - `renders/` — layer renders + assembled reference photo
 - `esp32_power_pin_verdict.png` — pin orientation summary
 - `renders/pcb_5v_rail_annotation.png` — 5V rail overlaid on copper
+- `renders/monitor_cable_yes_that_can_kill.png` — monitor-cable overvoltage / spark kill path
+- `renders/monitor_cable_failure_flow.png` — failure-flow diagram
