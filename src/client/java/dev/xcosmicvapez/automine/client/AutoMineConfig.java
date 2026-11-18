@@ -14,75 +14,98 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * JSON config at {@code config/automine.json} (rewritten on first launch / missing fields use defaults).
+ * JSON config at {@code config/automine.json}.
+ * Defaults follow a Complex-like prison command loop (sell all / rankupmax / mine)
+ * so allowlisted prison servers with the same command names work out of the box.
  */
 public final class AutoMineConfig {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private static final Path PATH = FabricLoader.getInstance().getConfigDir().resolve("automine.json");
 
+	/**
+	 * Named preset label only (documentation). Does not fetch anything remote.
+	 * {@code complex-like} = public Complex-style command names & 10s sell cooldown.
+	 */
+	public String prisonProfile = "complex-like";
+
 	// --- AutoReply ---
-	public boolean autoReplyEnabledByDefault = true;
+	public boolean autoReplyEnabledByDefault = false;
 	public int replyDelayTicksMin = 40;
 	public int replyDelayTicksMax = 120;
 	public int replyCooldownTicks = 300;
 	public boolean whispersOnly = true;
 	public List<String> replyMessages = defaultReplies();
-	/** Exact names (case-insensitive) never get auto-replies. */
 	public List<String> ignorePlayers = defaultIgnorePlayers();
-	/** If the sender name contains any of these, skip (staff tags, etc.). */
 	public List<String> ignoreNameContains = defaultIgnoreNameContains();
 
 	// --- Human feel ---
-	public double pauseChancePerSecond = 0.035;
-	public int pauseTicksMin = 10;
-	public int pauseTicksMax = 40;
-	public int afterBreakDelayMin = 1;
-	public int afterBreakDelayMax = 4;
-	public float lookJitterDegrees = 0.25f;
-	/** How fast the camera turns toward the next circle target (deg/tick). */
-	public float lookSpeedDegrees = 18f;
+	public double pauseChancePerSecond = 0.03;
+	public int pauseTicksMin = 8;
+	public int pauseTicksMax = 28;
+	public int afterBreakDelayMin = 0;
+	public int afterBreakDelayMax = 2;
+	public float lookJitterDegrees = 0.2f;
+	public float lookSpeedDegrees = 22f;
 
-	// --- Circle mining (good for high-efficiency picks) ---
+	// --- Circle mining ---
 	public boolean circleMine = true;
-	/** How far around you to hunt blocks (blocks). Vanilla reach ~4.5. */
 	public double circleRadius = 4.2;
-	public float circlePitchMin = -55f;
-	public float circlePitchMax = 55f;
-	/** Angular step when sweeping the ring. Smaller = denser. */
-	public float circleStepDegrees = 12f;
-	/** After clearing nearby blocks, tap forward this many ticks. */
-	public int forwardAssistTicks = 6;
+	public float circlePitchMin = -60f;
+	public float circlePitchMax = 60f;
+	public float circleStepDegrees = 10f;
+	public int forwardAssistTicks = 5;
 
-	// --- Block filters (empty whitelist = anything not blacklisted) ---
+	// --- Block filters ---
 	public List<String> blockWhitelist = defaultWhitelist();
 	public List<String> blockBlacklist = defaultBlacklist();
 
-	// --- Inventory / prison economy ---
+	// --- Complex-like economy loop ---
 	public boolean pauseWhenInventoryFull = true;
 	public boolean sellWhenFull = true;
-	/** e.g. "sell all" or "sell" — sent as a slash command. Empty disables. */
+	/** Complex: {@code /sell all} sells inventory + offhand backpack. */
 	public String sellCommand = "sell all";
-	public int sellCooldownTicks = 100;
+	/**
+	 * Complex applies a ~10s sell cooldown inside mines.
+	 * 20 ticks = 1s → 200 ticks = 10s.
+	 */
+	public int sellCooldownTicks = 200;
+	/**
+	 * Also sell on a timer while mining (mirrors Auto Sell–style cadence).
+	 * 0 disables. Default 200 = every 10s, aligned with Complex mine sell CD.
+	 */
+	public int periodicSellTicks = 200;
 	public String depositCommand = "";
 	public int depositCooldownTicks = 100;
 
+	/** After a successful sell attempt, run rankup (Complex: {@code /rankupmax}). */
+	public boolean rankupAfterSell = true;
+	public String rankupCommand = "rankupmax";
+	/** Small delay so sell money registers before rankup. */
+	public int rankupDelayTicks = 25;
+
+	/**
+	 * When AutoMine turns on, optionally run this once (Complex: {@code /mine} or {@code /mine a}).
+	 * Empty = skip.
+	 */
+	public String mineTeleportCommand = "mine";
+	public boolean teleportToMineOnStart = false;
+
 	// --- Tool guard ---
 	public boolean pauseOnLowDurability = true;
-	/** Stop mining when remaining durability is at or below this. */
 	public int minToolDurability = 15;
 
 	// --- Session limits (0 = unlimited) ---
-	public int maxSessionTicks = 12000;
-	public int maxBlocksPerSession = 4000;
+	public int maxSessionTicks = 0;
+	public int maxBlocksPerSession = 0;
 
 	private static List<String> defaultReplies() {
 		return new ArrayList<>(Arrays.asList(
 				"hey sorry grinding the mine rn",
 				"yo one sec mining for rank",
-				"hey what's good, afk mine for a bit",
-				"gimme a min in the pits",
+				"hey what's good, busy in mine",
+				"gimme a min ranking up",
 				"sup, selling soon brb",
-				"hey! busy mining will msg back"
+				"hey! mining will msg back"
 		));
 	}
 
@@ -94,37 +117,9 @@ public final class AutoMineConfig {
 		return new ArrayList<>(Arrays.asList("admin", "mod", "staff", "owner", "helper", "manager"));
 	}
 
-	/** Common prison mine blocks — edit for your server's mine. Empty list = all non-blacklisted. */
 	private static List<String> defaultWhitelist() {
-		return new ArrayList<>(Arrays.asList(
-				"minecraft:stone",
-				"minecraft:cobblestone",
-				"minecraft:cobbled_deepslate",
-				"minecraft:deepslate",
-				"minecraft:andesite",
-				"minecraft:diorite",
-				"minecraft:granite",
-				"minecraft:netherrack",
-				"minecraft:coal_ore",
-				"minecraft:deepslate_coal_ore",
-				"minecraft:iron_ore",
-				"minecraft:deepslate_iron_ore",
-				"minecraft:copper_ore",
-				"minecraft:deepslate_copper_ore",
-				"minecraft:gold_ore",
-				"minecraft:deepslate_gold_ore",
-				"minecraft:redstone_ore",
-				"minecraft:deepslate_redstone_ore",
-				"minecraft:lapis_ore",
-				"minecraft:deepslate_lapis_ore",
-				"minecraft:diamond_ore",
-				"minecraft:deepslate_diamond_ore",
-				"minecraft:emerald_ore",
-				"minecraft:deepslate_emerald_ore",
-				"minecraft:nether_quartz_ore",
-				"minecraft:nether_gold_ore",
-				"minecraft:ancient_debris"
-		));
+		// Empty = mine anything not blacklisted (safest across custom prison mines).
+		return new ArrayList<>();
 	}
 
 	private static List<String> defaultBlacklist() {
@@ -143,7 +138,8 @@ public final class AutoMineConfig {
 				"minecraft:chest",
 				"minecraft:trapped_chest",
 				"minecraft:ender_chest",
-				"minecraft:shulker_box"
+				"minecraft:shulker_box",
+				"minecraft:reinforced_deepslate"
 		));
 	}
 
@@ -165,6 +161,9 @@ public final class AutoMineConfig {
 	}
 
 	private void normalize() {
+		if (prisonProfile == null || prisonProfile.isBlank()) {
+			prisonProfile = "complex-like";
+		}
 		if (replyMessages == null || replyMessages.isEmpty()) {
 			replyMessages = defaultReplies();
 		}
@@ -185,6 +184,12 @@ public final class AutoMineConfig {
 		}
 		if (depositCommand == null) {
 			depositCommand = "";
+		}
+		if (rankupCommand == null) {
+			rankupCommand = "rankupmax";
+		}
+		if (mineTeleportCommand == null) {
+			mineTeleportCommand = "mine";
 		}
 	}
 

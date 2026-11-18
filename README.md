@@ -1,17 +1,10 @@
 # AutoMine
 
-Fresh **Fabric 1.21.1** client mod aimed at prison-style grinding (not a server plugin).
+Fabric **1.21.1** client mod for prison-style grinding on **servers that allow automation**.
 
-## Features
+Defaults use a **Complex-like** command profile (`/sell all`, 10s sell cooldown, `/rankupmax`, `/mine`) so allowlisted prisons with the same command names work with little config.
 
-- **Circle mine** — looks around you in a ring and breaks blocks (great with Efficiency picks) instead of one column
-- **Crosshair mode** — optional classic “mine what I’m looking at”
-- **Block whitelist / blacklist** — only break mine blocks you care about
-- **Inventory full** — pause + optional `/sell all` (and optional deposit command)
-- **Tool guard** — pause before your pick breaks
-- **Session limits** — auto-stop after time or block count
-- **Humanized pacing** — micro pauses, look jitter, short re-aim delays
-- **AutoReply** — delayed casual whisper replies; skips staff-like names
+> **Not for Complex Gaming.** Complex bans AFK mining / macros / autoclickers. This profile only copies their *public command names* as a template. Use it on servers that explicitly allow bots/automation.
 
 ## Controls
 
@@ -19,24 +12,34 @@ Fresh **Fabric 1.21.1** client mod aimed at prison-style grinding (not a server 
 |-----|--------|
 | **H** | Toggle AutoMine |
 | **J** | Toggle AutoReply |
-| **K** | Toggle circle mine ↔ crosshair |
+| **K** | Circle mine ↔ crosshair |
+| **L** | Force `/sell all` (respects cooldown) |
 
-## Config
+## Complex-like loop (defaults)
 
-`.minecraft/config/automine.json` (created on first launch). Important knobs:
+1. Circle-mine nearby blocks (good with high Efficiency picks)
+2. Every **10s** (and when inventory is full) run **`/sell all`**
+3. Shortly after sell, run **`/rankupmax`**
+4. Optional: set `teleportToMineOnStart` + `mineTeleportCommand` (e.g. `mine` or `mine k`)
 
-| Key | Default | Notes |
-|-----|---------|--------|
-| `circleMine` | `true` | Ring look-mine |
-| `circleRadius` | `4.2` | Reach around you |
-| `circleStepDegrees` | `12` | Sweep density |
-| `blockWhitelist` | common ores/stone | Empty list = all non-blacklisted |
-| `sellCommand` | `sell all` | Change to your prison’s sell cmd |
-| `depositCommand` | `""` | e.g. `deposit all` if the server has it |
-| `minToolDurability` | `15` | Stop before pick dies |
-| `maxSessionTicks` | `12000` | ~10 minutes (`0` = off) |
-| `maxBlocksPerSession` | `4000` | `0` = off |
-| `replyMessages` | prison-ish lines | Random whisper replies |
+Copy `config-examples/complex-like.json` → `.minecraft/config/automine.json` or edit the file AutoMine creates on first launch.
+
+| Setting | Default | Meaning |
+|---------|---------|---------|
+| `sellCommand` | `sell all` | Inv + backpack sell on Complex-style prisons |
+| `sellCooldownTicks` | `200` | 10 seconds |
+| `periodicSellTicks` | `200` | Sell while mining on that cadence (`0` = off) |
+| `rankupCommand` | `rankupmax` | After each sell |
+| `mineTeleportCommand` | `mine` | Used only if `teleportToMineOnStart` is true |
+| `blockWhitelist` | `[]` | Empty = any non-blacklisted block |
+
+## Other features
+
+- Circle look-mine or crosshair mode
+- Block blacklist (bedrock, chests, etc.)
+- Tool durability pause
+- Session limits (optional; off by default in this profile)
+- Whisper AutoReply (off by default)
 
 ## Requirements
 
@@ -46,19 +49,11 @@ Fresh **Fabric 1.21.1** client mod aimed at prison-style grinding (not a server 
 
 ## Build
 
-Needs **JDK 25+** for Fabric Loom (bytecode still targets 21):
+Needs **JDK 25+** for Fabric Loom (bytecode targets 21):
 
 ```bash
 export JAVA_HOME=/path/to/jdk-25
 ./gradlew build
 ```
 
-Jar: `build/libs/automine-1.0.0.jar`
-
-## Install
-
-1. Fabric 1.21.1 + Fabric API  
-2. Drop jar into `.minecraft/mods`  
-3. Join world, press **H** (and **K** if you want to switch modes)
-
-Many prison servers disallow automation — check rules before using online.
+Jar: `build/libs/automine-1.1.0.jar`

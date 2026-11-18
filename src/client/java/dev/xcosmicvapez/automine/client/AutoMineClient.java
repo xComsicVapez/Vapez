@@ -15,8 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Client-only AutoMine for prison-style grinding: circle look-mine, sell-on-full,
- * durability guard, session limits, and whisper auto-reply.
+ * Client-only AutoMine with a Complex-like prison command profile for allowlisted servers.
  */
 public class AutoMineClient implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(AutoMine.MOD_ID);
@@ -24,6 +23,7 @@ public class AutoMineClient implements ClientModInitializer {
 	private static KeyMapping toggleMineKey;
 	private static KeyMapping toggleReplyKey;
 	private static KeyMapping toggleCircleKey;
+	private static KeyMapping forceSellKey;
 	private static boolean miningEnabled;
 	private static AutoMineConfig config;
 	private static HumanizedMiner miner;
@@ -55,11 +55,16 @@ public class AutoMineClient implements ClientModInitializer {
 				GLFW.GLFW_KEY_K,
 				"category.automine"
 		));
+		forceSellKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+				"key.automine.force_sell",
+				GLFW.GLFW_KEY_L,
+				"category.automine"
+		));
 
 		ClientTickEvents.END_CLIENT_TICK.register(AutoMineClient::onClientTick);
 		HudRenderCallback.EVENT.register((graphics, tickDelta) -> renderHud(graphics));
 
-		LOGGER.info("AutoMine ready — H mine, J reply, K circle mode");
+		LOGGER.info("AutoMine ready (profile={}) — H mine, J reply, K circle, L sell", config.prisonProfile);
 	}
 
 	private static void renderHud(GuiGraphics graphics) {
@@ -70,7 +75,7 @@ public class AutoMineClient implements ClientModInitializer {
 		Font font = client.font;
 		int y = 6;
 		if (miningEnabled) {
-			drawLabel(graphics, font, "AutoMine ON", 6, y, 0xFF55FF55);
+			drawLabel(graphics, font, "AutoMine ON · " + config.prisonProfile, 6, y, 0xFF55FF55);
 			y += 11;
 			drawLabel(graphics, font, config.circleMine ? "Mode: Circle" : "Mode: Crosshair", 6, y, 0xFFAAAAAA);
 			y += 11;
@@ -101,6 +106,7 @@ public class AutoMineClient implements ClientModInitializer {
 				session.reset();
 				miner.reset();
 				prisonHelpers.reset();
+				prisonHelpers.onMiningStarted(client);
 			} else {
 				miner.reset();
 			}
@@ -132,6 +138,10 @@ public class AutoMineClient implements ClientModInitializer {
 						true
 				);
 			}
+		}
+
+		while (forceSellKey.consumeClick()) {
+			prisonHelpers.forceSell(client);
 		}
 
 		autoReply.tick(client);
