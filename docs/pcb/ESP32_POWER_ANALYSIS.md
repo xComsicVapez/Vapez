@@ -54,6 +54,17 @@ If copper is right, these are the usual kill switches:
 5. **Battery / VM shorted onto logic** — if the buck is installed backwards or bridged to the motor rail, ESP `VIN` can see pack voltage.
 6. **5V on GPIO** — DevKit IO is **3.3V only**; a 5V signal into a GPIO can kill the chip even when power pins are correct.
 
+## Power LED clue (fast flash vs solid red)
+
+On common 30-pin DevKits the **red LED is a power lamp**, not a health check.
+
+| Observation | Meaning |
+|-------------|---------|
+| **Very fast red flash** on low / weak voltage | Chip was still **alive** and **brownout-reset looping** (starts → current draw → rail sags → reset → repeat). LED flickers with each cycle. |
+| **Solid red held** on the same low voltage **after** the mains event | Rail still reaches the LED, but the ESP is **no longer booting** — typical of a **dead MCU / AMS1117** after the 100–240V hit. No boot → no current spikes → no blink. |
+
+So the supply condition can look the same; what changed is the silicon. Solid red does **not** mean the module is OK. See `renders/led_flash_vs_solid.png`.
+
 ## Bring-up checklist (do this before another ESP32)
 
 0. **Never** feed this board from a wall/monitor **AC** cord (100–240V). Only a known **DC** battery/pack into the intended power input.
@@ -89,3 +100,4 @@ If you export the EasyEDA project (schematic + PCB), we can add those labels and
 - `renders/monitor_cable_yes_that_can_kill.png` — monitor-cable overvoltage / spark kill path
 - `renders/monitor_cable_failure_flow.png` — failure-flow diagram
 - `renders/mains_100_240v_kill.png` — 100–240V AC mains as smoking-gun kill cause
+- `renders/led_flash_vs_solid.png` — pre-incident blink vs post-incident solid LED
