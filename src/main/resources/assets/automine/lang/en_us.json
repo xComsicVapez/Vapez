@@ -1,0 +1,7 @@
+{
+	"key.automine.toggle": "Toggle AutoMine",
+	"key.automine.toggle_reply": "Toggle AutoReply",
+	"key.automine.toggle_circle": "Toggle Circle Mine",
+	"key.automine.force_sell": "Force Sell",
+	"category.automine": "AutoMine"
+}

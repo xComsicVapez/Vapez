@@ -1,0 +1,23 @@
+{
+	"schemaVersion": 1,
+	"id": "automine",
+	"version": "${version}",
+	"name": "AutoMine",
+	"description": "Client-side auto mining — hold the break action on the block under your crosshair. Toggle with a keybind.",
+	"authors": [
+		"xCosmicVapez"
+	],
+	"license": "MIT",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"dev.xcosmicvapez.automine.client.AutoMineClient"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
