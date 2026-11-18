@@ -65,6 +65,10 @@ On common 30-pin DevKits the **red LED is a power lamp**, not a health check.
 
 So the supply condition can look the same; what changed is the silicon. Solid red does **not** mean the module is OK. See `renders/led_flash_vs_solid.png`.
 
+## Firmware note (ProfBoots dual-ESP sketches)
+
+The upstream code (`Mini_Excavator_ESP1.ino` / `Mini_Excavator_Esp2.ino`) **does not** auto-drive a gear to a direction on power-up — `setup()` holds all motors **stopped** and waits for a Bluetooth controller. Low-voltage fast blink means the ESP never stayed alive long enough to run that control path, so no gear motion is expected. Full flash/pairing/motor checklist: `FIRMWARE_BRINGUP.md` and `renders/firmware_no_auto_gear.png`.
+
 ## Bring-up checklist (do this before another ESP32)
 
 0. **Never** feed this board from a wall/monitor **AC** cord (100–240V). Only a known **DC** battery/pack into the intended power input.
