@@ -1,5 +1,6 @@
 {
 	"key.automine.toggle": "Toggle AutoMine",
 	"key.automine.toggle_reply": "Toggle AutoReply",
+	"key.automine.toggle_circle": "Toggle Circle Mine",
 	"category.automine": "AutoMine"
 }

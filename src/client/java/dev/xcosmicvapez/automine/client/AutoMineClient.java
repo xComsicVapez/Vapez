@@ -8,28 +8,35 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Client-only AutoMine + casual auto-reply when whispered on a server.
+ * Client-only AutoMine for prison-style grinding: circle look-mine, sell-on-full,
+ * durability guard, session limits, and whisper auto-reply.
  */
 public class AutoMineClient implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(AutoMine.MOD_ID);
 
 	private static KeyMapping toggleMineKey;
 	private static KeyMapping toggleReplyKey;
+	private static KeyMapping toggleCircleKey;
 	private static boolean miningEnabled;
 	private static AutoMineConfig config;
 	private static HumanizedMiner miner;
 	private static AutoReply autoReply;
+	private static PrisonHelpers prisonHelpers;
+	private static MiningSession session;
 
 	@Override
 	public void onInitializeClient() {
 		config = AutoMineConfig.load();
-		miner = new HumanizedMiner(config);
+		session = new MiningSession(config);
+		miner = new HumanizedMiner(config, session);
+		prisonHelpers = new PrisonHelpers(config);
 		autoReply = new AutoReply(config);
 		autoReply.register();
 
@@ -43,28 +50,46 @@ public class AutoMineClient implements ClientModInitializer {
 				GLFW.GLFW_KEY_J,
 				"category.automine"
 		));
+		toggleCircleKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+				"key.automine.toggle_circle",
+				GLFW.GLFW_KEY_K,
+				"category.automine"
+		));
 
 		ClientTickEvents.END_CLIENT_TICK.register(AutoMineClient::onClientTick);
-		HudRenderCallback.EVENT.register((graphics, tickDelta) -> {
-			Minecraft client = Minecraft.getInstance();
-			if (client.player == null || client.options.hideGui) {
-				return;
-			}
-			Font font = client.font;
-			int y = 6;
-			if (miningEnabled) {
-				drawLabel(graphics, font, "AutoMine ON", 6, y, 0xFF55FF55);
-				y += 12;
-			}
-			if (autoReply.isEnabled()) {
-				drawLabel(graphics, font, "AutoReply ON", 6, y, 0xFF55FFFF);
-			}
-		});
+		HudRenderCallback.EVENT.register((graphics, tickDelta) -> renderHud(graphics));
 
-		LOGGER.info("AutoMine ready — H toggles mining, J toggles auto-reply");
+		LOGGER.info("AutoMine ready — H mine, J reply, K circle mode");
 	}
 
-	private static void drawLabel(net.minecraft.client.gui.GuiGraphics graphics, Font font, String label, int x, int y, int color) {
+	private static void renderHud(GuiGraphics graphics) {
+		Minecraft client = Minecraft.getInstance();
+		if (client.player == null || client.options.hideGui) {
+			return;
+		}
+		Font font = client.font;
+		int y = 6;
+		if (miningEnabled) {
+			drawLabel(graphics, font, "AutoMine ON", 6, y, 0xFF55FF55);
+			y += 11;
+			drawLabel(graphics, font, config.circleMine ? "Mode: Circle" : "Mode: Crosshair", 6, y, 0xFFAAAAAA);
+			y += 11;
+			drawLabel(graphics, font, session.hudLine(), 6, y, 0xFFDDDDDD);
+			y += 11;
+			String minerStatus = miner.status();
+			String helperStatus = prisonHelpers.lastStatus();
+			String detail = !helperStatus.isEmpty() ? helperStatus : minerStatus;
+			if (detail != null && !detail.isEmpty()) {
+				drawLabel(graphics, font, detail, 6, y, 0xFFFFFF55);
+				y += 11;
+			}
+		}
+		if (autoReply.isEnabled()) {
+			drawLabel(graphics, font, "AutoReply ON", 6, y, 0xFF55FFFF);
+		}
+	}
+
+	private static void drawLabel(GuiGraphics graphics, Font font, String label, int x, int y, int color) {
 		graphics.drawString(font, label, x + 1, y + 1, 0x40000000, false);
 		graphics.drawString(font, label, x, y, color, false);
 	}
@@ -72,7 +97,11 @@ public class AutoMineClient implements ClientModInitializer {
 	private static void onClientTick(Minecraft client) {
 		while (toggleMineKey.consumeClick()) {
 			miningEnabled = !miningEnabled;
-			if (!miningEnabled) {
+			if (miningEnabled) {
+				session.reset();
+				miner.reset();
+				prisonHelpers.reset();
+			} else {
 				miner.reset();
 			}
 			if (client.player != null) {
@@ -93,14 +122,42 @@ public class AutoMineClient implements ClientModInitializer {
 			}
 		}
 
+		while (toggleCircleKey.consumeClick()) {
+			config.circleMine = !config.circleMine;
+			config.save();
+			miner.reset();
+			if (client.player != null) {
+				client.player.displayClientMessage(
+						Component.literal(config.circleMine ? "Circle mine ON" : "Circle mine OFF (crosshair)"),
+						true
+				);
+			}
+		}
+
 		autoReply.tick(client);
 
-		if (miningEnabled) {
-			miner.tick(client);
+		if (!miningEnabled) {
+			return;
 		}
+
+		if (!session.tick(client)) {
+			miningEnabled = false;
+			miner.reset();
+			return;
+		}
+
+		if (!prisonHelpers.allowMining(client)) {
+			return;
+		}
+
+		miner.tick(client);
 	}
 
 	public static boolean isMiningEnabled() {
 		return miningEnabled;
+	}
+
+	public static AutoMineConfig config() {
+		return config;
 	}
 }

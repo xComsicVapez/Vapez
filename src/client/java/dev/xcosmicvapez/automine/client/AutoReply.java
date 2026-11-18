@@ -13,11 +13,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * When someone whispers / privately messages you on a server, queue a delayed
- * casual reply so you don't look completely AFK.
+ * Delayed casual replies to whispers. Skips staff-like names and respects cooldowns.
  */
 public final class AutoReply {
-	// Vanilla-ish whisper formats + common plugin styles.
 	private static final Pattern[] WHISPER_PATTERNS = {
 			Pattern.compile("^(?<name>[\\w.]{1,32}) whispers(?: to you)?:\\s*(?<msg>.+)$", Pattern.CASE_INSENSITIVE),
 			Pattern.compile("^From (?<name>[\\w.]{1,32}):\\s*(?<msg>.+)$", Pattern.CASE_INSENSITIVE),
@@ -51,10 +49,6 @@ public final class AutoReply {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
 	public boolean toggle() {
 		enabled = !enabled;
 		return enabled;
@@ -75,9 +69,7 @@ public final class AutoReply {
 			return;
 		}
 
-		// Prefer a private reply when we know the name; otherwise say it in chat.
-		String outbound = "/msg " + toSend.fromName + " " + toSend.text;
-		sendChat(client, outbound);
+		PrisonHelpers.sendCommand(client, "msg " + toSend.fromName + " " + toSend.text);
 		lastReplyTickByPlayer.put(toSend.fromName.toLowerCase(Locale.ROOT), (long) client.player.tickCount);
 	}
 
@@ -90,9 +82,7 @@ public final class AutoReply {
 		if (player == null || client.getConnection() == null) {
 			return;
 		}
-		// Singleplayer integrated / no remote server — skip.
 		if (client.getCurrentServer() == null && client.isLocalServer()) {
-			// Still allow on open-to-lan; only skip pure solo when no server entry.
 			if (client.getSingleplayerServer() != null && !client.getSingleplayerServer().isPublished()) {
 				return;
 			}
@@ -104,14 +94,11 @@ public final class AutoReply {
 		}
 
 		String from = senderName;
-		String body = stripped;
-
 		boolean whisper = false;
 		for (Pattern pattern : WHISPER_PATTERNS) {
 			Matcher matcher = pattern.matcher(stripped);
 			if (matcher.matches()) {
 				from = matcher.group("name");
-				body = matcher.group("msg");
 				whisper = true;
 				break;
 			}
@@ -124,6 +111,9 @@ public final class AutoReply {
 			return;
 		}
 		if (from.equalsIgnoreCase(player.getGameProfile().getName())) {
+			return;
+		}
+		if (shouldIgnore(from)) {
 			return;
 		}
 
@@ -142,28 +132,36 @@ public final class AutoReply {
 		pending = new PendingReply(from, reply, (int) (now + delay));
 
 		player.displayClientMessage(
-				Component.literal("AutoReply → " + from + " in ~" + (delay / 20.0) + "s"),
+				Component.literal("AutoReply → " + from + " in ~" + String.format(Locale.ROOT, "%.1f", delay / 20.0) + "s"),
 				true
 		);
+	}
+
+	private boolean shouldIgnore(String name) {
+		String lower = name.toLowerCase(Locale.ROOT);
+		if (config.ignorePlayers != null) {
+			for (String exact : config.ignorePlayers) {
+				if (exact != null && exact.equalsIgnoreCase(name)) {
+					return true;
+				}
+			}
+		}
+		if (config.ignoreNameContains != null) {
+			for (String part : config.ignoreNameContains) {
+				if (part != null && !part.isBlank() && lower.contains(part.toLowerCase(Locale.ROOT))) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private String pickReply(ThreadLocalRandom rng) {
 		var list = config.replyMessages;
 		if (list == null || list.isEmpty()) {
-			return "hey sorry afk mining";
+			return "hey sorry grinding the mine rn";
 		}
 		return list.get(rng.nextInt(list.size()));
-	}
-
-	private static void sendChat(Minecraft client, String message) {
-		if (client.player == null || client.getConnection() == null) {
-			return;
-		}
-		if (message.startsWith("/")) {
-			client.player.connection.sendCommand(message.substring(1));
-		} else {
-			client.player.connection.sendChat(message);
-		}
 	}
 
 	private static String stripFormatting(String input) {
