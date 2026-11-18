@@ -47,7 +47,7 @@ Summary diagram: `esp32_power_pin_verdict.png`
 
 If copper is right, these are the usual kill switches:
 
-1. **Wrong power source / overvoltage event** — using a **monitor power cable** (or any high-V brick) with the buck + ESP32s already installed. Monitor DC bricks are often **12V / 19V / 19.5V**; a wall **AC** monitor cord is catastrophic if it touches the robot supply. A **spark on the other cable** (not on the PCB) still means a short / wrong polarity / surge dumped into the board supply. Mini bucks commonly **fail short IN→OUT** under that abuse, so raw high V lands on the **5V rail → ESP VIN** and kills both modules. See `renders/monitor_cable_yes_that_can_kill.png`.
+1. **Mains / monitor cord at 100–240V (most likely here)** — a monitor **wall** power cable at **100–240V is AC mains**, not a robot battery. If that touched the board supply (buck installed, ESP32s seated), the spark on the other cable fits a mains short/surge, and the buck + both ESP32s can die in one hit. PCB copper being correct (`5V → VIN`) does not protect against mains. See `renders/mains_100_240v_kill.png`. (A monitor **DC brick** at 12–19V is still risky if the buck fails short; wall AC is in another league.)
 2. **Wrong module type** — bare WROOM / bare chip instead of DevKit.
 3. **USB flipped 180°** — seats `VIN` on the unpowered end and can put board power on the wrong corner; always match USB to the power-fed end / silk mark.
 4. **Buck not actually at 5.0V** — adjustable modules can leave the factory above 5V; some “5V fixed” clones are mis-set. Measure **before** plugging ESP32s.
@@ -56,15 +56,17 @@ If copper is right, these are the usual kill switches:
 
 ## Bring-up checklist (do this before another ESP32)
 
-1. Install fuse + buck only (no ESP32s seated).
-2. Power the board and measure buck **OUT → GND = 5.0V ±0.2V**.
-3. Measure the ESP header **upper-left pad → GND ≈ 5V**.
-4. Measure the ESP header **lower-left pad → GND** — should be **open / not 5V** with ESP removed.
-5. Seat DevKits with **USB toward that upper-left/VIN end**.
-6. Power again and confirm on the DevKit silk:
+0. **Never** feed this board from a wall/monitor **AC** cord (100–240V). Only a known **DC** battery/pack into the intended power input.
+1. After a mains event: replace the **fuse** and inspect/replace the **buck** before trusting the 5V rail (burn smell / scorch = replace).
+2. Install fuse + buck only (no ESP32s seated).
+3. Power the board from the correct DC pack and measure buck **OUT → GND = 5.0V ±0.2V**.
+4. Measure the ESP header **upper-left pad → GND ≈ 5V**.
+5. Measure the ESP header **lower-left pad → GND** — should be **open / not 5V** with ESP removed.
+6. Seat DevKits with **USB toward that upper-left/VIN end**.
+7. Power again and confirm on the DevKit silk:
    - `VIN` ≈ 5V
    - `3V3` ≈ 3.3V
-7. Only then connect motors / drivers / USB programming.
+8. Only then connect motors / drivers / USB programming.
 
 ## Can we “fix” the Gerbers here?
 
@@ -86,3 +88,4 @@ If you export the EasyEDA project (schematic + PCB), we can add those labels and
 - `renders/pcb_5v_rail_annotation.png` — 5V rail overlaid on copper
 - `renders/monitor_cable_yes_that_can_kill.png` — monitor-cable overvoltage / spark kill path
 - `renders/monitor_cable_failure_flow.png` — failure-flow diagram
+- `renders/mains_100_240v_kill.png` — 100–240V AC mains as smoking-gun kill cause
