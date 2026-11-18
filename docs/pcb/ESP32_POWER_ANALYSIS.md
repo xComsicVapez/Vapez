@@ -67,7 +67,7 @@ So the supply condition can look the same; what changed is the silicon. Solid re
 
 ## Firmware note (ProfBoots dual-ESP sketches)
 
-The upstream code (`Mini_Excavator_ESP1.ino` / `Mini_Excavator_Esp2.ino`) **does not** auto-drive a gear to a direction on power-up — `setup()` holds all motors **stopped** and waits for a Bluetooth controller. Low-voltage fast blink means the ESP never stayed alive long enough to run that control path, so no gear motion is expected. Full flash/pairing/motor checklist: `FIRMWARE_BRINGUP.md` and `renders/firmware_no_auto_gear.png`.
+Workshop **Homing Servos** (“hear it move to its default location”) is ESP1 `setup()` writing the micro servo to **90°** — not a track/boom motor. Drive motors stay stopped until a Bluepad32 controller sends commands. Low-voltage fast blink means ESP1 never finished `setup()`, so homing is silent. See `FIRMWARE_BRINGUP.md` and `renders/homing_servos_explained.png`.
 
 ## Bring-up checklist (do this before another ESP32)
 

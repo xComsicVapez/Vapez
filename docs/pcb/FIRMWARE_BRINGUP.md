@@ -5,20 +5,30 @@ Upstream sketches (copied for reference):
 - Source: https://github.com/ProfBoots/3D-Printed-RC-Excavator
 - Local copies: `firmware/Mini_Excavator_ESP1.ino`, `firmware/Mini_Excavator_Esp2.ino`
 
-## Important: nothing “homes” a gear on power-up
+## Homing Servos (workshop step) vs motors
 
-Reading both sketches:
+Professor Boots **Homing Servos** says: power on the PCB and you should **hear the micro servo move to its default location**, then place the horn and power off.
 
-| Board | On `setup()` | When motors/servos move |
-|-------|--------------|-------------------------|
-| **ESP1** (`Mini_Excavator_ESP1.ino`) | All motor pins **LOW**; attachment + aux servos attach at **90°**; Bluepad32 starts and waits for a gamepad | Only after a **controller** is connected and you move sticks/buttons |
-| **ESP2** (`Mini_Excavator_Esp2.ino`) | All motor pins **LOW** | Only when it receives Serial commands from ESP1 (`1`–`18`) |
+That *is* in the firmware — but only as a **servo center**, not a track/arm gear motor:
 
-There is **no** routine that turns a gear to a fixed direction just because power was applied.
+```cpp
+// Mini_Excavator_ESP1.ino setup()
+attachmentServo.attach(attachmentServoPin);  // pin 23
+attachmentServo.write(attachmentValue);      // 90° default
+auxServo.attach(auxServoPin);                // pin 22
+auxServo.write(auxServoValue);               // 90° default
+```
 
-So if you powered the board on low voltage and expected a gear to spin by itself: that behavior is **not in this firmware**. What you saw instead (fast red blink) was the ESP **brownout reboot loop** — the chip never stayed alive long enough to run the control loop.
+| On power-up | Happens? |
+|-------------|----------|
+| Micro servo twitches/clicks to ~**90°** (homing) | **Yes**, if ESP1 is alive and running this sketch |
+| N20 / track / boom motors spin to a direction | **No** — all motor pins are forced **LOW** until a controller sends commands |
 
-Diagram: `renders/firmware_no_auto_gear.png`
+So the guide’s “default location” = that short servo move. If you had **fast red blink on low voltage**, ESP1 never finished `setup()`, so you never heard homing — expected.
+
+Workshop checklist often lists Homing under Soldering **before** Uploading Code. The twitch only happens if ESP1 **already has** `Mini_Excavator_ESP1.ino`. If Homing was checked off without hearing the move, **uncheck and redo it** after a good flash + stable 5V.
+
+Diagrams: `renders/homing_servos_explained.png`, `renders/firmware_no_auto_gear.png`
 
 ## Why low voltage never moved anything
 
