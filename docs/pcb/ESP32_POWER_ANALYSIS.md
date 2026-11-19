@@ -50,7 +50,7 @@ If copper is right, these are the usual kill switches:
 1. **External DC brick / wiring event (updated)** — Builder’s mophie brick is labeled **INPUT 100–240V** (wall into the adapter) and **OUTPUT 12V DC 3.5A** (what the cable delivers). That is **not** wall AC on the PCB, and **12V into board power IN is not a short circuit** by itself — a short means + tied to −. With a healthy buck, 12V on buck IN → ~5V on ESP VIN is a normal buck use case (kit batteries are still preferred). Damage is still possible if the spark was a **lead short / reverse polarity**, or if **12V reached the 5V rail** (buck failed short / wired past the buck). See `renders/adapter_12v_not_short.png` and `renders/mophie_12v_adapter_label.jpg`.
 2. **Wrong module type** — bare WROOM / bare chip instead of DevKit.
 3. **USB flipped 180°** — seats `VIN` on the unpowered end and can put board power on the wrong corner; always match USB to the power-fed end / silk mark.
-4. **Buck not actually at 5.0V** — adjustable modules can leave the factory above 5V; some “5V fixed” clones are mis-set. Measure **before** plugging ESP32s.
+4. **Buck not actually at 5.0V** — on the mini bucks with voltage-select pads: solder **only `ADJ`** to use the pot (“screw”), then meter `VO+`→`GND` to **5.0V ±0.2V** before seating ESP32s (out-of-box pot can be far from 5V). Bridging **`5V`** instead selects fixed ~5V (pot unused). See `renders/buck_adj_correct.png`.
 5. **Battery / VM shorted onto logic** — if the buck is installed backwards or bridged to the motor rail, ESP `VIN` can see pack voltage.
 6. **5V on GPIO** — DevKit IO is **3.3V only**; a 5V signal into a GPIO can kill the chip even when power pins are correct.
 
@@ -106,4 +106,5 @@ If you export the EasyEDA project (schematic + PCB), we can add those labels and
 - `renders/mains_100_240v_kill.png` — earlier AC-mains hypothesis (superseded if brick OUTPUT was 12V DC)
 - `renders/adapter_12v_not_short.png` — mophie label: 12V OUT is not a short; INPUT ≠ board voltage
 - `renders/mophie_12v_adapter_label.jpg` — adapter label photo
+- `renders/buck_adj_correct.png` / `buck_new_vs_old.jpg` — ADJ solder (new) vs 5V solder (old)
 - `renders/led_flash_vs_solid.png` — pre-incident blink vs post-incident solid LED
