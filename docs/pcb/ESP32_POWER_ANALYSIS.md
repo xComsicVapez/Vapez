@@ -85,7 +85,9 @@ If **IN+** is good but **VO+** stays 0V: check EN/wiring or replace the buck. If
 
 ### If EN ≈ pack voltage but VO+ = 0V
 
-EN high (~8V when the pack is ~8V) usually means the chip is **enabled**, not that you have a 5V rail. Only **VO+** is the output.
+**12V on IN+** (mophie brick) is normal — that is buck **input**, not the ESP rail. EN will often read about the same (~12V) if it is tied to IN+. Only **VO+** should be ~**5V**. See `renders/12v_in_vs_5v_out.png`.
+
+EN high (~pack/brick voltage) usually means the chip is **enabled**, not that you have a 5V rail. Only **VO+** is the output.
 
 1. Confirm **IN+→GND** (pack V), **EN→GND** (~pack V), **VO+→GND** (0V).
 2. Power **OFF**. Continuity/resistance **VO+→GND**:
@@ -136,4 +138,5 @@ If you export the EasyEDA project (schematic + PCB), we can add those labels and
 - `renders/buck_adj_correct.png` / `buck_new_vs_old.jpg` — ADJ solder (new) vs 5V solder (old)
 - `renders/how_to_meter_buck.png` — multimeter steps for IN+ / VO+
 - `renders/buck_en_ok_vo_dead.png` — EN≈pack V but VO+=0 troubleshooting
+- `renders/12v_in_vs_5v_out.png` — 12V on IN+ is OK; VO+ must be ~5V
 - `renders/led_flash_vs_solid.png` — pre-incident blink vs post-incident solid LED
