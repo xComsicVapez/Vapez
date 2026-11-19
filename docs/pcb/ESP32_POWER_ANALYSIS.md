@@ -69,12 +69,26 @@ So the supply condition can look the same; what changed is the silicon. Solid re
 
 Workshop **Homing Servos** (“hear it move to its default location”) is ESP1 `setup()` writing the micro servo to **90°** — not a track/boom motor. Drive motors stay stopped until a Bluepad32 controller sends commands. Low-voltage fast blink means ESP1 never finished `setup()`, so homing is silent. See `FIRMWARE_BRINGUP.md` and `renders/homing_servos_explained.png`.
 
+## How to test the buck with a multimeter
+
+Diagram: `renders/how_to_meter_buck.png`
+
+1. **Remove both ESP32s.**
+2. Meter to **DC volts** (`V⎓`; 20V range if not auto-ranging).
+3. Power the board (kit pack or 12V brick) on board power IN with correct polarity.
+4. **BLACK** on buck **GND**, **RED** on buck **IN+** → should read pack/brick voltage (e.g. ~7–12V).
+5. Keep **BLACK** on **GND**, move **RED** to buck **VO+** → this is the ESP 5V rail.
+6. With **ADJ** soldered, turn the back screw until **VO+ = 5.0V ±0.2V**.
+7. Power off, seat DevKits (USB toward VIN), then confirm `VIN≈5V` and after boot `3V3≈3.3V` (not 5V).
+
+If **IN+** is good but **VO+** stays 0V: check EN/wiring or replace the buck. If **VO+** won’t settle near 5V, don’t install ESP32s.
+
 ## Bring-up checklist (do this before another ESP32)
 
 0. Use the kit **DC battery/pack** into board power IN when possible. If using a brick, read **OUTPUT** (this mophie = **12V DC**), never assume the INPUT 100–240V line is what hits the PCB. Confirm polarity (+/−).
 1. After a spark / wiring incident: replace the **fuse** and inspect/replace the **buck** before trusting the 5V rail (burn smell / scorch = replace).
 2. Install fuse + buck only (no ESP32s seated).
-3. Power the board and measure buck **OUT → GND = 5.0V ±0.2V**.
+3. Meter buck as above: **VO+ → GND = 5.0V ±0.2V**.
 4. Measure the ESP header **upper-left pad → GND ≈ 5V**.
 5. Measure the ESP header **lower-left pad → GND** — should be **open / not 5V** with ESP removed.
 6. Seat DevKits with **USB toward that upper-left/VIN end**.
@@ -107,4 +121,5 @@ If you export the EasyEDA project (schematic + PCB), we can add those labels and
 - `renders/adapter_12v_not_short.png` — mophie label: 12V OUT is not a short; INPUT ≠ board voltage
 - `renders/mophie_12v_adapter_label.jpg` — adapter label photo
 - `renders/buck_adj_correct.png` / `buck_new_vs_old.jpg` — ADJ solder (new) vs 5V solder (old)
+- `renders/how_to_meter_buck.png` — multimeter steps for IN+ / VO+
 - `renders/led_flash_vs_solid.png` — pre-incident blink vs post-incident solid LED
