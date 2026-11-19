@@ -83,6 +83,19 @@ Diagram: `renders/how_to_meter_buck.png`
 
 If **IN+** is good but **VO+** stays 0V: check EN/wiring or replace the buck. If **VO+** won’t settle near 5V, don’t install ESP32s.
 
+### If EN ≈ pack voltage but VO+ = 0V
+
+EN high (~8V when the pack is ~8V) usually means the chip is **enabled**, not that you have a 5V rail. Only **VO+** is the output.
+
+1. Confirm **IN+→GND** (pack V), **EN→GND** (~pack V), **VO+→GND** (0V).
+2. Power **OFF**. Continuity/resistance **VO+→GND**:
+   - Near **0Ω** → short on the 5V rail (PCB/parts) — fix before replacing the buck.
+   - High resistance → no hard short; buck is likely **dead** (common after a spark event).
+3. Power ON; turn the ADJ screw end-to-end while watching VO+. Still 0V → replace the buck.
+4. Optional: power the buck alone off the board. Still no VO+ → bad module.
+
+See `renders/buck_en_ok_vo_dead.png`.
+
 ## Bring-up checklist (do this before another ESP32)
 
 0. Use the kit **DC battery/pack** into board power IN when possible. If using a brick, read **OUTPUT** (this mophie = **12V DC**), never assume the INPUT 100–240V line is what hits the PCB. Confirm polarity (+/−).
@@ -122,4 +135,5 @@ If you export the EasyEDA project (schematic + PCB), we can add those labels and
 - `renders/mophie_12v_adapter_label.jpg` — adapter label photo
 - `renders/buck_adj_correct.png` / `buck_new_vs_old.jpg` — ADJ solder (new) vs 5V solder (old)
 - `renders/how_to_meter_buck.png` — multimeter steps for IN+ / VO+
+- `renders/buck_en_ok_vo_dead.png` — EN≈pack V but VO+=0 troubleshooting
 - `renders/led_flash_vs_solid.png` — pre-incident blink vs post-incident solid LED
