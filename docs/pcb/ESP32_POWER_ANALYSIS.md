@@ -50,7 +50,7 @@ If copper is right, these are the usual kill switches:
 1. **External DC brick / wiring event (updated)** — Builder’s mophie brick is labeled **INPUT 100–240V** (wall into the adapter) and **OUTPUT 12V DC 3.5A** (what the cable delivers). That is **not** wall AC on the PCB, and **12V into board power IN is not a short circuit** by itself — a short means + tied to −. With a healthy buck, 12V on buck IN → ~5V on ESP VIN is a normal buck use case (kit batteries are still preferred). Damage is still possible if the spark was a **lead short / reverse polarity**, or if **12V reached the 5V rail** (buck failed short / wired past the buck). See `renders/adapter_12v_not_short.png` and `renders/mophie_12v_adapter_label.jpg`.
 2. **Wrong module type** — bare WROOM / bare chip instead of DevKit.
 3. **USB flipped 180°** — seats `VIN` on the unpowered end and can put board power on the wrong corner; always match USB to the power-fed end / silk mark.
-4. **Buck not actually at 5.0V** — on the mini bucks with voltage-select pads: solder **only `ADJ`** to use the pot (“screw”), then meter `VO+`→`GND` to **5.0V ±0.2V** before seating ESP32s (out-of-box pot can be far from 5V). Bridging **`5V`** instead selects fixed ~5V (pot unused). New module prep: `renders/solder_adj_only.png` / `renders/buck_adj_correct.png`. Before installing a replacement, power-off continuity **VO+→GND** — if shorted, fix the rail first or the new buck will also die.
+4. **Buck overvoltage from ADJ pot (fire risk)** — with **12V on IN+**, turning the ADJ screw the wrong way can drive **VO+ toward 12V** onto the ESP 5V rail and burn the board. **Do not use ADJ + screw on this build.** Solder **only the `5V` pads** (leave `ADJ` and all other voltages open); do not turn the screw. Meter `VO+`→`GND` ≈ **5.0V** with ESP32s removed before seating modules. See `renders/stop_adj_use_fixed_5v.png`. Before any replacement buck: power-off continuity **VO+→GND** — if shorted, fix the rail first.
 5. **Battery / VM shorted onto logic** — if the buck is installed backwards or bridged to the motor rail, ESP `VIN` can see pack voltage.
 6. **5V on GPIO** — DevKit IO is **3.3V only**; a 5V signal into a GPIO can kill the chip even when power pins are correct.
 
@@ -78,10 +78,11 @@ Diagram: `renders/how_to_meter_buck.png`
 3. Power the board (kit pack or 12V brick) on board power IN with correct polarity.
 4. **BLACK** on buck **GND**, **RED** on buck **IN+** → should read pack/brick voltage (e.g. ~7–12V).
 5. Keep **BLACK** on **GND**, move **RED** to buck **VO+** → this is the ESP 5V rail.
-6. With **ADJ** soldered, turn the back screw until **VO+ = 5.0V ±0.2V**.
-7. Power off, seat DevKits (USB toward VIN), then confirm `VIN≈5V` and after boot `3V3≈3.3V` (not 5V).
+6. With **fixed `5V` pads** soldered (not ADJ), confirm **VO+ ≈ 5.0V ±0.2V**. Do **not** turn the screw.
+7. If VO+ is **>>5V** or smoking: power off immediately.
+8. Power off, seat DevKits (USB toward VIN), then confirm `VIN≈5V` and after boot `3V3≈3.3V` (not 5V).
 
-If **IN+** is good but **VO+** stays 0V: check EN/wiring or replace the buck. If **VO+** won’t settle near 5V, don’t install ESP32s.
+If **IN+** is good but **VO+** stays 0V: check EN/wiring, rail short, or replace the buck. Don’t install ESP32s until VO+ is ~5V.
 
 ### If EN ≈ pack voltage but VO+ = 0V
 
@@ -93,10 +94,10 @@ EN high (~pack/brick voltage) usually means the chip is **enabled**, not that yo
 2. Power **OFF**. Continuity/resistance **VO+→GND**:
    - Near **0Ω** → short on the 5V rail (PCB/parts) — fix before replacing the buck.
    - High resistance → no hard short; buck is likely **dead** (common after a spark event).
-3. Power ON; turn the ADJ screw end-to-end while watching VO+. Still 0V → replace the buck.
-4. Optional: power the buck alone off the board. Still no VO+ → bad module.
+3. Do **not** thrash the ADJ screw trying to “find” 5V — that is how VO+ can spike and catch fire. Use a **fixed-5V**-bridged module instead.
+4. Optional: power a known-good fixed-5V buck alone off the board to confirm VO+≈5V before soldering it into the PCB.
 
-See `renders/buck_en_ok_vo_dead.png`.
+See `renders/buck_en_ok_vo_dead.png` and `renders/stop_adj_use_fixed_5v.png`.
 
 ## Bring-up checklist (do this before another ESP32)
 
@@ -135,7 +136,8 @@ If you export the EasyEDA project (schematic + PCB), we can add those labels and
 - `renders/mains_100_240v_kill.png` — earlier AC-mains hypothesis (superseded if brick OUTPUT was 12V DC)
 - `renders/adapter_12v_not_short.png` — mophie label: 12V OUT is not a short; INPUT ≠ board voltage
 - `renders/mophie_12v_adapter_label.jpg` — adapter label photo
-- `renders/buck_adj_correct.png` / `buck_new_vs_old.jpg` — ADJ solder (new) vs 5V solder (old)
+- `renders/stop_adj_use_fixed_5v.png` — **preferred**: fixed 5V bridge; ADJ+screw fire risk
+- `renders/solder_adj_only.png` / `buck_adj_correct.png` — older ADJ email method (**superseded** after fire reports)
 - `renders/how_to_meter_buck.png` — multimeter steps for IN+ / VO+
 - `renders/buck_en_ok_vo_dead.png` — EN≈pack V but VO+=0 troubleshooting
 - `renders/12v_in_vs_5v_out.png` — 12V on IN+ is OK; VO+ must be ~5V
