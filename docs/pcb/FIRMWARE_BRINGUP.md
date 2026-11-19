@@ -66,8 +66,8 @@ If a motor runs the **wrong way** after controls work: swap that motor’s two w
 
 ## Power + first-motion checklist (avoid the fast blink)
 
-1. After any mains/monitor-cord event: replace fried ESPs; replace fuse; inspect/replace buck.
-2. DC pack only into board power in. Never 100–240V AC.
+1. After any spark / adapter wiring event: replace fried ESPs; replace fuse; inspect/replace buck.
+2. Prefer kit DC pack into board power in. A 12V DC brick OUTPUT can feed buck IN if polarity is correct — that is not a short; do not confuse brick INPUT 100–240V with board voltage.
 3. ESPs removed: set buck **OUT = 5.0V ±0.2V**. Confirm header VIN ≈ 5V, 3V3 not 5V.
 4. Seat DevKits **USB toward VIN end**. Power up: red LED **solid**, not strobing.
 5. USB serial on ESP1 should print firmware / BD address (not endless reboot spam).
